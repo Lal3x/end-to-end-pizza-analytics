@@ -17,8 +17,10 @@ Sem processamento de fatos completos no pandas.
 
 ## O QUE JÁ EXISTE
 
-Módulo de conexão e estrutura de ingestão, testes e dados Pizza Paradise
-inspecionados. Confirmar os resultados da nova ingestão antes desta etapa.
+Aquisição e ingestão migradas, cinco tabelas RAW auditadas integralmente,
+26 testes aprovados e fonte anterior preservada. Nenhuma refined existe.
+Esta etapa executa somente SELECTs com conexão read_only=True; relatórios
+podem ser gravados como arquivos, sem criar tabelas temporárias ou views.
 
 ## ARTEFATO A PRODUZIR
 
@@ -55,8 +57,16 @@ Sem criar ID natural inexistente para order_items.
 
 IDs convertidos semanticamente para texto, dinheiro validado como finito,
 não negativo e representável com centavos; conversão de DOUBLE deve verificar
-a diferença antes/depois contra tolerância numérica explicitada na spec final,
-nunca aceitar centavos realmente extras silenciosamente.
+a diferença absoluta entre DOUBLE original e DECIMAL convertido de volta para
+DOUBLE: aceitar no máximo 1e-9 unidade monetária, após validar finitude,
+não negatividade e representabilidade em DECIMAL(18,2). Acima disso, falhar.
+Essa tolerância é dez milhões de vezes menor que um centavo e destina-se apenas
+ao ruído binário. Na investigação inicial, o maior desvio foi
+2.842170943040401e-14; nenhum valor excedeu 1e-9. Magnitudes novas que não
+caibam nessa regra exigem revisão; não alargar a tolerância automaticamente.
+Price do CSV deve casar [0-9]+([.][0-9]{1,2})? antes do CAST, sem arredondar
+entradas com terceira casa. Motivo: DOUBLE e texto monetário têm representações
+diferentes; nenhum centavo adicional real pode ser aceito silenciosamente.
 Formato de orderDate: ISO com Z até segundos, com Z até minutos, ou somente
 data. Zero formatos desconhecidos aceitos.
 Somente data: order_date preenchida, order_timestamp NULL; precisão date.

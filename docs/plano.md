@@ -37,7 +37,8 @@ Sem reescrever histórico ou publicar fontes completas sem licença esclarecida.
 ## Próximo passo
 
 Aquisição/ingestão validadas em banco separado, repetidas e publicadas em
-pizza.duckdb após cópia íntegra do banco Maven. Suíte: 26 testes, cobertura
+pizza.duckdb após cópia íntegra do banco Maven. Suíte atual: 35 testes, cobertura
 98,71%; pico RSS do ensaio aproximadamente 575 MiB. Registro e evidências em
-docs/migracao-pizza-paradise.md. Próximo passo: investigar a nova RAW e validar
-SELECTs temporais/monetários e correção Launch antes do código da refined.
+docs/migracao-pizza-paradise.md. SELECTs candidatos validados em leitura:
+43 diagnósticos sem falhas. Próximo passo: revisar as decisões propostas em
+docs/validacao-refined.md antes do executor transacional da transformação.

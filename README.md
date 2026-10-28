@@ -110,7 +110,7 @@ SELECT * FROM raw.order_items LIMIT 10;
 ```
 
 Testes usam fontes sintéticas e DuckDB temporário real, sem rede ou banco do
-projeto. Suíte migrada: 26 testes passaram, cobertura total 98,71% das 155 linhas
+projeto. Suíte atual: 35 testes passaram, cobertura total 98,71% das 155 linhas
 executáveis, acima da meta de 60%. Inclui aquisição gzip/hashes, CSV e Parquet
 reais sintéticos, repetições preservadas, mudança de esquema e rollback após
 erro real em páginas Parquet. Evidência: [registro da migração](docs/migracao-pizza-paradise.md).
@@ -133,7 +133,12 @@ pagamentos ou eventos logísticos, não afirmar lucro, cancelamento ou atraso.
 Specs anteriores ao código em specs/; um SQL por indicador em sql/marts/
 quando implementados. [Metodologia](docs/metodologia.md) e histórico de commits
 mantêm a evolução real, sem reconstrução posterior.
-Transformação, marts e dashboard não foram implementados nesta migração.
+Os cinco SELECTs candidatos da transformação foram validados em leitura:
+43 diagnósticos sem falhas, contagens preservadas e reconciliação por pedido.
+O banco permanece somente com RAW. Revisão das decisões de datas, dinheiro e
+Launch: [validação da refined](docs/validacao-refined.md).
+Para repetir a investigação: `uv run python scripts/validar_selects_refined.py`.
+O executor de transformação, marts e dashboard ainda não foram implementados.
 
 Codex auxiliou inspeção, specs, implementação anterior e testes. Problemas reais
 estão nos registros: acesso DNS/cache, formatação, bloqueio pela UI e correção
