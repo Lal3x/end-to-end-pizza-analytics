@@ -6,7 +6,7 @@ na etapa real, antes de iniciar a seguinte; não haverá reconstrução posterio
 
 | Etapa | Entrega | Porta de validação |
 |---|---|---|
-| Zero — atual | Fonte/licença, inventário, modelo, indicadores, specs iniciais, ambiente | Revisão do usuário antes de qualquer pipeline; preparar commit de fundação |
+| Zero — concluída | Fonte/licença, inventário, modelo, indicadores, specs iniciais, ambiente | Revisada pelo usuário; fundação registrada em fd85358 |
 | 1 — ingestão | Spec de conexão/caminhos e ingestão revisadas; db.py e ingestao.py | Fontes pré-validadas, valores VARCHAR/nulos preservados, idempotência, testes sintéticos e contagens reais |
 | 2 — transformação | Reinvestigação de raw, SELECTs de conversão para revisão, spec final, transformacao.py | Tipos, antes/depois, PK/FK, nenhum erro silencioso; executar só decisões aprovadas |
 | 3 — marts | Fechar definições; onze SQLs e executor transacional | Grãos/JOINS conferidos, financeiros reconciliados, rollback e testes sintéticos |
@@ -32,7 +32,7 @@ Permanece a necessidade de preparar o versionamento antes de começar o código,
 para preservar o histórico real por etapa. Commits e publicação ainda dependem
 de autorização específica.
 
-## Pendências para a revisão atual
+## Estado atual e pendências
 
 - Aprovar fonte Kaggle v1 e manter dados fora do Git.
 - Seleção dos onze candidatos validada para avançar; ajustes posteriores devem
@@ -40,12 +40,11 @@ de autorização específica.
 - Revisar política proposta de nulos e novos
   domínios; não houve necessidade de limpeza no dado atual.
 - Revisar os tipos propostos DATE e TIME, sem fuso informado.
-- Registrar as specs, configurações e documentos no Git antes do código.
-  O repositório agora funciona na branch dev e tem o commit beab954 com README;
-  os demais artefatos de fundação ainda precisam ser versionados.
+- Fundação registrada em fd85358, na branch dev, após beab954 (README).
+- Módulo db.py implementado: sete testes passaram, com cobertura de 100% das
+  suas 20 linhas executáveis. Evidências em docs/execucao-db.md.
 
 ## Próximo passo
 
-Revisar a Etapa Zero, resolver as decisões acima e preparar o commit de
-fundação. A spec de conexão já existe em specs/db.md; após a revisão completa,
-validá-la e implementar/testar o módulo de conexão antes da ingestão.
+Registrar o incremento de conexão e seus testes; em seguida implementar a
+ingestão conforme specs/ingestao.md, com testes sintéticos e conferência real.

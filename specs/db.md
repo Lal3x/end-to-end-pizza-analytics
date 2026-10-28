@@ -1,6 +1,7 @@
 # Etapa 1 — Módulo de conexão
 
-Status: proposta para revisão; nenhum módulo será criado na Etapa Zero.
+Status: implementação autorizada após revisão da Etapa Zero; validar antes da
+ingestão. Fundação registrada no commit fd85358.
 
 ## CONTEXTO
 
@@ -47,6 +48,11 @@ texto vira VARCHAR. Retornar contagem da tabela final. Sem views ou tabelas
 temporárias remanescentes e sem commit da transação do chamador.
 Motivo: cada etapa controla sua transação e confere o que gravou.
 
+Registrar o DataFrame sob um nome temporário exclusivo e remover esse registro
+em finally, inclusive se a gravação falhar. Delimitar identificadores SQL com
+aspas duplas e escapar aspas internas; não interpolar nomes como SQL executável.
+Motivo: registros não podem vazar, colidir ou interpretar nomes como comandos.
+
 ### D4. CONEXÃO E ERRO
 
 Devolver conexão aberta; quem chama fecha. Propagar erros para a etapa emitir
@@ -58,6 +64,7 @@ qual fonte/regra de negócio falhou.
 - Importar não cria banco; executar de outra pasta ainda usa a raiz configurada.
 - DataFrame sintético de três linhas retorna 3; regravar mantém 3.
 - Zero inicial, nulo e tipos preservados.
+- Falha de gravação propaga erro e remove o registro temporário do DataFrame.
 - Rollback do chamador desfaz gravação; fechar libera conexão.
 - Testes usam monkeypatch para redirecionar caminhos a tmp_path e DuckDB real;
   nunca abrem banco/CSV do projeto.

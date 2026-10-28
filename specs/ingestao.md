@@ -21,9 +21,9 @@ registre ambiguidades antes de implementar.
 - Ambiente, `pyproject.toml` e `uv.lock` validados.
 - `docs/evidencias/inspecao.json` com contagens/hashes e `docs/modelo.md`.
 
-`pipeline/db.py` e o banco ainda não existem. Antes da ingestão, implementar e
-validar o módulo de conexão conforme [db.md](db.md). Essa é uma dependência
-futura; não reimplementar suas funções na ingestão.
+`pipeline/db.py` está implementado e validado conforme [db.md](db.md), expondo
+PASTA_RAW, conectar(), criar_schema() e gravar(). O banco do projeto ainda não
+foi criado. Reutilizar o módulo; não reimplementar suas funções na ingestão.
 
 ## ARTEFATO A PRODUZIR
 

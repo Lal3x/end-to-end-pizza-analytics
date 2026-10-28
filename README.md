@@ -1,7 +1,8 @@
 # Pizza — análise de vendas com engenharia de dados
 
-**Status: Etapa Zero preparada para revisão.** O pipeline e o dashboard ainda
-não foram implementados. Este repositório de trabalho investiga dados de uma
+**Status: Etapa Zero revisada; módulo de conexão implementado e testado.**
+Ingestão, transformação, marts e dashboard ainda não foram implementados.
+Este repositório de trabalho investiga dados de uma
 pizzaria fictícia para responder quanto vendeu, como evoluíram as vendas, quais
 produtos lideram e quando se concentram os pedidos.
 
@@ -124,14 +125,14 @@ primárias repetidas ou FKs órfãs. Datas válidas entre 01/01/2015 e 31/12/201
 quantidades positivas e preços não negativos. Cinco variantes não têm vendas.
 `pizza_types.csv` não é UTF-8 válido; cp1252 é a decodificação proposta.
 
-## Testes e execução do pipeline — etapas futuras
+## Testes e execução do pipeline
 
-Ainda não existe suíte em `test/`: **testes unitários e cobertura não foram
-executados ou medidos**. O comando previsto, após criar os módulos e os testes,
-é `uv run pytest --cov`. A meta já configurada é 60%, sobre código Python
-relevante, sem incluir a inspeção auxiliar e a interface Streamlit.
+Os sete testes de `test/test_db.py` passaram usando DuckDB temporário real.
+Cobertura medida: 100% das 20 linhas executáveis de `pipeline/db.py`; a meta
+configurada é 60% do código relevante. Essa medição ainda não inclui as futuras
+etapas. Execute a suíte com `uv run pytest --cov`.
 
-Os futuros testes usarão dados sintéticos e DuckDB temporário real, sem tocar
+Os testes usam dados sintéticos e DuckDB temporário real, sem tocar
 CSV real ou pizza.duckdb. Qualidade sobre os dados reais terá verificações
 independentes de PK/FK, tipos, domínios, grãos e reconciliação financeira.
 
@@ -147,12 +148,14 @@ financeiro do pipeline é apresentado nesta entrega.
   [transformação](specs/transformacao.md) e [marts](specs/marts.md).
 - [Plano incremental e decisões pendentes](docs/plano.md).
 - [Registro de execução](docs/execucao-etapa-zero.md).
+- [Validação do módulo de conexão](docs/execucao-db.md).
 - [Instruções para colaboradores e IA](AGENTS.md).
 
 A Etapa Zero foi revisada e o usuário autorizou avançar por etapas. O próximo
-incremento é o módulo de conexão e seus testes, antes da ingestão. O repositório
+incremento é a ingestão, após registrar a validação do módulo de conexão.
+O repositório
 agora funciona na branch dev, com o commit inicial beab954 contendo o README.
-Os demais artefatos de fundação serão registrados antes de começar o código.
+Os demais artefatos de fundação foram registrados em fd85358 antes do código.
 Commits e publicação dependem de autorização; o histórico não será reconstruído.
 
 ## Participação da IA
