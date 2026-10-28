@@ -140,6 +140,32 @@ Na v1: 21.350 pedidos, 48.620 linhas de itens, 96 variantes e 32 tipos;
 total 70.098 registros. Duas execuções tiveram saída idêntica e os valores
 gravados foram comparados integralmente com os CSVs, incluindo repetições.
 
+## Explorar com notebooks DuckDB
+
+Depois da ingestão, abra a interface local:
+
+```bash
+uv run python ui.py
+```
+
+O script usa a extensão ui e abre o navegador em http://localhost:4213.
+Também é possível usar `uv run python ui.py --no-browser` e abrir a URL
+manualmente. Instalação inicial da extensão e recursos da página podem exigir
+rede. Não é necessário instalar Jupyter.
+
+No notebook SQL, experimente:
+
+```sql
+SELECT * FROM raw.orders LIMIT 10;
+DESCRIBE raw.order_details;
+```
+
+A interface usa conexão normal para armazenar notebooks internamente. Use-a
+para explorar; mantenha mudanças das camadas nos scripts do pipeline. Encerre
+com Ctrl+C no terminal antes de rodar ingestão ou transformação, liberando o
+arquivo do banco. Sem pizza.duckdb, ui.py orienta executar a ingestão e não
+cria um banco vazio.
+
 ## Testes e execução do pipeline
 
 Os 18 testes de conexão e ingestão passaram usando DuckDB temporário real.
