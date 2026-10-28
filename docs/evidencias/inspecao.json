@@ -1,0 +1,180 @@
+{
+  "zip_sha256": "a10880d056b5b2f5cd637bd5b435ae3f0f38e76dbc9b0e62fde4313e4a880317",
+  "files": [
+    "data_dictionary.csv",
+    "order_details.csv",
+    "orders.csv",
+    "pizza_types.csv",
+    "pizzas.csv"
+  ],
+  "tables": {
+    "orders": {
+      "sha256": "7fc7a67163fa2791e65c219fa7e179a9b66f7197787a6b04f1e2fa6479e98afa",
+      "bytes": 565363,
+      "encoding": "utf-8-sig",
+      "columns": [
+        "order_id",
+        "date",
+        "time"
+      ],
+      "rows": 21350,
+      "empty_fields": {
+        "order_id": 0,
+        "date": 0,
+        "time": 0
+      },
+      "exact_duplicates": 0,
+      "key": [
+        "order_id"
+      ],
+      "repeated_keys": 0
+    },
+    "order_details": {
+      "sha256": "cd8bde974bfd2a43893754c334e825e94165fae296ac7bd88578fb4b0f9623d5",
+      "bytes": 1308014,
+      "encoding": "utf-8-sig",
+      "columns": [
+        "order_details_id",
+        "order_id",
+        "pizza_id",
+        "quantity"
+      ],
+      "rows": 48620,
+      "empty_fields": {
+        "order_details_id": 0,
+        "order_id": 0,
+        "pizza_id": 0,
+        "quantity": 0
+      },
+      "exact_duplicates": 0,
+      "key": [
+        "order_details_id"
+      ],
+      "repeated_keys": 0
+    },
+    "pizzas": {
+      "sha256": "323c29b4dc2321c26153b5d56483225b2ea2986826315700141689aac5327706",
+      "bytes": 3092,
+      "encoding": "utf-8-sig",
+      "columns": [
+        "pizza_id",
+        "pizza_type_id",
+        "size",
+        "price"
+      ],
+      "rows": 96,
+      "empty_fields": {
+        "pizza_id": 0,
+        "pizza_type_id": 0,
+        "size": 0,
+        "price": 0
+      },
+      "exact_duplicates": 0,
+      "key": [
+        "pizza_id"
+      ],
+      "repeated_keys": 0
+    },
+    "pizza_types": {
+      "sha256": "efabb4891772bcdf9656541837f6a4cc3d613f62d67333535b239215da9588c2",
+      "bytes": 3770,
+      "encoding": "cp1252",
+      "columns": [
+        "pizza_type_id",
+        "name",
+        "category",
+        "ingredients"
+      ],
+      "rows": 32,
+      "empty_fields": {
+        "pizza_type_id": 0,
+        "name": 0,
+        "category": 0,
+        "ingredients": 0
+      },
+      "exact_duplicates": 0,
+      "key": [
+        "pizza_type_id"
+      ],
+      "repeated_keys": 0
+    },
+    "data_dictionary": {
+      "sha256": "5e5602c9d3d4dd94e712bec1ff583cb25ab0687af5e29661a7ec1899a73ed8d9",
+      "bytes": 1473,
+      "encoding": "utf-8-sig",
+      "columns": [
+        "Table",
+        "Field",
+        "Description"
+      ],
+      "rows": 15,
+      "empty_fields": {
+        "Table": 0,
+        "Field": 0,
+        "Description": 0
+      },
+      "exact_duplicates": 0,
+      "key": [
+        "Table",
+        "Field"
+      ],
+      "repeated_keys": 0
+    }
+  },
+  "relationships": [
+    {
+      "child": "order_details",
+      "fk": "order_id",
+      "parent": "orders",
+      "pk": "order_id",
+      "orphan_rows": 0,
+      "parents_without_children": 0
+    },
+    {
+      "child": "order_details",
+      "fk": "pizza_id",
+      "parent": "pizzas",
+      "pk": "pizza_id",
+      "orphan_rows": 0,
+      "parents_without_children": 5
+    },
+    {
+      "child": "pizzas",
+      "fk": "pizza_type_id",
+      "parent": "pizza_types",
+      "pk": "pizza_type_id",
+      "orphan_rows": 0,
+      "parents_without_children": 0
+    }
+  ],
+  "profile": {
+    "date_format": "%d/%m/%Y",
+    "time_format": "%H:%M:%S",
+    "date_min": "2015-01-01",
+    "date_max": "2015-12-31",
+    "nonpositive_quantities": 0,
+    "quantity_min": 1,
+    "quantity_max": 4,
+    "negative_prices": 0,
+    "price_min": "9.75",
+    "price_max": "35.95",
+    "prices_with_more_than_two_decimals": 0,
+    "sizes": [
+      "L",
+      "M",
+      "S",
+      "XL",
+      "XXL"
+    ],
+    "categories": [
+      "Chicken",
+      "Classic",
+      "Supreme",
+      "Veggie"
+    ],
+    "max_lines_per_order": 21,
+    "orders_with_multiple_lines": 13149,
+    "repeated_order_pizza_pairs": 0,
+    "repeated_type_size_pairs": 0
+  }
+}

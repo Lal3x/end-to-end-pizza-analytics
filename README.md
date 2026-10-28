@@ -149,11 +149,11 @@ financeiro do pipeline é apresentado nesta entrega.
 - [Registro de execução](docs/execucao-etapa-zero.md).
 - [Instruções para colaboradores e IA](AGENTS.md).
 
-O próximo passo é revisar esta entrega e as hipóteses de negócio. A instrução
-do usuário exige essa revisão antes de implementar o pipeline. Primeiro commit
-e publicação dependem de autorização. `git status` falhou porque o `.git`
-fornecido neste workspace não é um repositório funcional; nenhum commit foi
-criado e o histórico não será reconstruído depois.
+A Etapa Zero foi revisada e o usuário autorizou avançar por etapas. O próximo
+incremento é o módulo de conexão e seus testes, antes da ingestão. O repositório
+agora funciona na branch dev, com o commit inicial beab954 contendo o README.
+Os demais artefatos de fundação serão registrados antes de começar o código.
+Commits e publicação dependem de autorização; o histórico não será reconstruído.
 
 ## Participação da IA
 
