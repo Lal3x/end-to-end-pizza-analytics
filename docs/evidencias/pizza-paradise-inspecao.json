@@ -1,0 +1,277 @@
+{
+  "notebook_version": 398,
+  "tables": {
+    "customers": {
+      "rows": 34761,
+      "schema_observed": {
+        "id": "VARCHAR",
+        "latitude": "DOUBLE",
+        "longitude": "DOUBLE"
+      },
+      "nulls": {
+        "id": 0,
+        "latitude": 0,
+        "longitude": 0
+      },
+      "exact_repeated_rows": 0,
+      "repeated_keys": 0
+    },
+    "products": {
+      "rows": 36,
+      "schema_observed": {
+        "SKU": "VARCHAR",
+        "Name": "VARCHAR",
+        "Price": "DOUBLE",
+        "Category": "VARCHAR",
+        "Size": "VARCHAR",
+        "Ingredients": "VARCHAR",
+        "Launch": "VARCHAR"
+      },
+      "nulls": {
+        "SKU": 0,
+        "Name": 0,
+        "Price": 0,
+        "Category": 0,
+        "Size": 0,
+        "Ingredients": 0,
+        "Launch": 0
+      },
+      "exact_repeated_rows": 0,
+      "repeated_keys": 0
+    },
+    "stores": {
+      "rows": 32,
+      "schema_observed": {
+        "id": "VARCHAR",
+        "zipcode": "BIGINT",
+        "state_abbr": "VARCHAR",
+        "latitude": "DOUBLE",
+        "longitude": "DOUBLE",
+        "city": "VARCHAR",
+        "state": "VARCHAR",
+        "distance": "DOUBLE"
+      },
+      "nulls": {
+        "id": 0,
+        "zipcode": 0,
+        "state_abbr": 0,
+        "latitude": 0,
+        "longitude": 0,
+        "city": 0,
+        "state": 0,
+        "distance": 0
+      },
+      "exact_repeated_rows": 0,
+      "repeated_keys": 0
+    },
+    "orders": {
+      "rows": 2046713,
+      "schema_observed": {
+        "id": "INTEGER",
+        "customerId": "VARCHAR",
+        "storeId": "VARCHAR",
+        "orderDate": "VARCHAR",
+        "nItems": "INTEGER",
+        "total": "DOUBLE"
+      },
+      "nulls": {
+        "id": 0,
+        "customerId": 0,
+        "storeId": 0,
+        "orderDate": 0,
+        "nItems": 0,
+        "total": 0
+      },
+      "exact_repeated_rows": 0,
+      "repeated_keys": 0
+    },
+    "order_items": {
+      "rows": 2916015,
+      "schema_observed": {
+        "SKU": "VARCHAR",
+        "orderID": "INTEGER"
+      },
+      "nulls": {
+        "SKU": 0,
+        "orderID": 0
+      },
+      "exact_repeated_rows": 54041
+    }
+  },
+  "relationships": {
+    "orders.customerId->customers.id": 0,
+    "orders.storeId->stores.id": 0,
+    "order_items.orderID->orders.id": 0,
+    "order_items.SKU->products.SKU": 0
+  },
+  "source": {
+    "url": "https://observablehq.com/@observablehq/pizza-paradise-data",
+    "document_id": "0522fa2e9659bee6",
+    "version": 398,
+    "update_time": "2023-07-27T17:32:56.781Z",
+    "license_metadata": null,
+    "permission_text": "Feel free to use this entirely fake dataset for anything you wish!",
+    "synthetic": true
+  },
+  "profile": {
+    "calendar_date_range": [
+      "2020-01-01",
+      "2022-12-31"
+    ],
+    "direct_timestamp_cast_failures": 33980,
+    "nonpositive_nItems": 0,
+    "invalid_total": 0,
+    "invalid_price": 0,
+    "orders_without_items": 0,
+    "nItems_mismatches": 0,
+    "total_price_mismatches_decimal_2": 0,
+    "repeated_order_sku_groups": 53462,
+    "max_same_sku_in_order": 4,
+    "customers_with_multiple_orders": 19734,
+    "orders_by_year": [
+      [
+        2020,
+        562453
+      ],
+      [
+        2021,
+        711673
+      ],
+      [
+        2022,
+        772587
+      ]
+    ],
+    "order_date_lengths": [
+      [
+        10,
+        116
+      ],
+      [
+        17,
+        33980
+      ],
+      [
+        20,
+        2012617
+      ]
+    ],
+    "unparseable_with_explicit_formats": 116,
+    "unparseable_with_three_formats": 0,
+    "date_only_examples": [
+      [
+        883,
+        "2022-12-13"
+      ],
+      [
+        21369,
+        "2022-09-06"
+      ],
+      [
+        28655,
+        "2022-09-17"
+      ]
+    ],
+    "invalid_launch": [],
+    "noncanonical_launch": [
+      [
+        "PZ026",
+        "2020-01-01,"
+      ],
+      [
+        "PZ027",
+        "2020-01-01,"
+      ]
+    ],
+    "product_names": 9,
+    "orders_mismatching_if_items_deduplicated": 53275,
+    "sizes": [
+      [
+        "Extra Large",
+        9
+      ],
+      [
+        "Large",
+        9
+      ],
+      [
+        "Medium",
+        9
+      ],
+      [
+        "Small",
+        9
+      ]
+    ],
+    "categories": [
+      [
+        "Classic",
+        16
+      ],
+      [
+        "Specialty",
+        12
+      ],
+      [
+        "Vegetarian",
+        8
+      ]
+    ],
+    "launch_values": [
+      [
+        "2018-01-01"
+      ],
+      [
+        "2019-01-01"
+      ],
+      [
+        "2020-01-01"
+      ],
+      [
+        "2020-01-01,"
+      ],
+      [
+        "2021-01-01"
+      ],
+      [
+        "2022-01-01"
+      ]
+    ],
+    "invalid_customer_coordinates": 0,
+    "invalid_store_coordinates": 0
+  },
+  "files": {
+    "customers.csv": {
+      "bytes": 716110,
+      "sha256": "df590543072fc2b82abc454df9fc09a7098190b5425c9fd64dc0b264c8db6574"
+    },
+    "decoded_customers.csv": {
+      "bytes": 1591967,
+      "sha256": "a4975208e7d3843fafbd53e5f1ed908530292d7f737ce91453466efa214f0231"
+    },
+    "decoded_products.csv": {
+      "bytes": 3796,
+      "sha256": "c116092883ee22411c33a9c4a1b0dc68e8df26a26280a50ce10b9097366149e3"
+    },
+    "decoded_stores.csv": {
+      "bytes": 2464,
+      "sha256": "48a10f38803de9e904b4cf9a9b9eddc4af29c452e7968f211413bc342655c432"
+    },
+    "order_items.parquet": {
+      "bytes": 6180623,
+      "sha256": "cfef82b2403eb04542fa5af10b067dfdb0b45f54bdaa23152c782533fa2b7842"
+    },
+    "orders.parquet": {
+      "bytes": 26591479,
+      "sha256": "f88d964889bb11dde06b930513ff97bfc407353aedc101f1e4a97bd5acf5947a"
+    },
+    "products.csv": {
+      "bytes": 625,
+      "sha256": "dc020429285db555f39e813442298a4f3a8974cc915867b8a3c0beb3b7bb788f"
+    },
+    "stores.csv": {
+      "bytes": 1301,
+      "sha256": "ec3d6bccad761b7f08eb50eb9857bc8a59af9f0077c44ef3f42d5cd074426310"
+    }
+  }
+}

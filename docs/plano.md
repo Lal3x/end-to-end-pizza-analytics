@@ -1,54 +1,42 @@
-# Etapas e pontos de revisão
+# Plano de migração e desenvolvimento — Pizza Paradise
 
-Cada etapa segue investigação → spec → aceite → implementação → execução →
-evidências → preparação de commit. Commits exigem autorização e devem ocorrer
-na etapa real, antes de iniciar a seguinte; não haverá reconstrução posterior.
+O usuário autorizou substituir a fonte atual por Pizza Paradise.
+Trabalhar por etapas, com specs anteriores ao código, validação e commits reais.
+Sem reescrever histórico ou publicar fontes completas sem licença esclarecida.
 
-| Etapa | Entrega | Porta de validação |
+| Etapa | Entrega | Aceite |
 |---|---|---|
-| Zero — concluída | Fonte/licença, inventário, modelo, indicadores, specs iniciais, ambiente | Revisada pelo usuário; fundação registrada em fd85358 |
-| 1 — ingestão | Spec de conexão/caminhos e ingestão revisadas; db.py e ingestao.py | Fontes pré-validadas, valores VARCHAR/nulos preservados, idempotência, testes sintéticos e contagens reais |
-| 2 — transformação | Reinvestigação de raw, SELECTs de conversão para revisão, spec final, transformacao.py | Tipos, antes/depois, PK/FK, nenhum erro silencioso; executar só decisões aprovadas |
-| 3 — marts | Fechar definições; onze SQLs e executor transacional | Grãos/JOINS conferidos, financeiros reconciliados, rollback e testes sintéticos |
-| 4 — visualização | Spec visual, design/rascunho.png antes do código; painel.py/app.py; HTML se viável | Somente marts/read_only, conexão fechada, unidades USD, filtros com escopo claro; conferir no navegador |
-| 5 — validação consolidada | Ampliar testes já criados nas etapas; qualidade independente | pytest-cov ≥60% real, Ruff, dados temporários, falhas/rollback e formatação |
-| 6 — documentação e entrega | README final, registro IA e decisões, licença de código a escolher | Executar todos os comandos do README final; revisão do histórico; publicar apenas com autorização |
+| Migração da fundação | Modelo, fonte, indicadores e specs atualizados | Preservar histórico Maven; registrar diferenças de grão e formatos |
+| Aquisição/ingestão | Cinco fontes, CSV via pandas e Parquet via DuckDB | Hashes, tipos, contagens, valores, multiplicidades, rollback e idempotência |
+| Transformação | Investigar nova RAW e revisar SELECTs antes do código | Datas/precisão, Launch, dinheiro, quatro PKs e quatro FKs; preservar itens repetidos |
+| Marts | Um SQL numerado por pergunta | Sem média de médias; reconciliação entre pedido e itens; grãos declarados |
+| Dashboard | Rascunho antes do visual, painel/app separados | Somente marts, read_only e conexão fechada |
+| Entrega | README executável, testes e cobertura ≥60% | Resultados reais, licença/atribuição e histórico incremental |
 
-## Decisões aprovadas pelo usuário
+## Decisões já autorizadas
 
-- Usar o preço de catálogo para estimar receita em USD, mantendo explícita a
-  limitação de não existir preço transacional histórico.
-- Manter os nomes originais; identificadores permanecem como texto (VARCHAR).
-  Quantidades, preços, datas e horas seguem os tipos próprios da transformação.
-- Na refined, remover somente duplicatas exatas, com contagem explícita;
-  interromper em conflitos de chave e conversões inválidas. RAW preserva tudo.
-- Ranking principal por variante (tipo e tamanho separados); acrescentar um
-  ranking consolidado por tipo, somando seus tamanhos.
+- Migrar para Pizza Paradise sem trocar Python, uv, DuckDB, pandas, SQL e testes.
+- Preservar nomes originais, IDs como texto na refined.
+- Comparar variantes separadas e produtos consolidados; Pareto e resumos.
+- Preservar a fonte anterior e registrar a migração, sem inventar histórico.
+- Manter AGENTS.md apenas local, ignorado pelo Git.
 
-Após a validação conjunta dos indicadores, o usuário autorizou seguir para o
-próximo passo. A seleção dos onze candidatos, incluindo os rankings separados
-e consolidado e o Pareto por tipo, está aprovada para implementação incremental.
-Permanece a necessidade de preparar o versionamento antes de começar o código,
-para preservar o histórico real por etapa. Commits e publicação ainda dependem
-de autorização específica.
+## Diferenças que exigem contrato explícito
 
-## Estado atual e pendências
-
-- Aprovar fonte Kaggle v1 e manter dados fora do Git.
-- Seleção dos onze candidatos validada para avançar; ajustes posteriores devem
-  ser registrados antes da implementação do indicador afetado.
-- Revisar política proposta de nulos e novos
-  domínios; não houve necessidade de limpeza no dado atual.
-- Revisar os tipos propostos DATE e TIME, sem fuso informado.
-- Fundação registrada em fd85358, na branch dev, após beab954 (README).
-- Módulo db.py implementado: sete testes passaram, com cobertura de 100% das
-  suas 20 linhas executáveis. Evidências em docs/execucao-db.md.
-- Ingestão implementada e executada: quatro tabelas raw, total 70.098 linhas,
-  valores conferidos com CSVs e reexecução validada. Suíte ampliada: 18 testes
-  passaram; cobertura total 98,59%. Evidências em docs/execucao-ingestao.md.
+- Parquet mantém tipos nativos na RAW; CSV entra como texto.
+- order_items preserva repetições, pois cada linha representa uma unidade.
+- Não existe pizza_type_id; consolidação por Name exige checagem de consistência.
+- orders.total precisa reconciliar com itens; não somar total após JOIN 1:N.
+- 116 pedidos sem horário exigem classificação de precisão, sem hora inventada.
+- Moeda: proposta de apresentação USD por contexto americano, ainda sem declaração
+  explícita identificada nos anexos; não tratar isso como fato comprovado.
+- Licença: permissão textual ampla do publicador, sem licença padronizada nos
+  metadados dos cinco anexos. Código pode ser desenvolvido com arquivos locais;
+  redistribuição dos anexos completos permanece pendente de esclarecimento.
 
 ## Próximo passo
 
-Registrar o incremento de ingestão; em seguida investigar raw e revisar os
-SELECTs de transformação conforme specs/transformacao.md antes de implementar
-refined. Nenhuma transformação foi executada nesta etapa.
+Validar a aquisição/ingestão nova em banco separado, preservar cópia do banco
+Maven e só então substituir RAW. Não implementar transformação e marts sem
+validações intermediárias. Registrar decisões temporais e monetárias antes
+dos SELECTs finais da refined.

@@ -1,132 +1,118 @@
-# Etapa 1 — Ingestão
+# Etapa 1 — Ingestão Pizza Paradise
 
-Status: implementação autorizada após revisão da Etapa Zero.
+Status: migração autorizada; este contrato substitui o da fonte Maven.
+O histórico anterior permanece nos commits e registros de execução.
 
 ## CONTEXTO
 
-Estou construindo um pipeline de vendas de pizzaria com spec-driven development.
-Esta spec é o contrato anterior ao código. O objetivo é espelhar as quatro
-fontes em raw sem mudar seus valores. Não acrescente regras implícitas;
-registre ambiguidades antes de implementar.
+Espelhar os cinco arquivos oficiais do Pizza Paradise, versão 398 do notebook,
+em raw no banco pizza.duckdb. Esta spec precede a implementação da migração.
+Não aplicar regras de limpeza na origem.
 
 ## STACK
 
-- Python 3.13, dependências gerenciadas com uv.
-- pandas para ler os CSVs; DuckDB local em `pizza.duckdb`.
-- Script de linha de comando; nenhum orquestrador ou serviço adicional.
+Python 3.13, uv, pandas para CSV, DuckDB para Parquet e persistência local.
+Sem biblioteca, banco ou orquestrador adicional.
 
 ## O QUE JÁ EXISTE (use, não reimplemente)
 
-- `raw/` com quatro fontes e `data_dictionary.csv`, preservados como baixados.
-- Ambiente, `pyproject.toml` e `uv.lock` validados.
-- `docs/evidencias/inspecao.json` com contagens/hashes e `docs/modelo.md`.
+pipeline/db.py, ingestão Maven validada e evidência de inspeção do novo conjunto
+em docs/evidencias/pizza-paradise-inspecao.json. Antes de substituir a carga
+antiga, guardar cópia íntegra do banco e manter os CSVs anteriores.
+A aquisição dos anexos deve ser reproduzível e separada da ingestão.
 
-`pipeline/db.py` está implementado e validado conforme [db.md](db.md), expondo
-PASTA_RAW, conectar(), criar_schema() e gravar(). O banco do projeto ainda não
-foi criado. Reutilizar o módulo; não reimplementar suas funções na ingestão.
+## ARTEFATOS A PRODUZIR
 
-## ARTEFATO A PRODUZIR
-
-`pipeline/ingestao.py`, executável na futura etapa autorizada com:
-
-```bash
-uv run python -m pipeline.ingestao
-```
+scripts/baixar_paradise.py e pipeline/ingestao.py.
+Comandos: uv run python scripts/baixar_paradise.py;
+uv run python -m pipeline.ingestao.
+O executor aceita --banco para validar uma carga em arquivo separado.
 
 ## SPEC
 
 ### 1. ESCOPO E NOMES
 
-Schema: `raw`. Mapa completo e literal:
+Arquivos em raw/pizza_paradise/:
+- customers.csv → raw.customers: id, latitude, longitude.
+- stores.csv → raw.stores: id, zipcode, state_abbr, latitude, longitude, city,
+  state, distance.
+- products.csv → raw.products: SKU, Name, Price, Category, Size, Ingredients,
+  Launch.
+- orders.parquet → raw.orders: id, customerId, storeId, orderDate, nItems, total.
+- order_items.parquet → raw.order_items: SKU, orderID.
 
-```text
-orders.csv        -> raw.orders
-order_details.csv -> raw.order_details
-pizzas.csv        -> raw.pizzas
-pizza_types.csv   -> raw.pizza_types
-```
+Motivo: preservar nomes, inclusive maiúsculas, e usar apenas dados granulares,
+não os agregados prontos do notebook.
 
-Manter os cabeçalhos de docs/modelo.md. O dicionário é metadado local, não uma
-quinta tabela obrigatória de vendas. Motivo: rastrear nomes até a fonte.
+### 2. PROIBIÇÕES E TIPOS DA RAW
 
-### 2. PROIBIÇÕES
+CSV: ler UTF-8 com suporte a BOM, vírgula e aspas duplas, tudo VARCHAR.
+Campos vazios viram NULL; NA, N/A e NULL literais permanecem texto.
+Parquet: preservar tipos nativos e valores, inclusive DOUBLE de total,
+INTEGER dos IDs e todas as ocorrências de itens. Nenhum CAST na ingestão.
+Esperados em orders: INTEGER, VARCHAR, VARCHAR, VARCHAR, INTEGER, DOUBLE;
+em order_items: VARCHAR, INTEGER, na ordem das colunas acima.
+Nunca converter datas, dinheiro ou IDs, deduplicar, normalizar ou descartar
+linhas. Motivo: Parquet já é tipado; convertê-lo para texto mudaria sua
+representação. A migração autoriza esta diferença do antigo contrato CSV.
 
-Nenhuma conversão, deduplicação, remoção de linha, renomeação, preenchimento
-de nulo ou normalização de espaços/acentos. Não escrever nos CSVs, refined ou
-marts. Motivo: toda mudança do dado pertence à transformação.
+### 3. PRÉ-VALIDAÇÃO
 
-### 3. REEXECUÇÃO
+Verificar os cinco arquivos antes de abrir/criar o banco de destino.
+Validar cabeçalhos e estrutura de cada CSV com csv.reader estrito; não pular
+linhas vazias ou campos excedentes. Validar colunas e tipos dos Parquets com
+conexão DuckDB em memória, sem carregar milhões de linhas no pandas.
+Motivo: erro de fonte não pode criar banco vazio ou iniciar carga parcial.
 
-Recriar tabelas com `CREATE OR REPLACE`, nunca acrescentar. As quatro gravações
-ficam em uma transação. Motivo: reexecutar não pode duplicar nem misturar versões.
+### 4. REEXECUÇÃO E MIGRAÇÃO
 
-### 4. LEITURA DO ARQUIVO
+Recriar somente raw em transação única, incluindo DROP SCHEMA raw CASCADE,
+para remover tabelas da fonte anterior. Não escrever em refined/marts.
+Como os grãos da nova fonte são diferentes, recusar executar se refined ou
+marts contiverem tabelas; exigir plano explícito para não deixar camadas antigas.
+Na primeira migração real, comparar a cópia de segurança com o banco antigo
+por SHA-256. Nenhum arquivo de fonte anterior será apagado.
+Motivo: evitar mistura de fontes e preservar possibilidade de retorno.
 
-CSV com vírgula e aspas duplas; encoding declarado por arquivo:
+### 5. MEMÓRIA E GRAVAÇÃO
 
-```text
-orders.csv        utf-8-sig
-order_details.csv utf-8-sig
-pizzas.csv        utf-8-sig
-pizza_types.csv   cp1252
-```
+Somente os três CSVs pequenos passam por pandas, dtype="string".
+Os dois Parquets são lidos diretamente por DuckDB via read_parquet e CTAS.
+Não fazer merge/groupby no pandas nem concatenar os milhões de itens.
+Usar parâmetros para caminhos e nomes de tabela delimitados.
+Motivo: volume maior sem trazer o fato completo à memória Python.
 
-Campo vazio vira NULL; textos `NA`, `N/A` e `NULL` permanecem texto. Desligar a
-lista automática ampla de nulos do pandas. Encoding inválido falha; não ignorar
-ou substituir bytes. cp1252 é proposta compatível com os bytes observados.
-Motivo: UTF-8 falhou em pizza_types e os defaults de leitura podem mudar valores.
+### 6. AQUISIÇÃO
 
-### 5. TIPAGEM
+URLs de anexos e hashes fixos da versão investigada no script de aquisição.
+Aceitar gzip de transporte e descomprimir para conteúdo CSV canônico; validar
+SHA-256 do conteúdo antes de publicar os cinco arquivos. Manter respostas
+originais e manifesto em data/pizza_paradise/. Aquisição usa área temporária
+e só publica o diretório completo após validar todos os anexos.
+Se fontes já existentes tiverem conteúdo diferente, falhar sem sobrescrever.
+Motivo: URLs, compressão e integridade precisam ser reproduzíveis.
 
-Todas as colunas como texto (`dtype="string"`), inferência desligada, nulos como
-NULL no banco. As 15 colunas serão VARCHAR. Motivo: números, IDs e datas não
-devem ser interpretados silenciosamente na camada de origem.
+### 7. LOG E ERRO
 
-Usar StringDtype explícito também em coluna inteiramente vazia: ela deve virar
-VARCHAR, não um tipo numérico inferido dos nulos. Validar com csv.reader em modo
-estrito a quantidade de campos de cada registro antes da leitura pandas; linha
-em branco sem campos é estrutura inválida, não registro a pular. Campos com
-quebra de linha entre aspas continuam válidos. Motivo: não descartar registros
-ou permitir que o leitor acomode silenciosamente uma linha malformada.
-
-### 6. SAÍDA NA TELA
-
-stdout UTF-8; uma linha por tabela, nome qualificado e contagem consultada no
-banco, milhar com ponto; total no fim. Referência medida no CSV da v1, ainda
-não resultado de ingestão:
-
-```text
-raw.orders         21.350 linhas
-raw.order_details  48.620 linhas
-raw.pizzas             96 linhas
-raw.pizza_types        32 linhas
-total              70.098 linhas
-```
-
-Motivo: comparar a fonte com o que foi efetivamente gravado.
-
-### 7. ERRO
-
-Verificar todos os arquivos antes de abrir/criar o banco; antes de gravar,
-validar cabeçalhos e estrutura CSV. Fonte ausente: listar arquivos/pasta e
-`sys.exit(1)`. CSV, encoding ou banco inválido: fonte/causa, rollback e saída 1.
-Não continuar parcialmente; fechar conexão. Motivo: uma carga incompleta não
-pode parecer válida.
+Contagem de cada tabela consultada no banco e total após COMMIT; stdout UTF-8.
+Fonte ausente/inválida: nome, caminho e causa; saída 1. SQL inválido: rollback;
+não imprimir sucesso parcial. Sempre fechar conexões.
+Falha de aquisição não autoriza substituir fontes por dados inventados.
 
 ## CRITÉRIOS DE ACEITE
 
-- Na v1 do inventário: quatro tabelas, contagens acima e total 70.098;
-  não usar esses números para rejeitar automaticamente uma nova versão.
-- Todas as colunas VARCHAR, mesmos valores e quantidade de linhas da fonte.
-- Duas execuções consecutivas têm mesmos dados e mesma saída.
-- Fonte ausente impede qualquer gravação e identifica o arquivo.
-- CSV sintético preserva zero inicial, cp1252, NULL de vazio e `NA` literal.
-- Falha preserva raw anterior; processo fecha conexão e devolve o terminal.
+Na versão inspecionada: orders 2.046.713; order_items 2.916.015;
+customers 34.761; stores 32; products 36; total 4.997.557.
+Estes são resultados de referência da versão, não limites de crescimento.
+Duas cargas mantêm valores, multiplicidades, tipos e contagens.
+As 54.041 ocorrências repetidas além da primeira em order_items permanecem.
+Ausência, CSV inválido e Parquet inválido falham antes de modificar o destino.
+Erro durante a transação preserva a camada anterior.
+Os testes não usam rede, fontes reais nem o banco do projeto.
 
 ## ENTREGA
 
-1. Módulo com docstring referenciando esta spec, regras e motivos.
-2. Código com comentários nas decisões não óbvias.
-3. Testes em `test/` com CSV sintético e DuckDB temporário real.
-4. Comandos, contagens reais, comparação com fonte e reexecução.
-5. Suposições não previstas e critérios atendidos/pendentes.
+Spec antes do código; testes sintéticos com Parquet e DuckDB reais temporários;
+carga em banco separado, auditoria integral e duas execuções; cópia do banco
+anterior; registro de tempos/resultados medidos e suposições.
+Não implementar transformação ou marts neste incremento.

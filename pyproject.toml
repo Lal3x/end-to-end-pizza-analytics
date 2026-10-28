@@ -1,7 +1,7 @@
 [project]
 name = "pizza"
 version = "0.1.0"
-description = "Pipeline analítico autoral de vendas de pizzaria — Etapa Zero"
+description = "Pipeline analítico local de vendas — Pizza Paradise"
 requires-python = ">=3.13,<3.14"
 dependencies = [
     "duckdb>=1.4,<2",

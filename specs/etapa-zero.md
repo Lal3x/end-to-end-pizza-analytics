@@ -1,6 +1,8 @@
 # Etapa Zero — contrato prévio
 
-Status: em execução; entrega sujeita à revisão do usuário. Data: 2026-10-28.
+Status: contrato histórico da fonte Maven, substituído pela migração autorizada
+para Pizza Paradise. Ver docs/plano.md e specs/ingestao.md para a fonte ativa.
+Data original: 2026-10-28.
 
 ## Contexto e objetivo
 
