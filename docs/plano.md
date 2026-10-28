@@ -43,8 +43,12 @@ de autorização específica.
 - Fundação registrada em fd85358, na branch dev, após beab954 (README).
 - Módulo db.py implementado: sete testes passaram, com cobertura de 100% das
   suas 20 linhas executáveis. Evidências em docs/execucao-db.md.
+- Ingestão implementada e executada: quatro tabelas raw, total 70.098 linhas,
+  valores conferidos com CSVs e reexecução validada. Suíte ampliada: 18 testes
+  passaram; cobertura total 98,59%. Evidências em docs/execucao-ingestao.md.
 
 ## Próximo passo
 
-Registrar o incremento de conexão e seus testes; em seguida implementar a
-ingestão conforme specs/ingestao.md, com testes sintéticos e conferência real.
+Registrar o incremento de ingestão; em seguida investigar raw e revisar os
+SELECTs de transformação conforme specs/transformacao.md antes de implementar
+refined. Nenhuma transformação foi executada nesta etapa.

@@ -1,6 +1,6 @@
 # Etapa 1 — Ingestão
 
-Status: proposta para revisão; implementar somente após revisão da Etapa Zero.
+Status: implementação autorizada após revisão da Etapa Zero.
 
 ## CONTEXTO
 
@@ -78,9 +78,16 @@ Motivo: UTF-8 falhou em pizza_types e os defaults de leitura podem mudar valores
 
 ### 5. TIPAGEM
 
-Todas as colunas como texto (`dtype=str`), inferência desligada, nulos como
+Todas as colunas como texto (`dtype="string"`), inferência desligada, nulos como
 NULL no banco. As 15 colunas serão VARCHAR. Motivo: números, IDs e datas não
 devem ser interpretados silenciosamente na camada de origem.
+
+Usar StringDtype explícito também em coluna inteiramente vazia: ela deve virar
+VARCHAR, não um tipo numérico inferido dos nulos. Validar com csv.reader em modo
+estrito a quantidade de campos de cada registro antes da leitura pandas; linha
+em branco sem campos é estrutura inválida, não registro a pular. Campos com
+quebra de linha entre aspas continuam válidos. Motivo: não descartar registros
+ou permitir que o leitor acomode silenciosamente uma linha malformada.
 
 ### 6. SAÍDA NA TELA
 

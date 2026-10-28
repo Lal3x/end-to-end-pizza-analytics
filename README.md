@@ -1,7 +1,7 @@
 # Pizza — análise de vendas com engenharia de dados
 
-**Status: Etapa Zero revisada; módulo de conexão implementado e testado.**
-Ingestão, transformação, marts e dashboard ainda não foram implementados.
+**Status: conexão e ingestão implementadas e validadas.**
+Transformação, marts e dashboard ainda não foram implementados.
 Este repositório de trabalho investiga dados de uma
 pizzaria fictícia para responder quanto vendeu, como evoluíram as vendas, quais
 produtos lideram e quando se concentram os pedidos.
@@ -125,21 +125,36 @@ primárias repetidas ou FKs órfãs. Datas válidas entre 01/01/2015 e 31/12/201
 quantidades positivas e preços não negativos. Cinco variantes não têm vendas.
 `pizza_types.csv` não é UTF-8 válido; cp1252 é a decodificação proposta.
 
+## Executar a ingestão
+
+Depois de obter e extrair os dados, execute:
+
+```bash
+uv run python -m pipeline.ingestao
+```
+
+A carga cria `pizza.duckdb` na raiz e substitui as quatro tabelas raw em uma
+transação. Valores permanecem textuais, vazios viram NULL e duplicatas são
+preservadas. Uma fonte ausente ou inválida causa falha sem carga parcial.
+Na v1: 21.350 pedidos, 48.620 linhas de itens, 96 variantes e 32 tipos;
+total 70.098 registros. Duas execuções tiveram saída idêntica e os valores
+gravados foram comparados integralmente com os CSVs, incluindo repetições.
+
 ## Testes e execução do pipeline
 
-Os sete testes de `test/test_db.py` passaram usando DuckDB temporário real.
-Cobertura medida: 100% das 20 linhas executáveis de `pipeline/db.py`; a meta
-configurada é 60% do código relevante. Essa medição ainda não inclui as futuras
-etapas. Execute a suíte com `uv run pytest --cov`.
+Os 18 testes de conexão e ingestão passaram usando DuckDB temporário real.
+Cobertura total medida: 98,59% das 71 linhas executáveis (db.py 100%,
+ingestao.py 98%). A linha não coberta é a chamada de entrada CLI; o comando
+real foi executado separadamente. A meta configurada é 60%; etapas futuras
+ainda não entram nessa medição. Execute a suíte com `uv run pytest --cov`.
 
 Os testes usam dados sintéticos e DuckDB temporário real, sem tocar
 CSV real ou pizza.duckdb. Qualidade sobre os dados reais terá verificações
 independentes de PK/FK, tipos, domínios, grãos e reconciliação financeira.
 
-Não executar comandos de ingestão, transformação, marts ou dashboard agora:
-os respectivos módulos não existem. O README receberá esses comandos e suas
-evidências conforme cada etapa for autorizada e validada. Nenhum resultado
-financeiro do pipeline é apresentado nesta entrega.
+Transformação, marts e dashboard ainda não existem. Seus comandos e evidências
+serão adicionados quando implementados e validados. Nenhum resultado financeiro
+de marts é apresentado nesta entrega.
 
 ## Documentos e próximos passos
 
@@ -149,10 +164,11 @@ financeiro do pipeline é apresentado nesta entrega.
 - [Plano incremental e decisões pendentes](docs/plano.md).
 - [Registro de execução](docs/execucao-etapa-zero.md).
 - [Validação do módulo de conexão](docs/execucao-db.md).
-- [Instruções para colaboradores e IA](AGENTS.md).
+- [Validação da ingestão](docs/execucao-ingestao.md).
 
 A Etapa Zero foi revisada e o usuário autorizou avançar por etapas. O próximo
-incremento é a ingestão, após registrar a validação do módulo de conexão.
+incremento é investigar raw e revisar os SELECTs da transformação antes de
+implementar a refined.
 O repositório
 agora funciona na branch dev, com o commit inicial beab954 contendo o README.
 Os demais artefatos de fundação foram registrados em fd85358 antes do código.
