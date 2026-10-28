@@ -1,7 +1,7 @@
 # Pizza Paradise — pipeline analítico local
 
 Fonte ativa: Pizza Paradise, dados fictícios da Observable, notebook versão 398.
-Migração da base Maven autorizada pelo usuário; ver [plano](docs/plano.md) e
+Migração da ingestão Maven concluída e validada; ver [plano](docs/plano.md) e
 [registro da migração](docs/migracao-pizza-paradise.md).
 A versão anterior permanece no histórico e suas fontes locais são preservadas.
 
@@ -53,19 +53,45 @@ uv run python -c "import duckdb, pandas, streamlit, plotly"
 
 ## Aquisição e ingestão — incremento da migração
 
-Os comandos a seguir são os artefatos previstos nas specs e serão confirmados
-no registro da migração após implementação e execução:
+Aquisição e ingestão implementadas. Execute na raiz do projeto:
 
 ```bash
 uv run python scripts/baixar_paradise.py
 uv run python -m pipeline.ingestao --banco data/pizza-paradise-validacao.duckdb
 uv run python -m pipeline.ingestao
+uv run python scripts/auditar_paradise.py
 ```
 
-O segundo comando valida em arquivo separado. Antes da primeira substituição
-real, preservar a cópia do banco anterior; instruções e evidência ficarão no
-registro. Manter a UI encerrada durante escrita. Não executar o pipeline antigo
-sobre anexos novos sem atualizar o código: os formatos e grãos mudaram.
+O segundo comando é uma carga opcional de ensaio em arquivo separado. O terceiro
+recria RAW no banco principal e o quarto compara cada valor e multiplicidade
+com a fonte, verifica tipos e FKs. Não executar com a UI aberta. A aquisição
+precisa de rede na primeira execução; se as fontes já existem, confere hashes
+sem baixá-las novamente. Conteúdo local divergente não é sobrescrito.
+
+Nesta migração, o banco antigo foi preservado em
+data/backups/maven-e8542a701d7a.duckdb, com SHA-256 e contagens registrados em
+[backup-maven.json](docs/evidencias/backup-maven.json). Os CSVs antigos também
+permanecem locais. Para outra instalação com banco de fonte anterior, preservar
+uma cópia com a UI encerrada antes de executar a nova carga.
+
+### Resultados verificados
+
+| Tabela RAW | Linhas |
+|---|---:|
+| orders | 2.046.713 |
+| order_items | 2.916.015 |
+| customers | 34.761 |
+| stores | 32 |
+| products | 36 |
+| Total | 4.997.557 |
+
+Aquisição validada por hashes; ensaio e reexecução com mesmo resultado de
+auditoria; carga final idêntica ao ensaio. Zero diferenças de valores ou
+multiplicidade por EXCEPT ALL; quatro FKs sem órfãos. As repetições de itens
+permanecem. CSVs ficaram VARCHAR; Parquets mantiveram tipos nativos.
+No ensaio medido nesta máquina: 2,59 s e pico de memória residente 588.552 KiB
+(cerca de 575 MiB), sem swap. É uma medição da ingestão, não promessa para
+outra máquina nem medição da futura transformação.
 
 ## Exploração e testes
 
@@ -84,8 +110,10 @@ SELECT * FROM raw.order_items LIMIT 10;
 ```
 
 Testes usam fontes sintéticas e DuckDB temporário real, sem rede ou banco do
-projeto. Cobertura mínima 60% do Python relevante. Resultados da suíte anterior
-não comprovam a migração; os resultados novos serão registrados após execução.
+projeto. Suíte migrada: 26 testes passaram, cobertura total 98,71% das 155 linhas
+executáveis, acima da meta de 60%. Inclui aquisição gzip/hashes, CSV e Parquet
+reais sintéticos, repetições preservadas, mudança de esquema e rollback após
+erro real em páginas Parquet. Evidência: [registro da migração](docs/migracao-pizza-paradise.md).
 
 ## Indicadores, fórmulas e limites
 

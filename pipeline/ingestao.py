@@ -1,68 +1,99 @@
-"""Espelho dos CSVs em raw, conforme specs/ingestao.md, regras 1–7.
+"""Espelho Pizza Paradise em RAW, conforme specs/ingestao.md.
 
-Valida todas as fontes antes de abrir o banco, mantém campos textuais e nulos,
-sem limpeza ou deduplicação. A transação única evita cargas parciais; contagens
-do banco só são anunciadas após commit. Importar não executa a ingestão.
+CSV textual por pandas e Parquet tipado por DuckDB, sem deduplicar ocorrências.
+Todas as fontes são pré-validadas antes de abrir o destino. A transação recria
+somente RAW e falhas preservam a versão anterior; logs só após commit.
 """
 
+import argparse
 import csv
 import sys
+from pathlib import Path
 
+import duckdb
 import pandas as pd
 
 from pipeline import db
-
-FONTES = {
-    "orders": ("utf-8-sig", ["order_id", "date", "time"]),
-    "order_details": (
-        "utf-8-sig",
-        ["order_details_id", "order_id", "pizza_id", "quantity"],
-    ),
-    "pizzas": ("utf-8-sig", ["pizza_id", "pizza_type_id", "size", "price"]),
-    "pizza_types": ("cp1252", ["pizza_type_id", "name", "category", "ingredients"]),
-}
+from pipeline.fontes import FONTES
 
 
-def executar() -> dict[str, int]:
-    """Valida fontes, substitui raw atomicamente e retorna contagens gravadas."""
+def executar(banco: Path | None = None) -> dict[str, int]:
+    """Substitui RAW atomicamente; destino opcional permite carga de ensaio."""
+    pasta = db.PASTA_RAW / "pizza_paradise"
     faltantes = [
-        f"{nome}.csv" for nome in FONTES if not (db.PASTA_RAW / f"{nome}.csv").is_file()
+        fonte["arquivo"]
+        for fonte in FONTES.values()
+        if not (pasta / fonte["arquivo"]).is_file()
     ]
     if faltantes:
-        raise ValueError(f"Fontes ausentes em {db.PASTA_RAW}: {', '.join(faltantes)}")
+        raise ValueError(f"Fontes ausentes em {pasta}: {', '.join(faltantes)}")
 
     quadros = {}
-    for nome, (encoding, colunas) in FONTES.items():
-        caminho = db.PASTA_RAW / f"{nome}.csv"
-        try:
-            with caminho.open(encoding=encoding, newline="") as arquivo:
-                leitor = csv.reader(arquivo, strict=True)
-                if next(leitor, None) != colunas:
-                    raise ValueError(f"Cabeçalho esperado: {colunas}")
-                for registro, campos in enumerate(leitor, start=2):
-                    if len(campos) != len(colunas):
-                        raise ValueError(
-                            f"Registro {registro}: número de campos inválido"
-                        )
-            quadros[nome] = pd.read_csv(
-                caminho,
-                encoding=encoding,
-                dtype="string",
-                keep_default_na=False,
-                na_values=[""],
-                skip_blank_lines=False,
-            )
-        except (ValueError, OSError, csv.Error) as erro:
-            raise ValueError(f"Fonte {caminho}: {erro}") from erro
+    with duckdb.connect(":memory:") as validador:
+        for nome, fonte in FONTES.items():
+            caminho = pasta / fonte["arquivo"]
+            try:
+                if caminho.suffix == ".parquet":
+                    esquema = validador.execute(
+                        "DESCRIBE SELECT * FROM read_parquet(?)", [str(caminho)]
+                    ).fetchall()
+                    if [r[0] for r in esquema] != fonte["colunas"]:
+                        raise ValueError("Colunas Parquet divergentes")
+                    if [r[1] for r in esquema] != fonte["tipos"]:
+                        raise ValueError("Tipos Parquet divergentes")
+                else:
+                    with caminho.open(encoding="utf-8-sig", newline="") as arquivo:
+                        leitor = csv.reader(arquivo, strict=True)
+                        if next(leitor, None) != fonte["colunas"]:
+                            raise ValueError(f"Cabeçalho esperado: {fonte['colunas']}")
+                        for numero, campos in enumerate(leitor, start=2):
+                            if len(campos) != len(fonte["colunas"]):
+                                raise ValueError(f"Registro {numero}: campos inválidos")
+                    quadros[nome] = pd.read_csv(
+                        caminho,
+                        encoding="utf-8-sig",
+                        dtype="string",
+                        keep_default_na=False,
+                        na_values=[""],
+                        skip_blank_lines=False,
+                    )
+            except (ValueError, OSError, csv.Error, duckdb.Error) as erro:
+                raise ValueError(f"Fonte {caminho}: {erro}") from erro
 
-    con = db.conectar()
+    if banco is not None:
+        banco = Path(banco)
+        banco.parent.mkdir(parents=True, exist_ok=True)
+        con = duckdb.connect(str(banco))
+    else:
+        con = db.conectar()
     try:
+        if con.execute(
+            "SELECT count(*) FROM information_schema.tables "
+            "WHERE table_schema IN ('refined', 'marts')"
+        ).fetchone()[0]:
+            raise ValueError(
+                "refined/marts existentes: revisar migração antes de trocar RAW"
+            )
         con.execute("BEGIN")
         try:
+            con.execute("DROP SCHEMA IF EXISTS raw CASCADE")
             db.criar_schema(con, "raw")
             contagens = {}
-            for nome, quadro in quadros.items():
-                contagens[nome] = db.gravar(con, quadro, "raw", nome)
+            for nome, fonte in FONTES.items():
+                try:
+                    if fonte["arquivo"].endswith(".parquet"):
+                        con.execute(
+                            f'CREATE TABLE raw."{nome}" AS '
+                            "SELECT * FROM read_parquet(?)",
+                            [str(pasta / fonte["arquivo"])],
+                        )
+                        contagens[nome] = con.execute(
+                            f'SELECT count(*) FROM raw."{nome}"'
+                        ).fetchone()[0]
+                    else:
+                        contagens[nome] = db.gravar(con, quadros[nome], "raw", nome)
+                except duckdb.Error as erro:
+                    raise ValueError(f"Gravação raw.{nome}: {erro}") from erro
             con.execute("COMMIT")
         except Exception:
             con.execute("ROLLBACK")
@@ -73,11 +104,14 @@ def executar() -> dict[str, int]:
 
 
 def main() -> int:
-    """Interface CLI: erro claro em stderr, sucesso somente após commit."""
+    """CLI: diagnóstico em stderr e contagens apenas após transação publicada."""
+    parser = argparse.ArgumentParser(description="Ingestão Pizza Paradise")
+    parser.add_argument("--banco", type=Path, help="Banco separado para ensaio")
+    args = parser.parse_args()
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
     try:
-        contagens = executar()
+        contagens = executar(args.banco)
     except Exception as erro:
         print(f"Erro na ingestão: {erro}", file=sys.stderr)
         return 1

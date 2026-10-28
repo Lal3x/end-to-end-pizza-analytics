@@ -13,7 +13,7 @@ Python 3.13, uv, DuckDB e sua extensão oficial ui; sem nova biblioteca Python.
 
 ## O QUE JÁ EXISTE
 
-Banco pizza.duckdb com quatro tabelas raw; módulo pipeline/db.py. A extensão
+Banco pizza.duckdb com cinco tabelas raw Pizza Paradise; módulo pipeline/db.py. A extensão
 ui está instalada no ambiente atual, mas deve ser instalada se faltar em outra
 máquina. Instalação inicial e recursos visuais podem precisar de rede.
 

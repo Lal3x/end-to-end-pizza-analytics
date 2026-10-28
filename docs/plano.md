@@ -36,7 +36,8 @@ Sem reescrever histórico ou publicar fontes completas sem licença esclarecida.
 
 ## Próximo passo
 
-Validar a aquisição/ingestão nova em banco separado, preservar cópia do banco
-Maven e só então substituir RAW. Não implementar transformação e marts sem
-validações intermediárias. Registrar decisões temporais e monetárias antes
-dos SELECTs finais da refined.
+Aquisição/ingestão validadas em banco separado, repetidas e publicadas em
+pizza.duckdb após cópia íntegra do banco Maven. Suíte: 26 testes, cobertura
+98,71%; pico RSS do ensaio aproximadamente 575 MiB. Registro e evidências em
+docs/migracao-pizza-paradise.md. Próximo passo: investigar a nova RAW e validar
+SELECTs temporais/monetários e correção Launch antes do código da refined.

@@ -1,5 +1,10 @@
 # Referências analisadas e adaptação
 
+Nota de versão: este registro descreve a fundação inicial Maven. A migração
+autorizada para Pizza Paradise está em docs/migracao-pizza-paradise.md e nas
+specs ativas. Na nova RAW, CSV fica texto e Parquet preserva tipos nativos;
+order_items conserva repetições legítimas, diferentemente de deduplicação por PK.
+
 As quatro páginas foram efetivamente acessadas por `curl -L --fail` em
 2026-10-28. O navegador de pesquisa retornou erro interno para as aulas; o
 primeiro curl no sandbox falhou por DNS. A repetição com acesso autorizado

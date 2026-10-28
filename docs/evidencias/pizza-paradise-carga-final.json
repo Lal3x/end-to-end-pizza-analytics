@@ -1,0 +1,88 @@
+{
+  "tabelas": {
+    "orders": {
+      "linhas": 2046713,
+      "diferencas_except_all": [
+        0,
+        0
+      ],
+      "tipos": {
+        "id": "INTEGER",
+        "customerId": "VARCHAR",
+        "storeId": "VARCHAR",
+        "orderDate": "VARCHAR",
+        "nItems": "INTEGER",
+        "total": "DOUBLE"
+      },
+      "sha256_fonte": "f88d964889bb11dde06b930513ff97bfc407353aedc101f1e4a97bd5acf5947a"
+    },
+    "order_items": {
+      "linhas": 2916015,
+      "diferencas_except_all": [
+        0,
+        0
+      ],
+      "tipos": {
+        "SKU": "VARCHAR",
+        "orderID": "INTEGER"
+      },
+      "sha256_fonte": "cfef82b2403eb04542fa5af10b067dfdb0b45f54bdaa23152c782533fa2b7842"
+    },
+    "customers": {
+      "linhas": 34761,
+      "diferencas_except_all": [
+        0,
+        0
+      ],
+      "tipos": {
+        "id": "VARCHAR",
+        "latitude": "VARCHAR",
+        "longitude": "VARCHAR"
+      },
+      "sha256_fonte": "a4975208e7d3843fafbd53e5f1ed908530292d7f737ce91453466efa214f0231"
+    },
+    "stores": {
+      "linhas": 32,
+      "diferencas_except_all": [
+        0,
+        0
+      ],
+      "tipos": {
+        "id": "VARCHAR",
+        "zipcode": "VARCHAR",
+        "state_abbr": "VARCHAR",
+        "latitude": "VARCHAR",
+        "longitude": "VARCHAR",
+        "city": "VARCHAR",
+        "state": "VARCHAR",
+        "distance": "VARCHAR"
+      },
+      "sha256_fonte": "48a10f38803de9e904b4cf9a9b9eddc4af29c452e7968f211413bc342655c432"
+    },
+    "products": {
+      "linhas": 36,
+      "diferencas_except_all": [
+        0,
+        0
+      ],
+      "tipos": {
+        "SKU": "VARCHAR",
+        "Name": "VARCHAR",
+        "Price": "VARCHAR",
+        "Category": "VARCHAR",
+        "Size": "VARCHAR",
+        "Ingredients": "VARCHAR",
+        "Launch": "VARCHAR"
+      },
+      "sha256_fonte": "c116092883ee22411c33a9c4a1b0dc68e8df26a26280a50ce10b9097366149e3"
+    }
+  },
+  "orfãos": {
+    "orders.customerId->customers.id": 0,
+    "orders.storeId->stores.id": 0,
+    "order_items.orderID->orders.id": 0,
+    "order_items.SKU->products.SKU": 0
+  },
+  "banco": "/home/lucas/Projetos/Pizza/pizza.duckdb",
+  "repeticoes_itens_alem_da_primeira": 54041
+}

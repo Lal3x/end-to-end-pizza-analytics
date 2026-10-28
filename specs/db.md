@@ -14,8 +14,9 @@ Python 3.13, uv, DuckDB local e pandas para o DataFrame a gravar.
 
 ## O QUE JÁ EXISTE (use, não reimplemente)
 
-Ambiente/configurações e CSVs locais. Ainda não há `pizza.duckdb` ou `pipeline/`.
-Cada etapa decide suas colunas/tipos, não o módulo comum.
+Módulo implementado e validado; pizza.duckdb e fontes locais disponíveis.
+Na migração Pizza Paradise, PASTA_RAW continua raw/; as fontes novas ficam em
+raw/pizza_paradise/. Cada etapa decide suas colunas/tipos, não o módulo comum.
 
 ## ARTEFATO A PRODUZIR
 

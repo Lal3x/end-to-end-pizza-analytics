@@ -24,6 +24,8 @@ A aquisição dos anexos deve ser reproduzível e separada da ingestão.
 ## ARTEFATOS A PRODUZIR
 
 scripts/baixar_paradise.py e pipeline/ingestao.py.
+Compartilhar descritores em pipeline/fontes.py; aquisição em
+pipeline/aquisicao.py, chamada pelo script fino, sem duplicar URLs/hashes.
 Comandos: uv run python scripts/baixar_paradise.py;
 uv run python -m pipeline.ingestao.
 O executor aceita --banco para validar uma carga em arquivo separado.

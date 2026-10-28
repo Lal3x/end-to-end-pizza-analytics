@@ -1,0 +1,10 @@
+{
+  "arquivo": "data/backups/maven-e8542a701d7a.duckdb",
+  "sha256": "e8542a701d7a403c03e7649c5f2dfb8f327090362316e2528ff0ee78fcc6794a",
+  "linhas": {
+    "orders": 21350,
+    "order_details": 48620,
+    "pizzas": 96,
+    "pizza_types": 32
+  }
+}
