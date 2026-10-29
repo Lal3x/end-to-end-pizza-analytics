@@ -21,7 +21,7 @@ Nenhum envio dos arquivos à nuvem faz parte do projeto.
 
 ## Aquisição reproduzível
 
-scripts/baixar_paradise.py fixa as URLs dos cinco anexos investigados e verifica
+baixar_dados.py fixa as URLs dos cinco anexos investigados e verifica
 SHA-256 de cada conteúdo canônico. CSVs podem vir com gzip de transporte:
 preservar resposta original em data/pizza_paradise e descomprimir sem editar
 campos. Parquets mantêm bytes/tipos nativos. Fontes ativas:

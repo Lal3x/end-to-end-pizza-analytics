@@ -7,7 +7,8 @@ import json
 
 import pytest
 
-from pipeline import aquisicao, db
+import baixar_dados as aquisicao
+import db
 
 
 def configurar(tmp_path, monkeypatch, corromper=False):

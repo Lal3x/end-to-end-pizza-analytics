@@ -8,14 +8,13 @@ import duckdb
 import pandas as pd
 import pytest
 
-from pipeline import db
+import db
 
 
 def test_importar_modulo_nao_cria_banco(tmp_path):
     # Executar o módulo com localização isolada detecta efeitos na importação.
     origem = Path(db.__file__)
-    modulo_local = tmp_path / "pipeline" / "db.py"
-    modulo_local.parent.mkdir()
+    modulo_local = tmp_path / "db.py"
     modulo_local.write_bytes(origem.read_bytes())
     spec = importlib.util.spec_from_file_location("db_isolado", modulo_local)
     modulo = importlib.util.module_from_spec(spec)

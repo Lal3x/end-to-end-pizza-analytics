@@ -1,7 +1,7 @@
 # Etapa 1 — Módulo de conexão
 
-Status: implementação autorizada após revisão da Etapa Zero; validar antes da
-ingestão. Fundação registrada no commit fd85358.
+Status: implementado e validado; registro em docs/execucao-db.md.
+Fundação registrada no commit fd85358; caminho atual na raiz por decisão do usuário.
 
 ## CONTEXTO
 
@@ -20,7 +20,7 @@ raw/pizza_paradise/. Cada etapa decide suas colunas/tipos, não o módulo comum.
 
 ## ARTEFATO A PRODUZIR
 
-`pipeline/db.py`, expondo somente:
+`db.py`, na raiz e fora da pasta de etapas, expondo somente:
 
 ```text
 PASTA_RAW                        Path de raw/ na raiz
@@ -33,7 +33,7 @@ gravar(con, df, schema, tabela)   substitui tabela e retorna count(*) do banco
 
 ### D1. CAMINHOS
 
-Resolver raw/ e pizza.duckdb pela localização do módulo, nunca pelo diretório
+Resolver raw/ e pizza.duckdb pela pasta do módulo na raiz, nunca pelo diretório
 corrente. Motivo: executar de outra pasta não pode criar banco no lugar errado.
 
 ### D2. RESPONSABILIDADES E PROIBIÇÕES

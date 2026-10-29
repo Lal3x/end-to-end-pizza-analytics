@@ -13,12 +13,69 @@ from pathlib import Path
 import duckdb
 import pandas as pd
 
-from pipeline import db
-from pipeline.fontes import FONTES
+import db
+
+FONTES = {
+    "orders": {
+        "arquivo": "orders.parquet",
+        "colunas": ["id", "customerId", "storeId", "orderDate", "nItems", "total"],
+        "tipos": ["INTEGER", "VARCHAR", "VARCHAR", "VARCHAR", "INTEGER", "DOUBLE"],
+    },
+    "order_items": {
+        "arquivo": "order_items.parquet",
+        "colunas": ["SKU", "orderID"],
+        "tipos": ["VARCHAR", "INTEGER"],
+    },
+    "customers": {
+        "arquivo": "customers.csv",
+        "colunas": ["id", "latitude", "longitude"],
+    },
+    "stores": {
+        "arquivo": "stores.csv",
+        "colunas": [
+            "id",
+            "zipcode",
+            "state_abbr",
+            "latitude",
+            "longitude",
+            "city",
+            "state",
+            "distance",
+        ],
+    },
+    "products": {
+        "arquivo": "products.csv",
+        "colunas": [
+            "SKU",
+            "Name",
+            "Price",
+            "Category",
+            "Size",
+            "Ingredients",
+            "Launch",
+        ],
+    },
+}
 
 
 def executar(banco: Path | None = None) -> dict[str, int]:
-    """Substitui RAW atomicamente; destino opcional permite carga de ensaio."""
+    """Publica as cinco fontes em RAW, conforme specs/ingestao.md.
+
+    Args:
+        banco: Caminho opcional para uma carga de ensaio. Quando omitido,
+            utiliza pizza.duckdb na raiz do projeto.
+
+    Returns:
+        Contagens por tabela, somente após o commit de toda a carga.
+
+    Raises:
+        ValueError: Se uma fonte divergir do contrato ou o destino já tiver
+            tabelas refined/marts. Falhas durante a carga provocam rollback.
+        duckdb.Error: Se a abertura ou o controle da transação falhar.
+
+    Preserva valores e multiplicidades; CSV entra como texto e Parquet mantém
+    seus tipos nativos. Fecha a conexão também em caso de erro.
+    """
     pasta = db.PASTA_RAW / "pizza_paradise"
     faltantes = [
         fonte["arquivo"]

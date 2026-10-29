@@ -6,8 +6,9 @@ import duckdb
 import pandas as pd
 import pytest
 
-from pipeline import db, ingestao
-from pipeline.fontes import FONTES
+import db
+from pipeline import ingestao
+from pipeline.ingestao import FONTES
 
 
 def preparar(tmp_path, monkeypatch):

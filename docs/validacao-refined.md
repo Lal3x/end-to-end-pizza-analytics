@@ -1,7 +1,10 @@
 # Validação dos SELECTs candidatos da refined
 
-Status: investigação concluída; decisões propostas aguardam revisão antes de
-implementar pipeline/transformacao.py. Nenhuma refined foi criada.
+Status: registro histórico da investigação SQL. O usuário corrigiu o escopo
+para transformação com pandas; SQLs, validador e seus testes foram retirados
+do fluxo ativo e permanecem acessíveis nos commits anteriores. Este documento
+registra o que foi executado, não é um guia de comandos atuais. Nenhuma refined
+foi criada. O contrato ativo é specs/transformacao.md.
 
 ## Entradas e artefatos
 

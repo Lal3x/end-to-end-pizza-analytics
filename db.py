@@ -12,16 +12,32 @@ from uuid import uuid4
 import duckdb
 import pandas as pd
 
-PASTA_RAW = Path(__file__).resolve().parents[1] / "raw"
+PASTA_RAW = Path(__file__).resolve().parent / "raw"
 
 
 def conectar() -> duckdb.DuckDBPyConnection:
-    """Abre pizza.duckdb na raiz do projeto; o chamador deve fechar."""
+    """Abre o banco local definido em specs/db.md.
+
+    Returns:
+        Conexão com pizza.duckdb na raiz do projeto. O chamador deve fechá-la
+        e controlar suas transações.
+
+    Raises:
+        duckdb.Error: Se o arquivo não puder ser aberto, inclusive por bloqueio.
+    """
     return duckdb.connect(str(PASTA_RAW.parent / "pizza.duckdb"))
 
 
 def criar_schema(con: duckdb.DuckDBPyConnection, nome: str) -> None:
-    """Cria o schema sem interpretar seu identificador como código SQL."""
+    """Cria um schema, escapando seu nome como identificador SQL.
+
+    Args:
+        con: Conexão aberta, cuja transação pertence ao chamador.
+        nome: Nome literal do schema a criar, caso ainda não exista.
+
+    Raises:
+        duckdb.Error: Se a criação falhar. Não confirma a transação.
+    """
     identificador = '"' + nome.replace('"', '""') + '"'
     con.execute(f"CREATE SCHEMA IF NOT EXISTS {identificador}")
 
@@ -32,7 +48,21 @@ def gravar(
     schema: str,
     tabela: str,
 ) -> int:
-    """Substitui tabela sem transformar o DataFrame ou confirmar a transação."""
+    """Substitui uma tabela pelo DataFrame, conforme specs/db.md.
+
+    Args:
+        con: Conexão aberta, cuja transação pertence ao chamador.
+        df: Dados já preparados pela etapa responsável.
+        schema: Nome literal de um schema existente.
+        tabela: Nome literal da tabela de destino.
+
+    Returns:
+        Quantidade de linhas consultada na tabela após a gravação.
+
+    Raises:
+        duckdb.Error: Se o registro ou a gravação falhar. Não executa commit;
+            remove o registro temporário mesmo quando a gravação falha.
+    """
     schema_sql = '"' + schema.replace('"', '""') + '"'
     tabela_sql = '"' + tabela.replace('"', '""') + '"'
     destino = f"{schema_sql}.{tabela_sql}"

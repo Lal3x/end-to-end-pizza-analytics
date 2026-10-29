@@ -16,17 +16,18 @@ Sem biblioteca, banco ou orquestrador adicional.
 
 ## O QUE JÁ EXISTE (use, não reimplemente)
 
-pipeline/db.py, ingestão Maven validada e evidência de inspeção do novo conjunto
+db.py na raiz, ingestão Maven validada e evidência de inspeção do novo conjunto
 em docs/evidencias/pizza-paradise-inspecao.json. Antes de substituir a carga
 antiga, guardar cópia íntegra do banco e manter os CSVs anteriores.
 A aquisição dos anexos deve ser reproduzível e separada da ingestão.
 
 ## ARTEFATOS A PRODUZIR
 
-scripts/baixar_paradise.py e pipeline/ingestao.py.
-Compartilhar descritores em pipeline/fontes.py; aquisição em
-pipeline/aquisicao.py, chamada pelo script fino, sem duplicar URLs/hashes.
-Comandos: uv run python scripts/baixar_paradise.py;
+baixar_dados.py na raiz e pipeline/ingestao.py.
+Mapa de arquivos/colunas/tipos na ingestão; URLs/hashes somente no downloader.
+Não criar módulos de aquisição ou configuração dentro de pipeline/.
+Conexão compartilhada em db.py na raiz; pipeline/ fica para as etapas.
+Comandos: uv run python baixar_dados.py;
 uv run python -m pipeline.ingestao.
 O executor aceita --banco para validar uma carga em arquivo separado.
 
@@ -58,15 +59,7 @@ Nunca converter datas, dinheiro ou IDs, deduplicar, normalizar ou descartar
 linhas. Motivo: Parquet já é tipado; convertê-lo para texto mudaria sua
 representação. A migração autoriza esta diferença do antigo contrato CSV.
 
-### 3. PRÉ-VALIDAÇÃO
-
-Verificar os cinco arquivos antes de abrir/criar o banco de destino.
-Validar cabeçalhos e estrutura de cada CSV com csv.reader estrito; não pular
-linhas vazias ou campos excedentes. Validar colunas e tipos dos Parquets com
-conexão DuckDB em memória, sem carregar milhões de linhas no pandas.
-Motivo: erro de fonte não pode criar banco vazio ou iniciar carga parcial.
-
-### 4. REEXECUÇÃO E MIGRAÇÃO
+### 3. REEXECUÇÃO
 
 Recriar somente raw em transação única, incluindo DROP SCHEMA raw CASCADE,
 para remover tabelas da fonte anterior. Não escrever em refined/marts.
@@ -76,7 +69,16 @@ Na primeira migração real, comparar a cópia de segurança com o banco antigo
 por SHA-256. Nenhum arquivo de fonte anterior será apagado.
 Motivo: evitar mistura de fontes e preservar possibilidade de retorno.
 
-### 5. MEMÓRIA E GRAVAÇÃO
+### 4. LEITURA DO ARQUIVO
+
+Verificar os cinco arquivos antes de abrir/criar o banco de destino.
+Validar cabeçalhos e estrutura de cada CSV com csv.reader estrito; não pular
+linhas vazias ou campos excedentes. Validar colunas e tipos dos Parquets com
+conexão DuckDB em memória, sem carregar milhões de linhas no pandas.
+Encoding UTF-8 explícito, BOM aceito; fontes não são alteradas na leitura.
+Motivo: erro de fonte não pode criar banco vazio ou iniciar carga parcial.
+
+### 5. TIPAGEM
 
 Somente os três CSVs pequenos passam por pandas, dtype="string".
 Os dois Parquets são lidos diretamente por DuckDB via read_parquet e CTAS.
@@ -84,7 +86,7 @@ Não fazer merge/groupby no pandas nem concatenar os milhões de itens.
 Usar parâmetros para caminhos e nomes de tabela delimitados.
 Motivo: volume maior sem trazer o fato completo à memória Python.
 
-### 6. AQUISIÇÃO
+#### 5.1. AQUISIÇÃO (apoio separado em baixar_dados.py)
 
 URLs de anexos e hashes fixos da versão investigada no script de aquisição.
 Aceitar gzip de transporte e descomprimir para conteúdo CSV canônico; validar
@@ -94,9 +96,14 @@ e só publica o diretório completo após validar todos os anexos.
 Se fontes já existentes tiverem conteúdo diferente, falhar sem sobrescrever.
 Motivo: URLs, compressão e integridade precisam ser reproduzíveis.
 
-### 7. LOG E ERRO
+### 6. SAÍDA NA TELA
 
 Contagem de cada tabela consultada no banco e total após COMMIT; stdout UTF-8.
+Uma linha por tabela com nome qualificado e milhar separado por ponto; linha
+final com total. Motivo: anunciar somente uma carga publicada.
+
+### 7. ERRO
+
 Fonte ausente/inválida: nome, caminho e causa; saída 1. SQL inválido: rollback;
 não imprimir sucesso parcial. Sempre fechar conexões.
 Falha de aquisição não autoriza substituir fontes por dados inventados.

@@ -15,8 +15,8 @@ import duckdb
 
 def main() -> None:
     """Falha em diferenças de valor, multiplicidade, tipo, coluna ou relação."""
-    from pipeline import db
-    from pipeline.fontes import FONTES
+    import db
+    from baixar_dados import FONTES
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
