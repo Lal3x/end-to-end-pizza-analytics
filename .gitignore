@@ -14,3 +14,5 @@ data/
 !.env.example
 *.log
 /AGENTS.md
+/site/
+/.venv-validacao/
