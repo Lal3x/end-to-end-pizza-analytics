@@ -33,7 +33,7 @@ Hook de MkDocs para apontar links de código/design/specs ao GitHub, sem copiar
 ### 1. CI
 
 Executar em push, pull_request e acionamento manual, Python 3.13 e uv fixado.
-uv sync --locked --group docs; pre-commit em todos os arquivos; pytest --cov;
+uv sync --locked --group docs; pre-commit em todos os arquivos, incluindo pytest --cov;
 mkdocs build --strict. Testes só com fontes sintéticas, sem rede ou banco real
 como dependência. Não executar downloader/pipeline real no CI.
 Permissão contents: read; passos externos fixados por SHA verificado.
@@ -95,7 +95,11 @@ Falha de lint/teste/docs impede deploy. Logs não exibem tokens ou credenciais.
 
 ## CRITÉRIOS DE ACEITE
 
-- Ambiente novo instala com --locked; hooks, testes/cobertura ≥60% e build
+- O pre-commit executa a suíte completa uma vez por chamada, sem receber nomes
+  de arquivos; também roda quando apenas documentação é alterada.
+- Cobertura mínima de linhas de 70%, centralizada no pyproject.toml, aplicada
+  pelo pytest --cov tanto no hook quanto no CI.
+- Ambiente novo instala com --locked; hooks, testes/cobertura ≥70% e build
   estrito passam sem dados/banco do projeto na suíte.
 - Navegação e links do MkDocs funcionam; site/ não inclui fontes brutas/banco.
 - Fonte/atribuição/limites e método de reprodução explícitos na documentação.

@@ -30,17 +30,47 @@ Permissão textual ampla, sem licença padronizada nos metadados dos cinco anexo
 Não atribuir CC0/ISC nem redistribuir os anexos completos neste repositório.
 [Proveniência e política de publicação](docs/fontes-e-licenca.md).
 
-| Tabela | Uma linha representa | Chave |
-|---|---|---|
-| orders | Um pedido | id |
-| order_items | Uma ocorrência de produto no pedido | Sem PK natural de linha |
-| products | Uma variante de pizza | SKU |
-| customers | Um cliente fictício | id |
-| stores | Uma loja | id |
+### Arquivos baixados e tabelas
+
+Os cinco arquivos são obtidos pelo downloader e mantidos em raw/pizza_paradise/.
+As contagens abaixo foram conferidas na carga RAW da versão 398 da fonte;
+não são valores fixos usados para validar futuras versões.
+
+| Arquivo baixado | Tabela RAW | Linhas | Uma linha representa | Chave |
+|---|---|---:|---|---|
+| orders.parquet | raw.orders | 2.046.713 | Um pedido | id |
+| order_items.parquet | raw.order_items | 2.916.015 | Uma ocorrência de produto no pedido | Sem PK natural de linha |
+| products.csv | raw.products | 36 | Uma variante de pizza (SKU) | SKU |
+| customers.csv | raw.customers | 34.761 | Um cliente fictício | id |
+| stores.csv | raw.stores | 32 | Uma loja | id |
+| **Total** | **5 tabelas** | **4.997.557** | — | — |
+
+[Evidência da carga e preservação das fontes](docs/evidencias/pizza-paradise-carga-final.json).
+
+### Relacionamentos
+
+Cada pedido pertence a um cliente e a uma loja. Cada ocorrência de item aponta
+para um pedido e um SKU. PK identifica um registro; FK aponta para a chave de
+outra tabela. O diagrama representa as relações validadas na refined.
+
+```mermaid
+erDiagram
+    customers ||--o{ orders : "id → customerId"
+    stores ||--o{ orders : "id → storeId"
+    orders ||--o{ order_items : "id → orderID"
+    products ||--o{ order_items : "SKU → SKU"
+```
 
 FKs: orders.customerId → customers.id; orders.storeId → stores.id;
 order_items.orderID → orders.id; order_items.SKU → products.SKU.
 [Modelo completo](docs/modelo.md).
+
+As quatro relações foram auditadas sem registros órfãos. O par orderID/SKU
+pode se repetir em order_items: cada ocorrência representa uma unidade vendida.
+Depois de juntar pedidos e itens, o total do pedido não pode ser somado em
+cada linha, pois isso multiplicaria a receita.
+
+### Fluxo do pipeline
 
 ```text
 Arquivos CSV/Parquet → raw/pizza_paradise/
@@ -98,7 +128,8 @@ uv run mkdocs serve
 ```
 
 Testes usam fontes sintéticas e DuckDB temporário real, sem rede ou banco do
-projeto. No executor: **127 testes, cobertura 94,81%**, meta ≥60%.
+projeto. No executor: **127 testes, cobertura 94,81%**, mínimo exigido de 70%.
+O pre-commit executa a suíte completa com cobertura antes de cada commit.
 Verificações independentes conferem PKs, FKs, nulos, tipos, grãos e receitas.
 [CI, hooks e publicação](docs/automacao.md).
 
@@ -117,6 +148,20 @@ principal comparados integralmente com zero diferenças. A carga completa levou
 [Dashboard validado](docs/execucao-dashboard.md) ·
 [PNG do rascunho](design/rascunho.png) ·
 [Captura funcional](docs/evidencias/dashboard-desktop.png)
+
+## Dashboard
+
+![Dashboard Pizza Paradise — visão executiva com KPIs e evolução das vendas](docs/evidencias/dashboard-desktop.png)
+
+Captura da aplicação Streamlit com dados dos marts validados. Os cartões
+apresentam receita total, pedidos, unidades e ticket médio. As demais seções
+mostram produtos, Pareto, categorias, tamanhos, dias, horários e lojas.
+O painel considera o período completo de 2020–2022; as seleções de série e
+ranking não alteram os KPIs globais. Valores monetários na unidade da fonte,
+sem símbolo de moeda não comprovado.
+
+[Produtos e Pareto](docs/evidencias/dashboard-produtos.png) ·
+[Demanda e lojas](docs/evidencias/dashboard-demanda.png).
 
 Arquivos brutos, banco, backups, credenciais, caches, site gerado e AGENTS.md
 ficam fora do Git. Evidências pequenas, agregados e imagens são artefatos de

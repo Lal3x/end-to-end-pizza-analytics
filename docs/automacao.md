@@ -9,6 +9,9 @@ uv run pre-commit run --all-files
 ```
 
 O hook precisa ser instalado em cada clone; não é versionado dentro de .git/.
+Cada execução do pre-commit roda a suíte completa com `pytest --cov`, inclusive
+em commits só de documentação. Testes com falha ou cobertura abaixo de 70%
+bloqueiam o commit. O limite está em pyproject.toml e também vale no CI.
 Hooks locais usam uv.lock: Ruff, formatação, YAML/TOML, conflitos, espaços/fim
 de arquivo, arquivos grandes e chaves privadas. Ajustes de whitespace podem
 modificar arquivos; revise o diff e adicione novamente ao staging.
@@ -30,8 +33,8 @@ da busca. Links para esses arquivos levam à versão preservada no repositório.
 
 ## CI
 
-Pushes e pull requests executam instalação bloqueada pelo lock, pre-commit,
-testes com cobertura e build estrito. A suíte usa DuckDB temporário e fontes
+Pushes e pull requests executam instalação bloqueada pelo lock, pre-commit
+(incluindo testes com cobertura) e build estrito. A suíte usa DuckDB temporário e fontes
 sintéticas; não baixa datasets nem executa cargas reais no runner.
 
 ## CD

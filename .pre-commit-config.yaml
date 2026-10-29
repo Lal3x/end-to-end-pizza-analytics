@@ -1,6 +1,13 @@
 repos:
   - repo: local
     hooks:
+      - id: pytest-cov
+        name: Testes e cobertura minima de 70%
+        entry: uv run --locked pytest --cov
+        language: system
+        pass_filenames: false
+        always_run: true
+        require_serial: true
       - id: ruff-check
         name: Ruff
         entry: uv run --locked ruff check
