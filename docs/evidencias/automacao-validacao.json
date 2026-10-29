@@ -1,0 +1,154 @@
+{
+  "data": "2026-10-29",
+  "ambiente_novo": {
+    "python": "3.13.14",
+    "uv": "0.12.24",
+    "instalacao": "uv sync --locked --group docs",
+    "sem_banco_fontes_originais_na_suite": true,
+    "cache_uv_reutilizado": true
+  },
+  "testes": {
+    "aprovados": 127,
+    "segundos": 22.51,
+    "cobertura_percentual": 94.81,
+    "linhas": 617
+  },
+  "pre_commit": "aprovado na copia limpa",
+  "bloqueio_env_forcado": "aprovado",
+  "mkdocs_build_strict": "aprovado",
+  "pipeline_fonte_recem_baixada": {
+    "estado": "publicado",
+    "segundos": 38.891,
+    "pico_rss_kib": 1847720
+  },
+  "comparacoes_except_all": {
+    "marts.concentracao_pizzas": [
+      0,
+      0
+    ],
+    "marts.frequencia_clientes": [
+      0,
+      0
+    ],
+    "marts.kpis": [
+      0,
+      0
+    ],
+    "marts.pedidos_dia_semana": [
+      0,
+      0
+    ],
+    "marts.pedidos_hora": [
+      0,
+      0
+    ],
+    "marts.quantidade_por_pedido": [
+      0,
+      0
+    ],
+    "marts.ranking_pizzas": [
+      0,
+      0
+    ],
+    "marts.ranking_tipos_pizza": [
+      0,
+      0
+    ],
+    "marts.receita_categoria": [
+      0,
+      0
+    ],
+    "marts.ticket_por_pedido": [
+      0,
+      0
+    ],
+    "marts.vendas_loja": [
+      0,
+      0
+    ],
+    "marts.vendas_mensais": [
+      0,
+      0
+    ],
+    "marts.vendas_tamanho": [
+      0,
+      0
+    ],
+    "raw.customers": [
+      0,
+      0
+    ],
+    "raw.order_items": [
+      0,
+      0
+    ],
+    "raw.orders": [
+      0,
+      0
+    ],
+    "raw.products": [
+      0,
+      0
+    ],
+    "raw.stores": [
+      0,
+      0
+    ],
+    "refined.customers": [
+      0,
+      0
+    ],
+    "refined.order_items": [
+      0,
+      0
+    ],
+    "refined.orders": [
+      0,
+      0
+    ],
+    "refined.products": [
+      0,
+      0
+    ],
+    "refined.stores": [
+      0,
+      0
+    ]
+  },
+  "fonte": {
+    "id": "0522fa2e9659bee6",
+    "versao": 398,
+    "licenca_padronizada": null,
+    "permissao_textual_reconferida": true,
+    "redistribui_anexos_completos": false
+  },
+  "acoes_fixadas": {
+    "actions/checkout": {
+      "tag": "v6",
+      "sha": "d23441a48e516b6c34aea4fa41551a30e30af803"
+    },
+    "astral-sh/setup-uv": {
+      "tag": "v7",
+      "sha": "37802adc94f370d6bfd71619e3f0bf239e1f3b78"
+    },
+    "actions/configure-pages": {
+      "tag": "v5",
+      "sha": "983d7736d9b0ae728b81ab479565c72886d7745b"
+    },
+    "actions/upload-pages-artifact": {
+      "tag": "v4",
+      "sha": "7b1f4a764d45c48632c6b24a0339c27f5614fb0b"
+    },
+    "actions/deploy-pages": {
+      "tag": "v4",
+      "sha": "d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e"
+    }
+  },
+  "publicacao": {
+    "opcao_usuario": "preparar_para_publicar_depois",
+    "push_realizado": false,
+    "workflow_remoto_executado": false,
+    "pages_ativado_nesta_etapa": false,
+    "url_prevista": "https://lal3x.github.io/end-to-end-pizza-analytics/"
+  }
+}

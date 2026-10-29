@@ -61,3 +61,15 @@ Registro em docs/execucao-dashboard.md. Próximo passo: revisão final da entreg
 comandos do README e pendências de fonte/publicação; relatório HTML é opcional.
 Revisão de 29/10/2026: specs padronizadas, Pareto com nomes e mart horário em
 America/Sao_Paulo; 87 testes aprovados. Registro em docs/validacao-specs-e-fuso.md.
+
+Execução completa implementada em 29/10/2026 em executar_pipeline.py, na raiz,
+reutilizando as três etapas com uma transação de destino. Ensaio, reexecução e
+principal publicados; comparação integral das 23 tabelas sem diferenças.
+127 testes aprovados, cobertura 94,81%; registro em docs/execucao-pipeline.md.
+Comandos individuais preservados. Nenhum commit novo nesta etapa.
+
+Revisão final local: CI, pre-commit, MkDocs e CD preparados. Ambiente novo com
+127 testes aprovados e 94,81% de cobertura; nova aquisição e execução reproduziram
+as 23 tabelas. Ferramentas e executor registrados em commits locais. A publicação
+foi adiada por escolha do usuário; próximo passo é seguir docs/automacao.md para
+enviar dev, revisar a PR e ativar Pages. Evidências em docs/execucao-automacao.md.

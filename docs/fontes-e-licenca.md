@@ -19,6 +19,23 @@ Desenvolvimento com arquivos locais autorizado; arquivos completos permanecem
 ignorados pelo Git. Antes de redistribuir, esclarecer os termos aplicáveis.
 Nenhum envio dos arquivos à nuvem faz parte do projeto.
 
+## Revisão de publicação — 29/10/2026
+
+A declaração de uso foi reconferida no código do notebook oficial. A atribuição
+e a distinção entre permissão textual e ausência de licença padronizada são
+mantidas; isso não é uma afirmação de licença CC0/ISC nem um parecer jurídico.
+
+Escopo da entrega pública: código autoral, specs, guias, capturas e resultados
+derivados/evidências pequenas. Os cinco CSV/Parquets completos, pizza.duckdb,
+backups e respostas originais de aquisição permanecem locais/ignorados. O
+downloader obtém os anexos do publicador, não de uma cópia distribuída pelo repo.
+Essa política também vale para o artefato MkDocs/Pages, construído de docs/,
+sem incluir raw/, data/, banco, credenciais ou AGENTS.md.
+
+Uma futura redistribuição dos anexos completos exige outra revisão dos termos.
+A revisão atual documenta os termos e restringe os artefatos publicados; não
+converte license:null em uma licença padronizada inventada.
+
 ## Aquisição reproduzível
 
 baixar_dados.py fixa as URLs dos cinco anexos investigados e verifica

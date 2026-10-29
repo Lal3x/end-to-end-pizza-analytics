@@ -143,3 +143,34 @@ As diferenças próprias da pizzaria foram mantidas: encoding observado, datas
 dia/mês/ano, quatro tabelas, IDs originais e receita estimada em USD. Nomes de
 colunas e filtros da Olist não foram transferidos para este dado. As dependências
 futuras são distinguidas dos artefatos que realmente existem na Etapa Zero.
+
+## Execução completa — Pizza Paradise, 29/10/2026
+
+Após spec e aprovação, executar_pipeline.py passou a controlar uma transação
+para as três camadas. A pré-validação foi extraída na ingestão; as três etapas
+aceitam conexão emprestada e preservam os comandos individuais. Não houve cópia
+de regras de negócio no executor ou novo módulo na pasta pipeline/.
+
+Quinze testes novos verificam falhas reais depois de ingestão e transformação,
+rollback completo, destino novo/existente, schemas externos e interrupção.
+Os 127 testes passaram, cobertura 94,81%. Ensaio/reexecução e carga principal
+reconciliaram todas as 23 tabelas por valores, tipos e multiplicidades.
+
+O comparador inicial encontrou falta do adaptador opcional pytz ao usar fetchall
+em TIMESTAMPTZ; a comparação passou a usar JSON nativo e DESCRIBE, sem modificar
+conversões de produção ou adicionar dependência apenas para o teste.
+Medições, backup local e cuidados de operação: docs/execucao-pipeline.md.
+Nenhum commit foi criado nesta etapa; mudanças preparadas para revisão.
+
+## Automação e organização da entrega — 29/10/2026
+
+CI, pre-commit, MkDocs e CD foram preparados após spec. Uma cópia sem dados nem
+banco recebeu um ambiente novo: 127 testes passaram, cobertura 94,81%. Depois,
+aquisição e pipeline reais reproduziram as 23 tabelas sem diferenças. O build
+estrito passou e um .env artificial foi corretamente bloqueado pelo hook.
+O formatador dos hooks ajustou somente a quebra final de dois JSONs históricos,
+sem alterar seus valores. A documentação distingue fonte atual e histórico.
+
+Foram criados commits locais das ferramentas e do executor que estava pendente,
+sem retrodatação. Por escolha do usuário, envio e ativação do Pages ficam para
+depois. Resultados e limites em [validação da automação](execucao-automacao.md).

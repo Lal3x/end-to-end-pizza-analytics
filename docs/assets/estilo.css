@@ -1,0 +1,15 @@
+:root { --bs-link-color: #087d98; --bs-link-hover-color: #164e63; }
+body { background: #ecfeff; color: #164e63; }
+.navbar { background: #083e50 !important; border-bottom: 3px solid #0891b2; }
+.navbar .nav-link, .navbar .navbar-brand { color: #e7fcff !important; }
+.navbar .dropdown-menu { background: #fff; }
+.navbar .dropdown-item { color: #164e63 !important; }
+.navbar .dropdown-item:hover { background: #dff7fa; }
+.bs-sidebar, main, [role="main"] { background: #fff; border-radius: 12px; }
+main, [role="main"] { padding: 1.5rem; border: 1px solid #dcecef; }
+h1, h2, h3 { color: #164e63; letter-spacing: -.025em; }
+h1 { border-bottom: 2px solid #b9e4ed; padding-bottom: .5rem; }
+pre { background: #f3fafb; border: 1px solid #dcecef; border-radius: 8px; }
+img { max-width: 100%; height: auto; }
+a:focus-visible { outline: 3px solid #dba900; outline-offset: 3px; }
+footer { color: #526e7a; }
