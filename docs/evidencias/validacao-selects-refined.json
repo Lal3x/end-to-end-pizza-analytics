@@ -1,0 +1,441 @@
+{
+  "tabelas": {
+    "orders": {
+      "linhas_antes": 2046713,
+      "linhas_depois": 2046713,
+      "repeticoes_exatas_antes": 0,
+      "nulos_antes": {
+        "id": 0,
+        "customerId": 0,
+        "storeId": 0,
+        "orderDate": 0,
+        "nItems": 0,
+        "total": 0
+      },
+      "nulos_depois": {
+        "id": 0,
+        "customerId": 0,
+        "storeId": 0,
+        "orderDate": 0,
+        "nItems": 0,
+        "total": 0,
+        "order_date": 0,
+        "order_timestamp": 116,
+        "timestamp_precision": 0
+      },
+      "tipos_depois": {
+        "id": "VARCHAR",
+        "customerId": "VARCHAR",
+        "storeId": "VARCHAR",
+        "orderDate": "VARCHAR",
+        "nItems": "INTEGER",
+        "total": "DECIMAL(18,2)",
+        "order_date": "DATE",
+        "order_timestamp": "TIMESTAMP WITH TIME ZONE",
+        "timestamp_precision": "VARCHAR"
+      }
+    },
+    "order_items": {
+      "linhas_antes": 2916015,
+      "linhas_depois": 2916015,
+      "repeticoes_exatas_antes": 54041,
+      "nulos_antes": {
+        "SKU": 0,
+        "orderID": 0
+      },
+      "nulos_depois": {
+        "SKU": 0,
+        "orderID": 0
+      },
+      "tipos_depois": {
+        "SKU": "VARCHAR",
+        "orderID": "VARCHAR"
+      }
+    },
+    "products": {
+      "linhas_antes": 36,
+      "linhas_depois": 36,
+      "repeticoes_exatas_antes": 0,
+      "nulos_antes": {
+        "SKU": 0,
+        "Name": 0,
+        "Price": 0,
+        "Category": 0,
+        "Size": 0,
+        "Ingredients": 0,
+        "Launch": 0
+      },
+      "nulos_depois": {
+        "SKU": 0,
+        "Name": 0,
+        "Price": 0,
+        "Category": 0,
+        "Size": 0,
+        "Ingredients": 0,
+        "Launch": 0
+      },
+      "tipos_depois": {
+        "SKU": "VARCHAR",
+        "Name": "VARCHAR",
+        "Price": "DECIMAL(18,2)",
+        "Category": "VARCHAR",
+        "Size": "VARCHAR",
+        "Ingredients": "VARCHAR",
+        "Launch": "DATE"
+      }
+    },
+    "customers": {
+      "linhas_antes": 34761,
+      "linhas_depois": 34761,
+      "repeticoes_exatas_antes": 0,
+      "nulos_antes": {
+        "id": 0,
+        "latitude": 0,
+        "longitude": 0
+      },
+      "nulos_depois": {
+        "id": 0,
+        "latitude": 0,
+        "longitude": 0
+      },
+      "tipos_depois": {
+        "id": "VARCHAR",
+        "latitude": "DOUBLE",
+        "longitude": "DOUBLE"
+      }
+    },
+    "stores": {
+      "linhas_antes": 32,
+      "linhas_depois": 32,
+      "repeticoes_exatas_antes": 0,
+      "nulos_antes": {
+        "id": 0,
+        "zipcode": 0,
+        "state_abbr": 0,
+        "latitude": 0,
+        "longitude": 0,
+        "city": 0,
+        "state": 0,
+        "distance": 0
+      },
+      "nulos_depois": {
+        "id": 0,
+        "zipcode": 0,
+        "state_abbr": 0,
+        "latitude": 0,
+        "longitude": 0,
+        "city": 0,
+        "state": 0,
+        "distance": 0
+      },
+      "tipos_depois": {
+        "id": "VARCHAR",
+        "zipcode": "VARCHAR",
+        "state_abbr": "VARCHAR",
+        "latitude": "DOUBLE",
+        "longitude": "DOUBLE",
+        "city": "VARCHAR",
+        "state": "VARCHAR",
+        "distance": "DOUBLE"
+      }
+    }
+  },
+  "verificacoes": [
+    {
+      "nome": "orders: conflitos de PK",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM (SELECT \"id\" FROM (SELECT DISTINCT * FROM raw.orders) GROUP BY \"id\" HAVING count(*) > 1)"
+    },
+    {
+      "nome": "orders.id: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.orders WHERE \"id\" IS NULL OR trim(CAST(\"id\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "orders.customerId: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.orders WHERE \"customerId\" IS NULL OR trim(CAST(\"customerId\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "orders.storeId: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.orders WHERE \"storeId\" IS NULL OR trim(CAST(\"storeId\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "orders.orderDate: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.orders WHERE \"orderDate\" IS NULL OR trim(CAST(\"orderDate\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "orders.nItems: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.orders WHERE \"nItems\" IS NULL OR trim(CAST(\"nItems\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "orders.total: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.orders WHERE \"total\" IS NULL OR trim(CAST(\"total\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "order_items.SKU: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.order_items WHERE \"SKU\" IS NULL OR trim(CAST(\"SKU\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "order_items.orderID: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.order_items WHERE \"orderID\" IS NULL OR trim(CAST(\"orderID\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "products: conflitos de PK",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM (SELECT \"SKU\" FROM (SELECT DISTINCT * FROM raw.products) GROUP BY \"SKU\" HAVING count(*) > 1)"
+    },
+    {
+      "nome": "products.SKU: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.products WHERE \"SKU\" IS NULL OR trim(CAST(\"SKU\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "products.Name: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.products WHERE \"Name\" IS NULL OR trim(CAST(\"Name\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "products.Price: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.products WHERE \"Price\" IS NULL OR trim(CAST(\"Price\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "products.Category: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.products WHERE \"Category\" IS NULL OR trim(CAST(\"Category\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "products.Size: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.products WHERE \"Size\" IS NULL OR trim(CAST(\"Size\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "products.Launch: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.products WHERE \"Launch\" IS NULL OR trim(CAST(\"Launch\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "customers: conflitos de PK",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM (SELECT \"id\" FROM (SELECT DISTINCT * FROM raw.customers) GROUP BY \"id\" HAVING count(*) > 1)"
+    },
+    {
+      "nome": "customers.id: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.customers WHERE \"id\" IS NULL OR trim(CAST(\"id\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "customers.latitude: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.customers WHERE \"latitude\" IS NULL OR trim(CAST(\"latitude\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "customers.longitude: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.customers WHERE \"longitude\" IS NULL OR trim(CAST(\"longitude\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "stores: conflitos de PK",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM (SELECT \"id\" FROM (SELECT DISTINCT * FROM raw.stores) GROUP BY \"id\" HAVING count(*) > 1)"
+    },
+    {
+      "nome": "stores.id: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.stores WHERE \"id\" IS NULL OR trim(CAST(\"id\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "stores.zipcode: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.stores WHERE \"zipcode\" IS NULL OR trim(CAST(\"zipcode\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "stores.state_abbr: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.stores WHERE \"state_abbr\" IS NULL OR trim(CAST(\"state_abbr\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "stores.latitude: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.stores WHERE \"latitude\" IS NULL OR trim(CAST(\"latitude\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "stores.longitude: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.stores WHERE \"longitude\" IS NULL OR trim(CAST(\"longitude\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "stores.city: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.stores WHERE \"city\" IS NULL OR trim(CAST(\"city\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "stores.state: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.stores WHERE \"state\" IS NULL OR trim(CAST(\"state\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "stores.distance: obrigatório",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.stores WHERE \"distance\" IS NULL OR trim(CAST(\"distance\" AS VARCHAR)) = ''"
+    },
+    {
+      "nome": "orders.total: precisão e domínio",
+      "erros": 0,
+      "sql": "-- Diagnóstico: tolerância absoluta de 1e-9 somente para representação DOUBLE.\n-- Qualquer linha contada impede publicar a transformação.\nSELECT count(*)\nFROM raw.orders\nWHERE NOT isfinite(total)\n   OR total < 0\n   OR try_cast(total AS DECIMAL(18,2)) IS NULL\n   OR abs(total - CAST(try_cast(total AS DECIMAL(18,2)) AS DOUBLE)) > 1e-9;\n"
+    },
+    {
+      "nome": "orders.nItems: positivo",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM raw.orders WHERE nItems <= 0"
+    },
+    {
+      "nome": "products.Price: formato e domínio",
+      "erros": 0,
+      "sql": "-- Diagnóstico: preço textual com até duas casas, sem arredondamento tolerado.\nSELECT count(*)\nFROM raw.products\nWHERE NOT regexp_full_match(Price, '[0-9]+([.][0-9]{1,2})?')\n   OR try_cast(Price AS DECIMAL(18,2)) IS NULL;\n"
+    },
+    {
+      "nome": "products: domínios conhecidos",
+      "erros": 0,
+      "sql": "\n            SELECT count(*) FROM raw.products\n            WHERE Size NOT IN ('Small','Medium','Large','Extra Large')\n               OR Category NOT IN ('Classic','Specialty','Vegetarian')\n        "
+    },
+    {
+      "nome": "products.Name: categoria consistente",
+      "erros": 0,
+      "sql": "\n            SELECT count(*) FROM (SELECT Name FROM raw.products GROUP BY Name\n            HAVING count(DISTINCT Category) != 1)\n        "
+    },
+    {
+      "nome": "customers: coordenadas",
+      "erros": 0,
+      "sql": "\n                SELECT count(*) FROM raw.customers\n                WHERE try_cast(latitude AS DOUBLE) IS NULL\n                   OR try_cast(longitude AS DOUBLE) IS NULL\n                   OR NOT isfinite(try_cast(latitude AS DOUBLE))\n                   OR NOT isfinite(try_cast(longitude AS DOUBLE))\n                   OR try_cast(latitude AS DOUBLE) NOT BETWEEN -90 AND 90\n                   OR try_cast(longitude AS DOUBLE) NOT BETWEEN -180 AND 180\n            "
+    },
+    {
+      "nome": "stores: coordenadas",
+      "erros": 0,
+      "sql": "\n                SELECT count(*) FROM raw.stores\n                WHERE try_cast(latitude AS DOUBLE) IS NULL\n                   OR try_cast(longitude AS DOUBLE) IS NULL\n                   OR NOT isfinite(try_cast(latitude AS DOUBLE))\n                   OR NOT isfinite(try_cast(longitude AS DOUBLE))\n                   OR try_cast(latitude AS DOUBLE) NOT BETWEEN -90 AND 90\n                   OR try_cast(longitude AS DOUBLE) NOT BETWEEN -180 AND 180\n            "
+    },
+    {
+      "nome": "stores.distance: conversão finita",
+      "erros": 0,
+      "sql": "\n            SELECT count(*) FROM raw.stores WHERE try_cast(distance AS DOUBLE) IS NULL\n            OR NOT isfinite(try_cast(distance AS DOUBLE))\n        "
+    },
+    {
+      "nome": "FK orders.customerId->customers.id",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM (-- Grão: um pedido (id), após validar conflitos na PK da RAW.\n-- Preserva orderDate e indica sua precisão; data sem hora não vira meia-noite.\n-- Pré-condições: nulos/domínios validados e desvio monetário <= 1e-9.\nWITH fonte AS (\n    SELECT DISTINCT * FROM raw.orders\n), temporal AS (\n    SELECT *,\n        CASE\n            WHEN regexp_full_match(orderDate, '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z')\n                THEN 'second'\n            WHEN regexp_full_match(orderDate, '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}Z')\n                THEN 'minute'\n            WHEN regexp_full_match(orderDate, '[0-9]{4}-[0-9]{2}-[0-9]{2}')\n                THEN 'date'\n            ELSE error('orderDate com formato desconhecido')\n        END AS timestamp_precision\n    FROM fonte\n)\nSELECT\n    CAST(id AS VARCHAR) AS id,\n    customerId,\n    storeId,\n    orderDate,\n    nItems,\n    CAST(total AS DECIMAL(18,2)) AS total,\n    CAST(strptime(left(orderDate, 10), '%Y-%m-%d') AS DATE) AS order_date,\n    CASE timestamp_precision\n        WHEN 'second' THEN strptime(orderDate, '%Y-%m-%dT%H:%M:%SZ') AT TIME ZONE 'UTC'\n        WHEN 'minute' THEN strptime(orderDate, '%Y-%m-%dT%H:%MZ') AT TIME ZONE 'UTC'\n        ELSE NULL::TIMESTAMPTZ\n    END AS order_timestamp,\n    timestamp_precision\nFROM temporal) f ANTI JOIN (-- Grão: um cliente (id), após validar conflito de chave e coordenadas.\nWITH fonte AS (\n    SELECT DISTINCT * FROM raw.customers\n)\nSELECT\n    id,\n    CAST(latitude AS DOUBLE) AS latitude,\n    CAST(longitude AS DOUBLE) AS longitude\nFROM fonte) p ON f.customerId=p.id"
+    },
+    {
+      "nome": "FK orders.storeId->stores.id",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM (-- Grão: um pedido (id), após validar conflitos na PK da RAW.\n-- Preserva orderDate e indica sua precisão; data sem hora não vira meia-noite.\n-- Pré-condições: nulos/domínios validados e desvio monetário <= 1e-9.\nWITH fonte AS (\n    SELECT DISTINCT * FROM raw.orders\n), temporal AS (\n    SELECT *,\n        CASE\n            WHEN regexp_full_match(orderDate, '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z')\n                THEN 'second'\n            WHEN regexp_full_match(orderDate, '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}Z')\n                THEN 'minute'\n            WHEN regexp_full_match(orderDate, '[0-9]{4}-[0-9]{2}-[0-9]{2}')\n                THEN 'date'\n            ELSE error('orderDate com formato desconhecido')\n        END AS timestamp_precision\n    FROM fonte\n)\nSELECT\n    CAST(id AS VARCHAR) AS id,\n    customerId,\n    storeId,\n    orderDate,\n    nItems,\n    CAST(total AS DECIMAL(18,2)) AS total,\n    CAST(strptime(left(orderDate, 10), '%Y-%m-%d') AS DATE) AS order_date,\n    CASE timestamp_precision\n        WHEN 'second' THEN strptime(orderDate, '%Y-%m-%dT%H:%M:%SZ') AT TIME ZONE 'UTC'\n        WHEN 'minute' THEN strptime(orderDate, '%Y-%m-%dT%H:%MZ') AT TIME ZONE 'UTC'\n        ELSE NULL::TIMESTAMPTZ\n    END AS order_timestamp,\n    timestamp_precision\nFROM temporal) f ANTI JOIN (-- Grão: uma loja (id), após validar conflito de chave e conversões.\n-- Zipcode permanece texto. Distance é medida sem unidade comprovada.\nWITH fonte AS (\n    SELECT DISTINCT * FROM raw.stores\n)\nSELECT\n    id,\n    zipcode,\n    state_abbr,\n    CAST(latitude AS DOUBLE) AS latitude,\n    CAST(longitude AS DOUBLE) AS longitude,\n    city,\n    state,\n    CAST(distance AS DOUBLE) AS distance\nFROM fonte) p ON f.storeId=p.id"
+    },
+    {
+      "nome": "FK order_items.orderID->orders.id",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM (-- Grão: uma ocorrência de SKU no pedido, sem PK natural de linha.\n-- Não aplicar DISTINCT: linhas iguais representam unidades legítimas.\nSELECT\n    SKU,\n    CAST(orderID AS VARCHAR) AS orderID\nFROM raw.order_items) f ANTI JOIN (-- Grão: um pedido (id), após validar conflitos na PK da RAW.\n-- Preserva orderDate e indica sua precisão; data sem hora não vira meia-noite.\n-- Pré-condições: nulos/domínios validados e desvio monetário <= 1e-9.\nWITH fonte AS (\n    SELECT DISTINCT * FROM raw.orders\n), temporal AS (\n    SELECT *,\n        CASE\n            WHEN regexp_full_match(orderDate, '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z')\n                THEN 'second'\n            WHEN regexp_full_match(orderDate, '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}Z')\n                THEN 'minute'\n            WHEN regexp_full_match(orderDate, '[0-9]{4}-[0-9]{2}-[0-9]{2}')\n                THEN 'date'\n            ELSE error('orderDate com formato desconhecido')\n        END AS timestamp_precision\n    FROM fonte\n)\nSELECT\n    CAST(id AS VARCHAR) AS id,\n    customerId,\n    storeId,\n    orderDate,\n    nItems,\n    CAST(total AS DECIMAL(18,2)) AS total,\n    CAST(strptime(left(orderDate, 10), '%Y-%m-%d') AS DATE) AS order_date,\n    CASE timestamp_precision\n        WHEN 'second' THEN strptime(orderDate, '%Y-%m-%dT%H:%M:%SZ') AT TIME ZONE 'UTC'\n        WHEN 'minute' THEN strptime(orderDate, '%Y-%m-%dT%H:%MZ') AT TIME ZONE 'UTC'\n        ELSE NULL::TIMESTAMPTZ\n    END AS order_timestamp,\n    timestamp_precision\nFROM temporal) p ON f.orderID=p.id"
+    },
+    {
+      "nome": "FK order_items.SKU->products.SKU",
+      "erros": 0,
+      "sql": "SELECT count(*) FROM (-- Grão: uma ocorrência de SKU no pedido, sem PK natural de linha.\n-- Não aplicar DISTINCT: linhas iguais representam unidades legítimas.\nSELECT\n    SKU,\n    CAST(orderID AS VARCHAR) AS orderID\nFROM raw.order_items) f ANTI JOIN (-- Grão: um SKU, após validar conflitos da PK e formato monetário na RAW.\n-- Launch aceita somente ISO exato ou ISO com uma vírgula terminal.\nWITH fonte AS (\n    SELECT DISTINCT * FROM raw.products\n), lancamento AS (\n    SELECT *,\n        CASE\n            WHEN regexp_full_match(Launch, '[0-9]{4}-[0-9]{2}-[0-9]{2}')\n                THEN Launch\n            WHEN regexp_full_match(Launch, '[0-9]{4}-[0-9]{2}-[0-9]{2},')\n                THEN left(Launch, 10)\n            ELSE error('Launch com formato desconhecido')\n        END AS launch_normalizado\n    FROM fonte\n)\nSELECT\n    SKU,\n    Name,\n    CAST(Price AS DECIMAL(18,2)) AS Price,\n    Category,\n    Size,\n    Ingredients,\n    CAST(strptime(launch_normalizado, '%Y-%m-%d') AS DATE) AS Launch\nFROM lancamento) p ON f.SKU=p.SKU"
+    },
+    {
+      "nome": "Reconciliação por pedido: unidades e centavos",
+      "erros": 0,
+      "sql": "WITH o AS (-- Grão: um pedido (id), após validar conflitos na PK da RAW.\n-- Preserva orderDate e indica sua precisão; data sem hora não vira meia-noite.\n-- Pré-condições: nulos/domínios validados e desvio monetário <= 1e-9.\nWITH fonte AS (\n    SELECT DISTINCT * FROM raw.orders\n), temporal AS (\n    SELECT *,\n        CASE\n            WHEN regexp_full_match(orderDate, '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z')\n                THEN 'second'\n            WHEN regexp_full_match(orderDate, '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}Z')\n                THEN 'minute'\n            WHEN regexp_full_match(orderDate, '[0-9]{4}-[0-9]{2}-[0-9]{2}')\n                THEN 'date'\n            ELSE error('orderDate com formato desconhecido')\n        END AS timestamp_precision\n    FROM fonte\n)\nSELECT\n    CAST(id AS VARCHAR) AS id,\n    customerId,\n    storeId,\n    orderDate,\n    nItems,\n    CAST(total AS DECIMAL(18,2)) AS total,\n    CAST(strptime(left(orderDate, 10), '%Y-%m-%d') AS DATE) AS order_date,\n    CASE timestamp_precision\n        WHEN 'second' THEN strptime(orderDate, '%Y-%m-%dT%H:%M:%SZ') AT TIME ZONE 'UTC'\n        WHEN 'minute' THEN strptime(orderDate, '%Y-%m-%dT%H:%MZ') AT TIME ZONE 'UTC'\n        ELSE NULL::TIMESTAMPTZ\n    END AS order_timestamp,\n    timestamp_precision\nFROM temporal), i AS (-- Grão: uma ocorrência de SKU no pedido, sem PK natural de linha.\n-- Não aplicar DISTINCT: linhas iguais representam unidades legítimas.\nSELECT\n    SKU,\n    CAST(orderID AS VARCHAR) AS orderID\nFROM raw.order_items), p AS (-- Grão: um SKU, após validar conflitos da PK e formato monetário na RAW.\n-- Launch aceita somente ISO exato ou ISO com uma vírgula terminal.\nWITH fonte AS (\n    SELECT DISTINCT * FROM raw.products\n), lancamento AS (\n    SELECT *,\n        CASE\n            WHEN regexp_full_match(Launch, '[0-9]{4}-[0-9]{2}-[0-9]{2}')\n                THEN Launch\n            WHEN regexp_full_match(Launch, '[0-9]{4}-[0-9]{2}-[0-9]{2},')\n                THEN left(Launch, 10)\n            ELSE error('Launch com formato desconhecido')\n        END AS launch_normalizado\n    FROM fonte\n)\nSELECT\n    SKU,\n    Name,\n    CAST(Price AS DECIMAL(18,2)) AS Price,\n    Category,\n    Size,\n    Ingredients,\n    CAST(strptime(launch_normalizado, '%Y-%m-%d') AS DATE) AS Launch\nFROM lancamento), valores AS (SELECT i.orderID, count(*) AS unidades, sum(p.Price) AS receita FROM i JOIN p ON i.SKU=p.SKU GROUP BY i.orderID) \n            SELECT count(*) FROM o LEFT JOIN valores v ON o.id=v.orderID\n            WHERE o.nItems IS DISTINCT FROM v.unidades\n               OR o.total IS DISTINCT FROM v.receita\n        "
+    },
+    {
+      "nome": "Precisão temporal e nulos intencionais",
+      "erros": 0,
+      "sql": "\n            SELECT count(*) FROM (-- Grão: um pedido (id), após validar conflitos na PK da RAW.\n-- Preserva orderDate e indica sua precisão; data sem hora não vira meia-noite.\n-- Pré-condições: nulos/domínios validados e desvio monetário <= 1e-9.\nWITH fonte AS (\n    SELECT DISTINCT * FROM raw.orders\n), temporal AS (\n    SELECT *,\n        CASE\n            WHEN regexp_full_match(orderDate, '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z')\n                THEN 'second'\n            WHEN regexp_full_match(orderDate, '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}Z')\n                THEN 'minute'\n            WHEN regexp_full_match(orderDate, '[0-9]{4}-[0-9]{2}-[0-9]{2}')\n                THEN 'date'\n            ELSE error('orderDate com formato desconhecido')\n        END AS timestamp_precision\n    FROM fonte\n)\nSELECT\n    CAST(id AS VARCHAR) AS id,\n    customerId,\n    storeId,\n    orderDate,\n    nItems,\n    CAST(total AS DECIMAL(18,2)) AS total,\n    CAST(strptime(left(orderDate, 10), '%Y-%m-%d') AS DATE) AS order_date,\n    CASE timestamp_precision\n        WHEN 'second' THEN strptime(orderDate, '%Y-%m-%dT%H:%M:%SZ') AT TIME ZONE 'UTC'\n        WHEN 'minute' THEN strptime(orderDate, '%Y-%m-%dT%H:%MZ') AT TIME ZONE 'UTC'\n        ELSE NULL::TIMESTAMPTZ\n    END AS order_timestamp,\n    timestamp_precision\nFROM temporal)\n            WHERE order_date IS NULL\n               OR (timestamp_precision='date' AND order_timestamp IS NOT NULL)\n               OR (timestamp_precision!='date' AND order_timestamp IS NULL)\n        "
+    }
+  ],
+  "sql_sha256": {
+    "01_orders.sql": "1c9033612452a6d8e5ef7306e361c29c02185ae08326cc1ff514bd2ee964db9a",
+    "02_order_items.sql": "810a6e5a6da5f5b2dafbb850ac9904b8ffd294de2e4d6946aec169ebd0b811a4",
+    "03_products.sql": "b008289ed9c8245cd6eb8f709a8dec2196e861f6901a58b828dec17074f90aac",
+    "04_customers.sql": "e646ed7edbfc21958fa2349d6b86542d72e26098717e59a6417ef36c983e54c8",
+    "05_stores.sql": "5d2b1ca56275e16a0e28ec426ceca563ab9770a53aaaad8a2b5478b3773d5448"
+  },
+  "precisao_temporal": [
+    [
+      "date",
+      116
+    ],
+    [
+      "minute",
+      33980
+    ],
+    [
+      "second",
+      2012617
+    ]
+  ],
+  "exemplos_temporais": [
+    [
+      "1015069",
+      "2020-12-18",
+      "2020-12-18",
+      null,
+      "date"
+    ],
+    [
+      "1000040",
+      "2022-06-17T21:34Z",
+      "2022-06-17",
+      "2022-06-17 21:34:00+00",
+      "minute"
+    ],
+    [
+      "0",
+      "2021-04-11T00:05:37Z",
+      "2021-04-11",
+      "2021-04-11 00:05:37+00",
+      "second"
+    ]
+  ],
+  "correcoes_launch": [
+    [
+      "PZ026",
+      "2020-01-01,",
+      "2020-01-01"
+    ],
+    [
+      "PZ027",
+      "2020-01-01,",
+      "2020-01-01"
+    ]
+  ],
+  "maior_desvio_double_centavos": 2.842170943040401e-14,
+  "catalogo_inalterado": true,
+  "tabelas_existentes": [
+    [
+      "raw",
+      "customers"
+    ],
+    [
+      "raw",
+      "order_items"
+    ],
+    [
+      "raw",
+      "orders"
+    ],
+    [
+      "raw",
+      "products"
+    ],
+    [
+      "raw",
+      "stores"
+    ]
+  ],
+  "banco_sha256_antes_depois": "45edd08698c1e6030a5269e812a535f63651cb4739910300b3c5bdf370df764d"
+}

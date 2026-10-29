@@ -1,0 +1,40 @@
+{
+  "capturado_em_utc": "2026-10-29T14:17:02.707538+00:00",
+  "origem": "design/rascunho.html renderizado no Chromium",
+  "dimensoes_png": [
+    1440,
+    2870
+  ],
+  "viewport_desktop": [
+    1440,
+    1024
+  ],
+  "viewport_mobile": [
+    390,
+    844
+  ],
+  "kpis_conferidos_com_banco": {
+    "receita": "50.211.527,85",
+    "pedidos": "2.046.713",
+    "unidades": "2.916.015",
+    "ticket": "24,53"
+  },
+  "snapshot_conferido_integralmente": [
+    "kpis",
+    "vendas_mensais",
+    "ranking_tipos_pizza",
+    "concentracao_pizzas",
+    "pedidos_dia_semana",
+    "pedidos_hora",
+    "receita_categoria",
+    "vendas_loja",
+    "frequencia_clientes"
+  ],
+  "graficos_com_mart_e_resposta": 7,
+  "alternancia_mensal_e_navegacao": "aprovadas",
+  "transbordamento_horizontal": false,
+  "erros_javascript": [],
+  "png_sha256": "de31cafcbfca1712a53f8403b031550c6b332c1ce18644b7f603691f32dbeccb",
+  "html_sha256": "7e91ff44f3883d70918b101b1b123c8b8f7d9c5f4173d89feef466f7256e5505",
+  "dados_js_sha256": "f3b5118bafc0856f3c8e897c5069f9b4fca7516220e58d14731a238c1ebd0b05"
+}

@@ -1,0 +1,218 @@
+{
+  "data": "2026-10-29",
+  "specs": {
+    "dashboard.md": {
+      "blocos_na_ordem": true,
+      "regras_principais": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ]
+    },
+    "db.md": {
+      "blocos_na_ordem": true,
+      "regras_principais": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ]
+    },
+    "etapa-zero.md": {
+      "blocos_na_ordem": true,
+      "regras_principais": [
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    "ingestao.md": {
+      "blocos_na_ordem": true,
+      "regras_principais": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    "marts.md": {
+      "blocos_na_ordem": true,
+      "regras_principais": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ]
+    },
+    "transformacao.md": {
+      "blocos_na_ordem": true,
+      "regras_principais": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    "ui.md": {
+      "blocos_na_ordem": true,
+      "regras_principais": [
+        "U1",
+        "U2",
+        "U3",
+        "U4",
+        "U5",
+        "U6"
+      ]
+    }
+  },
+  "contagens_marts_iguais_ao_registro_utc": {
+    "vendas_mensais": 36,
+    "ranking_pizzas": 36,
+    "pedidos_dia_semana": 7,
+    "pedidos_hora": 20,
+    "ticket_por_pedido": 2046713,
+    "receita_categoria": 3,
+    "vendas_tamanho": 4,
+    "concentracao_pizzas": 9,
+    "quantidade_por_pedido": 2046713,
+    "kpis": 1,
+    "ranking_tipos_pizza": 9,
+    "vendas_loja": 32,
+    "frequencia_clientes": 990
+  },
+  "kpis_iguais_ao_registro_utc": true,
+  "horas_sao_paulo": [
+    [
+      0,
+      "America/Sao_Paulo",
+      false,
+      107396
+    ],
+    [
+      1,
+      "America/Sao_Paulo",
+      false,
+      38399
+    ],
+    [
+      2,
+      "America/Sao_Paulo",
+      false,
+      10412
+    ],
+    [
+      3,
+      "America/Sao_Paulo",
+      false,
+      2162
+    ],
+    [
+      4,
+      "America/Sao_Paulo",
+      false,
+      343
+    ],
+    [
+      5,
+      "America/Sao_Paulo",
+      false,
+      31
+    ],
+    [
+      6,
+      "America/Sao_Paulo",
+      false,
+      4
+    ],
+    [
+      12,
+      "America/Sao_Paulo",
+      false,
+      4
+    ],
+    [
+      13,
+      "America/Sao_Paulo",
+      false,
+      73
+    ],
+    [
+      14,
+      "America/Sao_Paulo",
+      false,
+      588
+    ],
+    [
+      15,
+      "America/Sao_Paulo",
+      false,
+      3343
+    ],
+    [
+      16,
+      "America/Sao_Paulo",
+      false,
+      15426
+    ],
+    [
+      17,
+      "America/Sao_Paulo",
+      false,
+      53517
+    ],
+    [
+      18,
+      "America/Sao_Paulo",
+      false,
+      138754
+    ],
+    [
+      19,
+      "America/Sao_Paulo",
+      false,
+      269355
+    ],
+    [
+      20,
+      "America/Sao_Paulo",
+      false,
+      392671
+    ],
+    [
+      21,
+      "America/Sao_Paulo",
+      false,
+      430329
+    ],
+    [
+      22,
+      "America/Sao_Paulo",
+      false,
+      358913
+    ],
+    [
+      23,
+      "America/Sao_Paulo",
+      false,
+      224877
+    ],
+    [
+      null,
+      "America/Sao_Paulo",
+      true,
+      116
+    ]
+  ],
+  "auditorias_refined_marts": "aprovadas",
+  "testes": 87,
+  "cobertura_percentual": 92.42
+}

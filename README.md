@@ -1,181 +1,189 @@
-# Pizza — análise de vendas com engenharia de dados
+# Pizza Analytics
 
-**Status: Etapa Zero preparada para revisão.** O pipeline e o dashboard ainda
-não foram implementados. Este repositório de trabalho investiga dados de uma
-pizzaria fictícia para responder quanto vendeu, como evoluíram as vendas, quais
-produtos lideram e quando se concentram os pedidos.
+Pipeline autoral de Engenharia de Dados para analisar vendas com os dados
+inteiramente fictícios do **Pizza Paradise / Observable**.
 
-O desenvolvimento segue o método spec-driven do curso Pipeline Olist, com
-decisões e critérios antes do código. A [análise das quatro aulas](docs/metodologia.md)
-explica como o método foi adaptado a este conjunto de dados.
+Python 3.13 · uv · pandas · DuckDB · SQL · pytest · Ruff · Streamlit · Plotly
 
-## Fonte e licença
+[Documentação](https://lal3x.github.io/end-to-end-pizza-analytics/) ·
+[Guia local](docs/guia-rapido.md) · [Critérios de entrega](docs/entrega.md)
 
-Dados: Neethi Mohan / [Kaggle, Maven Pizza Challenge Dataset v1](https://www.kaggle.com/datasets/neethimohan/maven-pizza-challenge-dataset),
-licença declarada **CC0: Public Domain**, conferida na API da própria
-republicação em 28/10/2026. Contexto original:
-[Maven Analytics, Pizza Place Sales](https://mavenanalytics.io/data-playground/pizza-place-sales).
-Consulte [proveniência, evidência e limites da licença](docs/fontes-e-licenca.md).
+O endereço da documentação será ativado pelo workflow após publicar e integrar
+esta configuração na main; build local não significa site já publicado.
 
-ZIP, CSVs e banco ficam ignorados pelo Git. Nenhum dado ou projeto foi publicado.
-A licença autoral do código será escolhida antes da publicação.
+## O que o projeto responde
 
-## Modelo e arquitetura propostos
+Quanto vendeu, como as vendas evoluíram, quais produtos/categorias/tamanhos
+lideraram, quando os pedidos se concentraram, qual o ticket e quantos produtos
+atingem 80% da receita. Também compara lojas e frequência de compra.
+
+[Contratos dos 13 indicadores](docs/contratos-indicadores.md). Não há dados para
+afirmar margem, cancelamento ou prazo de entrega. Moeda não declarada nos anexos;
+usar unidade original. Horas em São Paulo como referência escolhida, não fuso
+comercial das lojas; mês/dia mantêm a data original da fonte.
+
+## Fonte, grãos e arquitetura
+
+Fonte: [Pizza Paradise](https://observablehq.com/@observablehq/pizza-paradise-data),
+gerado pela equipe Observable; notebook de Paul Buffa, versão 398.
+Permissão textual ampla, sem licença padronizada nos metadados dos cinco anexos.
+Não atribuir CC0/ISC nem redistribuir os anexos completos neste repositório.
+[Proveniência e política de publicação](docs/fontes-e-licenca.md).
+
+### Arquivos baixados e tabelas
+
+Os cinco arquivos são obtidos pelo downloader e mantidos em raw/pizza_paradise/.
+As contagens abaixo foram conferidas na carga RAW da versão 398 da fonte;
+não são valores fixos usados para validar futuras versões.
+
+| Arquivo baixado | Tabela RAW | Linhas | Uma linha representa | Chave |
+|---|---|---:|---|---|
+| orders.parquet | raw.orders | 2.046.713 | Um pedido | id |
+| order_items.parquet | raw.order_items | 2.916.015 | Uma ocorrência de produto no pedido | Sem PK natural de linha |
+| products.csv | raw.products | 36 | Uma variante de pizza (SKU) | SKU |
+| customers.csv | raw.customers | 34.761 | Um cliente fictício | id |
+| stores.csv | raw.stores | 32 | Uma loja | id |
+| **Total** | **5 tabelas** | **4.997.557** | — | — |
+
+[Evidência da carga e preservação das fontes](docs/evidencias/pizza-paradise-carga-final.json).
+
+### Relacionamentos
+
+Cada pedido pertence a um cliente e a uma loja. Cada ocorrência de item aponta
+para um pedido e um SKU. PK identifica um registro; FK aponta para a chave de
+outra tabela. O diagrama representa as relações validadas na refined.
+
+```mermaid
+erDiagram
+    customers ||--o{ orders : "id → customerId"
+    stores ||--o{ orders : "id → storeId"
+    orders ||--o{ order_items : "id → orderID"
+    products ||--o{ order_items : "SKU → SKU"
+```
+
+FKs: orders.customerId → customers.id; orders.storeId → stores.id;
+order_items.orderID → orders.id; order_items.SKU → products.SKU.
+[Modelo completo](docs/modelo.md).
+
+As quatro relações foram auditadas sem registros órfãos. O par orderID/SKU
+pode se repetir em order_items: cada ocorrência representa uma unidade vendida.
+Depois de juntar pedidos e itens, o total do pedido não pode ser somado em
+cada linha, pois isso multiplicaria a receita.
+
+### Fluxo do pipeline
 
 ```text
-Kaggle v1 → raw/ (CSV preservado)
-                 ↓ ingestão futura
-            pizza.duckdb: raw.* (VARCHAR)
-                 ↓ transformação futura
-            refined.* (tipos e integridade)
-                 ↓ SQL futuro em sql/marts/NN_nome.sql
-            marts.* (indicadores)
-                 ↓ SELECT read_only
-            painel.py / app.py (futuros)
+Arquivos CSV/Parquet → raw/pizza_paradise/
+  → pizza.duckdb: raw → refined → marts → dashboard
+
+pipeline/ingestao.py       preservação dos dados
+pipeline/transformacao.py  conversões/validações pandas
+pipeline/marts.py         execução dos 13 SQLs e auditorias
+db.py                     conexão compartilhada
+baixar_dados.py            aquisição independente
+executar_pipeline.py      transação única das três etapas
+painel.py / app.py         leitura, formatos, Plotly / interface Streamlit
 ```
 
-| Tabela | Uma linha representa | PK | FK |
-|---|---|---|---|
-| orders | Pedido registrado por uma mesa | order_id | — |
-| order_details | Variante de pizza dentro de um pedido, com quantidade | order_details_id | order_id → orders; pizza_id → pizzas |
-| pizzas | Variante de tipo e tamanho | pizza_id | pizza_type_id → pizza_types |
-| pizza_types | Tipo de pizza do cardápio | pizza_type_id | — |
+CSV textual e Parquet nativo na RAW. Na refined, IDs VARCHAR e dinheiro
+DECIMAL(18,2); formatos temporais explícitos, correção restrita de Launch e
+duplicatas exatas removidas somente nas tabelas com PK. As 54.041 repetições
+legítimas de itens são preservadas. Receita soma Price por ocorrência e
+reconcilia com total do pedido; ticket parte de uma linha por pedido.
+Specs em [specs/](specs/) e [decisões de transformação](specs/transformacao.md).
 
-O [modelo detalhado](docs/modelo.md) contém colunas, cardinalidades, diagrama e
-tipos propostos. IDs continuam texto, datas viram DATE, horas TIME, quantidades
-INTEGER e preço DECIMAL(10,2). Não foi encontrada necessidade de limpeza na v1.
-As [decisões de transformação](specs/transformacao.md) aguardam revisão.
+## Executar do zero
 
-## Indicadores e limites
-
-[indicadores.md](indicadores.md) lista onze candidatos no formato da aula 1:
-indicador — tabelas e colunas — o que mede. As definições de população,
-fórmulas, grãos e critérios estão nos
-[contratos analíticos propostos](docs/contratos-indicadores.md): vendas mensais,
-rankings por variante e consolidado por tipo, pedidos por dia da
-semana e hora, receita por pedido, categoria e tamanho, concentração de receita,
-quantidade por pedido e KPIs gerais.
-
-Receita estimada = `SUM(quantity * price)`, em **USD**, moeda declarada no
-dicionário. Ticket médio parte de uma linha de receita por pedido. O preço é
-de catálogo, sem histórico transacional: sua aplicação a todas as vendas é
-uma hipótese aprovada pelo usuário, mantendo a limitação histórica. A seleção
-e as definições dos indicadores continuam em revisão conjunta.
-Não há custo, cliente, status, estoque ou eventos
-de entrega; não será possível afirmar lucro, clientes únicos ou cancelamento.
-Um ano observado não comprova sazonalidade recorrente. Fuso não informado.
-
-## Preparar o ambiente do zero
-
-Pré-requisitos: Git e uv instalado, conforme o preparo da aula 1. Execute na
-raiz deste projeto. Python 3.13 é selecionado por `.python-version`; uv pode
-obtê-lo se não houver interpretador compatível. `uv.lock` fixa as dependências.
+Linux/WSL, Git e uv. Python 3.13 e dependências são resolvidos pelo projeto.
+Windows nativo não foi validado; a medição de memória usa resource (Unix).
 
 ```bash
-uv --version
-uv sync --locked
-uv run python --version
-uv run python -c "import duckdb, pandas, streamlit, plotly, pytest, pytest_cov"
+git clone https://github.com/Lal3x/end-to-end-pizza-analytics.git
+cd end-to-end-pizza-analytics
+uv sync --locked --group docs
+uv run python baixar_dados.py
+uv run python executar_pipeline.py
+uv run streamlit run app.py
 ```
 
-Não há build-system: segue o formato `uv init --bare` do curso. Stack instalada:
-Python 3.13.14, DuckDB 1.5.6, pandas 3.1.0, Streamlit 1.66.1, Plotly 6.9.0,
-pytest 9.2.0, pytest-cov 7.1.0 e Ruff 0.17.3. A compatibilidade básica foi
-verificada por resolução, instalação e importação, não por execução de pipeline.
+Abrir http://localhost:8501. Encerrar ui.py antes de gravar no banco; após nova
+carga, clicar em **Recarregar dados**. O executor não inicia interfaces, não
+baixa fontes e só publica após concluir todas as auditorias. Em falha tratável
+antes do commit, reverte o conjunto e preserva outros schemas.
 
-## Obter e inspecionar os dados
+Ensaio isolado: `uv run python executar_pipeline.py --banco data/ensaio.duckdb`.
+[Detalhes operacionais](docs/execucao-pipeline.md) e
+[comandos individuais](docs/guia-rapido.md#comandos-individuais).
 
-O script de inspeção usa apenas a biblioteca padrão; não cria banco e não faz
-ingestão. O ZIP tem quatro fontes e um dicionário auxiliar.
-
-```bash
-mkdir -p data raw
-curl -L --fail --max-time 60 'https://www.kaggle.com/api/v1/datasets/download/neethimohan/maven-pizza-challenge-dataset?datasetVersionNumber=1' -o data/pizza-kaggle-v1.zip
-uv run python scripts/inspecionar.py data/pizza-kaggle-v1.zip
-uv run python -m zipfile -e data/pizza-kaggle-v1.zip raw
-```
-
-O SHA-256 esperado do ZIP efetivamente inspecionado é
-`a10880d056b5b2f5cd637bd5b435ae3f0f38e76dbc9b0e62fde4313e4a880317`.
-Se o conteúdo mudar, investigar em vez de reaproveitar estas contagens como fato.
-Nunca salvar os CSVs pelo Excel ou alterar seus bytes.
-
-## Verificações disponíveis agora
+## Qualidade e desenvolvimento
 
 ```bash
+uv run pre-commit install
+uv run pre-commit run --all-files
+uv run pytest --cov
 uv run ruff check .
 uv run ruff format --check .
+uv run mkdocs build --strict
+uv run mkdocs serve
 ```
 
-A inspeção foi repetida, seu JSON comparado byte a byte e os cinco hashes
-conferidos com os CSVs extraídos. Evidência em
-[docs/evidencias/inspecao.json](docs/evidencias/inspecao.json).
+Testes usam fontes sintéticas e DuckDB temporário real, sem rede ou banco do
+projeto. No executor: **127 testes, cobertura 94,81%**, mínimo exigido de 70%.
+O pre-commit executa a suíte completa com cobertura antes de cada commit.
+Verificações independentes conferem PKs, FKs, nulos, tipos, grãos e receitas.
+[CI, hooks e publicação](docs/automacao.md).
 
-| Fonte | Linhas observadas |
-|---|---:|
-| orders.csv | 21.350 |
-| order_details.csv | 48.620 |
-| pizzas.csv | 96 |
-| pizza_types.csv | 32 |
-| data_dictionary.csv | 15 |
+CI valida push/PR com uv.lock, hooks, testes e build estrito. Na main, CD publica
+somente o site estático no GitHub Pages após qualidade aprovada. O Pages não
+executa o servidor Streamlit. [Workflow](.github/workflows/ci.yml).
 
-Nas quatro fontes de negócio: zero campos vazios, duplicatas exatas, chaves
-primárias repetidas ou FKs órfãs. Datas válidas entre 01/01/2015 e 31/12/2015;
-quantidades positivas e preços não negativos. Cinco variantes não têm vendas.
-`pizza_types.csv` não é UTF-8 válido; cp1252 é a decodificação proposta.
+## Resultados verificados
 
-## Testes e execução do pipeline — etapas futuras
+2.046.713 pedidos, 2.916.015 itens, 34.761 clientes, 32 lojas e 36 SKUs em
+2020–2022. Cinco RAW, cinco refined, treze marts. Ensaio/reexecução/carga
+principal comparados integralmente com zero diferenças. A carga completa levou
+53,848 s e pico RSS de 1.931,85 MiB nesta máquina; não é garantia para outra base.
 
-Ainda não existe suíte em `test/`: **testes unitários e cobertura não foram
-executados ou medidos**. O comando previsto, após criar os módulos e os testes,
-é `uv run pytest --cov`. A meta já configurada é 60%, sobre código Python
-relevante, sem incluir a inspeção auxiliar e a interface Streamlit.
+[Pipeline completo](docs/execucao-pipeline.md) ·
+[Dashboard validado](docs/execucao-dashboard.md) ·
+[PNG do rascunho](design/rascunho.png) ·
+[Captura funcional](docs/evidencias/dashboard-desktop.png)
 
-Os futuros testes usarão dados sintéticos e DuckDB temporário real, sem tocar
-CSV real ou pizza.duckdb. Qualidade sobre os dados reais terá verificações
-independentes de PK/FK, tipos, domínios, grãos e reconciliação financeira.
+## Dashboard
 
-Não executar comandos de ingestão, transformação, marts ou dashboard agora:
-os respectivos módulos não existem. O README receberá esses comandos e suas
-evidências conforme cada etapa for autorizada e validada. Nenhum resultado
-financeiro do pipeline é apresentado nesta entrega.
+![Dashboard Pizza Paradise — visão executiva com KPIs e evolução das vendas](docs/evidencias/dashboard-desktop.png)
 
-## Documentos e próximos passos
+Captura da aplicação Streamlit com dados dos marts validados. Os cartões
+apresentam receita total, pedidos, unidades e ticket médio. As demais seções
+mostram produtos, Pareto, categorias, tamanhos, dias, horários e lojas.
+O painel considera o período completo de 2020–2022; as seleções de série e
+ranking não alteram os KPIs globais. Valores monetários na unidade da fonte,
+sem símbolo de moeda não comprovado.
 
-- [Contrato da Etapa Zero](specs/etapa-zero.md).
-- Propostas prévias: [conexão](specs/db.md), [ingestão](specs/ingestao.md),
-  [transformação](specs/transformacao.md) e [marts](specs/marts.md).
-- [Plano incremental e decisões pendentes](docs/plano.md).
-- [Registro de execução](docs/execucao-etapa-zero.md).
-- [Instruções para colaboradores e IA](AGENTS.md).
+[Produtos e Pareto](docs/evidencias/dashboard-produtos.png) ·
+[Demanda e lojas](docs/evidencias/dashboard-demanda.png).
 
-O próximo passo é revisar esta entrega e as hipóteses de negócio. A instrução
-do usuário exige essa revisão antes de implementar o pipeline. Primeiro commit
-e publicação dependem de autorização. `git status` falhou porque o `.git`
-fornecido neste workspace não é um repositório funcional; nenhum commit foi
-criado e o histórico não será reconstruído depois.
+Arquivos brutos, banco, backups, credenciais, caches, site gerado e AGENTS.md
+ficam fora do Git. Evidências pequenas, agregados e imagens são artefatos de
+revisão.
 
-## Participação da IA
+## Decisões técnicas e participação da IA
 
-Codex auxiliou na consulta às quatro aulas, verificação da licença, inspeção,
-propostas de modelo/specs e preparação do ambiente. Evidências: ZIP identificado
-por hash, inspeção de todas as linhas e repetição idêntica do inventário.
+O autor criou e validou as specs, tomou as decisões de negócio e definiu os
+indicadores. Conduziu o escopo e a escolha da fonte Pizza Paradise,
+exigiu transformação com pandas e simplificou a estrutura de pipeline/.
+Aprovou regras de conversão antes do código, solicitou Pareto e análises
+separadas por SKU e nome, escolheu o horário de São Paulo e orientou a revisão
+visual. Também solicitou o executor completo, CI, hooks e documentação.
+[Decisões e limitações](docs/decisoes.md).
 
-Problemas realmente observados: acesso inicial às aulas falhou no navegador e
-por DNS no sandbox; curl autorizado permitiu consultá-las. O cache global do uv
-era somente leitura no sandbox; acesso autorizado resolveu a verificação e a
-instalação. O Ruff encontrou três linhas longas no script proposto pela IA;
-elas foram corrigidas e o código formatado antes de nova validação.
+Codex apoiou a investigação, o detalhamento das specs, a implementação e os
+testes, sob orientação e revisão do autor. Desvios efetivamente
+encontrados: estrutura excessiva e transformação SQL contrariando a escolha por
+pandas; inferência Decimal do DuckDB insuficiente; formatos de data distintos e
+repetições de itens legítimas; layout/fuso corrigidos após revisão do usuário.
+As correções e evidências estão na [metodologia](docs/metodologia.md).
 
-Na revisão do usuário, identificou-se outro erro: a primeira entrega usou
-specs com seções genéricas e uma tabela de contratos em indicadores.md, em vez
-dos formatos ensinados nas aulas. A comparação com os exemplos confirmou a
-divergência. As specs foram reorganizadas no formato de contrato/prompt das
-aulas, e indicadores.md passou à lista de dez linhas do desafio 1. Os contratos
-detalhados foram preservados em documento separado.
-
-Suposições explicitadas para revisão: cp1252 compatível com os bytes não prova
-o encoding usado pelo exportador; preço de catálogo não comprova valor histórico
-da venda; ranking por tipo agrega tamanhos. O dado ainda não foi ingerido: a
-inspeção não prova sucesso de um pipeline inexistente.
-# end-to-end-pizza-analytics
+Algumas mudanças ficaram acumuladas antes de serem registradas em commits;
+não foram retrodatadas. O histórico real foi preservado. As decisões e os
+resultados relatados correspondem às verificações efetivamente realizadas.

@@ -1,0 +1,455 @@
+{
+  "tabelas": {
+    "orders": {
+      "antes": 2046713,
+      "tipos_antes": {
+        "id": "int32",
+        "customerId": "str",
+        "storeId": "str",
+        "orderDate": "str",
+        "nItems": "int32",
+        "total": "float64"
+      },
+      "nulos_antes": {
+        "id": 0,
+        "customerId": 0,
+        "storeId": 0,
+        "orderDate": 0,
+        "nItems": 0,
+        "total": 0
+      },
+      "exemplos_antes": [
+        {
+          "id": "0",
+          "customerId": "C501741",
+          "storeId": "S302800",
+          "orderDate": "2021-04-11T00:05:37Z",
+          "nItems": "1",
+          "total": "22.99"
+        },
+        {
+          "id": "1",
+          "customerId": "C896243",
+          "storeId": "S750231",
+          "orderDate": "2022-06-11T02:12:49Z",
+          "nItems": "2",
+          "total": "27.98"
+        }
+      ],
+      "duplicatas_removidas": 0,
+      "repeticoes_preservadas": 0,
+      "precisoes": {
+        "second": 2012617,
+        "minute": 33980,
+        "date": 116
+      },
+      "depois": 2046713,
+      "tipos_pandas": {
+        "id": "string",
+        "customerId": "string",
+        "storeId": "string",
+        "orderDate": "string",
+        "nItems": "int32",
+        "total": "object",
+        "order_timestamp": "datetime64[ns, UTC]",
+        "order_date": "object",
+        "timestamp_precision": "string"
+      },
+      "nulos_depois": {
+        "id": 0,
+        "customerId": 0,
+        "storeId": 0,
+        "orderDate": 0,
+        "nItems": 0,
+        "total": 0,
+        "order_timestamp": 116,
+        "order_date": 0,
+        "timestamp_precision": 0
+      },
+      "exemplos_depois": [
+        {
+          "id": "0",
+          "customerId": "C501741",
+          "storeId": "S302800",
+          "orderDate": "2021-04-11T00:05:37Z",
+          "nItems": "1",
+          "total": "22.99",
+          "order_timestamp": "2021-04-11 00:05:37+00:00",
+          "order_date": "2021-04-11",
+          "timestamp_precision": "second"
+        },
+        {
+          "id": "1",
+          "customerId": "C896243",
+          "storeId": "S750231",
+          "orderDate": "2022-06-11T02:12:49Z",
+          "nItems": "2",
+          "total": "27.98",
+          "order_timestamp": "2022-06-11 02:12:49+00:00",
+          "order_date": "2022-06-11",
+          "timestamp_precision": "second"
+        }
+      ],
+      "tipos_destino": {
+        "id": "VARCHAR",
+        "customerId": "VARCHAR",
+        "storeId": "VARCHAR",
+        "orderDate": "VARCHAR",
+        "nItems": "INTEGER",
+        "total": "DECIMAL(18,2)",
+        "order_timestamp": "TIMESTAMP WITH TIME ZONE",
+        "order_date": "DATE",
+        "timestamp_precision": "VARCHAR"
+      },
+      "linhas_destino": 2046713
+    },
+    "order_items": {
+      "antes": 2916015,
+      "tipos_antes": {
+        "SKU": "str",
+        "orderID": "int32"
+      },
+      "nulos_antes": {
+        "SKU": 0,
+        "orderID": 0
+      },
+      "exemplos_antes": [
+        {
+          "SKU": "PZ020",
+          "orderID": "0"
+        },
+        {
+          "SKU": "PZ030",
+          "orderID": "1"
+        }
+      ],
+      "duplicatas_removidas": 0,
+      "repeticoes_preservadas": 54041,
+      "depois": 2916015,
+      "tipos_pandas": {
+        "SKU": "string",
+        "orderID": "string"
+      },
+      "nulos_depois": {
+        "SKU": 0,
+        "orderID": 0
+      },
+      "exemplos_depois": [
+        {
+          "SKU": "PZ020",
+          "orderID": "0"
+        },
+        {
+          "SKU": "PZ030",
+          "orderID": "1"
+        }
+      ],
+      "tipos_destino": {
+        "SKU": "VARCHAR",
+        "orderID": "VARCHAR"
+      },
+      "linhas_destino": 2916015
+    },
+    "customers": {
+      "antes": 34761,
+      "tipos_antes": {
+        "id": "str",
+        "latitude": "str",
+        "longitude": "str"
+      },
+      "nulos_antes": {
+        "id": 0,
+        "latitude": 0,
+        "longitude": 0
+      },
+      "exemplos_antes": [
+        {
+          "id": "C772113",
+          "latitude": "39.656182608998165",
+          "longitude": "-120.27004846154956"
+        },
+        {
+          "id": "C314977",
+          "latitude": "39.795087859397384",
+          "longitude": "-116.00640255356002"
+        }
+      ],
+      "duplicatas_removidas": 0,
+      "repeticoes_preservadas": 0,
+      "depois": 34761,
+      "tipos_pandas": {
+        "id": "string",
+        "latitude": "float64",
+        "longitude": "float64"
+      },
+      "nulos_depois": {
+        "id": 0,
+        "latitude": 0,
+        "longitude": 0
+      },
+      "exemplos_depois": [
+        {
+          "id": "C772113",
+          "latitude": "39.656182608998165",
+          "longitude": "-120.27004846154956"
+        },
+        {
+          "id": "C314977",
+          "latitude": "39.795087859397384",
+          "longitude": "-116.00640255356002"
+        }
+      ],
+      "tipos_destino": {
+        "id": "VARCHAR",
+        "latitude": "DOUBLE",
+        "longitude": "DOUBLE"
+      },
+      "linhas_destino": 34761
+    },
+    "stores": {
+      "antes": 32,
+      "tipos_antes": {
+        "id": "str",
+        "zipcode": "str",
+        "state_abbr": "str",
+        "latitude": "str",
+        "longitude": "str",
+        "city": "str",
+        "state": "str",
+        "distance": "str"
+      },
+      "nulos_antes": {
+        "id": 0,
+        "zipcode": 0,
+        "state_abbr": 0,
+        "latitude": 0,
+        "longitude": 0,
+        "city": 0,
+        "state": 0,
+        "distance": 0
+      },
+      "exemplos_antes": [
+        {
+          "id": "S490972",
+          "zipcode": "89834",
+          "state_abbr": "NV",
+          "latitude": "41.328852",
+          "longitude": "-116.12251",
+          "city": "Tuscarora",
+          "state": "Nevada",
+          "distance": "14.84941748050039"
+        },
+        {
+          "id": "S476770",
+          "zipcode": "94586",
+          "state_abbr": "CA",
+          "latitude": "37.593883",
+          "longitude": "-121.88281",
+          "city": "Sunol",
+          "state": "California",
+          "distance": "4.6295070633177975"
+        }
+      ],
+      "duplicatas_removidas": 0,
+      "repeticoes_preservadas": 0,
+      "depois": 32,
+      "tipos_pandas": {
+        "id": "string",
+        "zipcode": "string",
+        "state_abbr": "string",
+        "latitude": "float64",
+        "longitude": "float64",
+        "city": "string",
+        "state": "string",
+        "distance": "float64"
+      },
+      "nulos_depois": {
+        "id": 0,
+        "zipcode": 0,
+        "state_abbr": 0,
+        "latitude": 0,
+        "longitude": 0,
+        "city": 0,
+        "state": 0,
+        "distance": 0
+      },
+      "exemplos_depois": [
+        {
+          "id": "S490972",
+          "zipcode": "89834",
+          "state_abbr": "NV",
+          "latitude": "41.328852",
+          "longitude": "-116.12251",
+          "city": "Tuscarora",
+          "state": "Nevada",
+          "distance": "14.84941748050039"
+        },
+        {
+          "id": "S476770",
+          "zipcode": "94586",
+          "state_abbr": "CA",
+          "latitude": "37.593883",
+          "longitude": "-121.88281",
+          "city": "Sunol",
+          "state": "California",
+          "distance": "4.6295070633177975"
+        }
+      ],
+      "tipos_destino": {
+        "id": "VARCHAR",
+        "zipcode": "VARCHAR",
+        "state_abbr": "VARCHAR",
+        "latitude": "DOUBLE",
+        "longitude": "DOUBLE",
+        "city": "VARCHAR",
+        "state": "VARCHAR",
+        "distance": "DOUBLE"
+      },
+      "linhas_destino": 32
+    },
+    "products": {
+      "antes": 36,
+      "tipos_antes": {
+        "SKU": "str",
+        "Name": "str",
+        "Price": "str",
+        "Category": "str",
+        "Size": "str",
+        "Ingredients": "str",
+        "Launch": "str"
+      },
+      "nulos_antes": {
+        "SKU": 0,
+        "Name": 0,
+        "Price": 0,
+        "Category": 0,
+        "Size": 0,
+        "Ingredients": 0,
+        "Launch": 0
+      },
+      "exemplos_antes": [
+        {
+          "SKU": "PZ001",
+          "Name": "Margherita Pizza",
+          "Price": "10.99",
+          "Category": "Classic",
+          "Size": "Small",
+          "Ingredients": "Tomato Sauce, Fresh Mozzarella, Basil, Olive Oil",
+          "Launch": "2018-01-01"
+        },
+        {
+          "SKU": "PZ002",
+          "Name": "Margherita Pizza",
+          "Price": "14.99",
+          "Category": "Classic",
+          "Size": "Medium",
+          "Ingredients": "Tomato Sauce, Fresh Mozzarella, Basil, Olive Oil",
+          "Launch": "2018-01-01"
+        }
+      ],
+      "duplicatas_removidas": 0,
+      "repeticoes_preservadas": 0,
+      "correcoes_launch": [
+        {
+          "SKU": "PZ026",
+          "original": "2020-01-01,",
+          "corrigido": "2020-01-01"
+        },
+        {
+          "SKU": "PZ027",
+          "original": "2020-01-01,",
+          "corrigido": "2020-01-01"
+        }
+      ],
+      "depois": 36,
+      "tipos_pandas": {
+        "SKU": "string",
+        "Name": "string",
+        "Price": "object",
+        "Category": "string",
+        "Size": "string",
+        "Ingredients": "string",
+        "Launch": "object"
+      },
+      "nulos_depois": {
+        "SKU": 0,
+        "Name": 0,
+        "Price": 0,
+        "Category": 0,
+        "Size": 0,
+        "Ingredients": 0,
+        "Launch": 0
+      },
+      "exemplos_depois": [
+        {
+          "SKU": "PZ001",
+          "Name": "Margherita Pizza",
+          "Price": "10.99",
+          "Category": "Classic",
+          "Size": "Small",
+          "Ingredients": "Tomato Sauce, Fresh Mozzarella, Basil, Olive Oil",
+          "Launch": "2018-01-01"
+        },
+        {
+          "SKU": "PZ002",
+          "Name": "Margherita Pizza",
+          "Price": "14.99",
+          "Category": "Classic",
+          "Size": "Medium",
+          "Ingredients": "Tomato Sauce, Fresh Mozzarella, Basil, Olive Oil",
+          "Launch": "2018-01-01"
+        }
+      ],
+      "tipos_destino": {
+        "SKU": "VARCHAR",
+        "Name": "VARCHAR",
+        "Price": "DECIMAL(18,2)",
+        "Category": "VARCHAR",
+        "Size": "VARCHAR",
+        "Ingredients": "VARCHAR",
+        "Launch": "DATE"
+      },
+      "linhas_destino": 36
+    }
+  },
+  "validacoes": {
+    "orders.customerId->customers.id": 0,
+    "orders.storeId->stores.id": 0,
+    "order_items.orderID->orders.id": 0,
+    "order_items.SKU->products.SKU": 0,
+    "pedidos_divergentes": 0
+  },
+  "segundos": 35.916,
+  "pico_rss_mib": 1575.04,
+  "comparacao_ensaio_reexecutado_except_all": {
+    "orders": [
+      0,
+      0
+    ],
+    "order_items": [
+      0,
+      0
+    ],
+    "customers": [
+      0,
+      0
+    ],
+    "stores": [
+      0,
+      0
+    ],
+    "products": [
+      0,
+      0
+    ]
+  },
+  "ensaio_inicial": {
+    "segundos": 25.205,
+    "pico_rss_mib": 1616.36
+  },
+  "reexecucao_ensaio": {
+    "segundos": 35.558,
+    "pico_rss_mib": 1573.86
+  },
+  "auditoria_raw_identica_apos_transformacao": true
+}
