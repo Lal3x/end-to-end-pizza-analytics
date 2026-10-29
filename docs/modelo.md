@@ -40,11 +40,14 @@ Três CSVs UTF-8 e dois Parquets. RAW mantém CSV como VARCHAR e Parquet nos
 tipos nativos: orders.id/nItems INTEGER, total DOUBLE, outros VARCHAR;
 order_items.orderID INTEGER e SKU VARCHAR. Isso preserva a representação
 tipada da fonte, ao contrário do contrato anterior de quatro CSVs.
-Na refined, IDs serão VARCHAR e dinheiro DECIMAL(18,2).
+Na refined, IDs são VARCHAR e dinheiro DECIMAL(18,2).
 
 orderDate mistura segundos+Z, minutos+Z e data sem horário (116 pedidos).
 Não interpretar esses 116 como pedidos à meia-noite sem evidência.
-Launch contém vírgula terminal em PZ026/PZ027. Regras propostas e pontos de
-revisão estão em specs/transformacao.md.
+Na refined, order_date é DATE; order_timestamp mantém UTC e fica nulo quando
+somente a data é conhecida. timestamp_precision distingue second, minute e date.
+Launch contém vírgula terminal em PZ026/PZ027 na RAW; a correção aprovada remove
+essa vírgula somente nesses valores e publica DATE na refined.
+Contrato: specs/transformacao.md.
 Coordenadas não demonstram rota ou duração. distance não tem unidade comprovada.
 Não há custos, pagamento, status de cancelamento ou eventos de entrega.
