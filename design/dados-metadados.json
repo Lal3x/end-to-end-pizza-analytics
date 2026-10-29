@@ -1,0 +1,17 @@
+{
+  "gerado_em_utc": "2026-10-29T14:16:54.227837+00:00",
+  "banco": "pizza.duckdb",
+  "somente_leitura": true,
+  "tabelas": {
+    "marts.kpis": 1,
+    "marts.vendas_mensais": 36,
+    "marts.ranking_tipos_pizza": 9,
+    "marts.concentracao_pizzas": 9,
+    "marts.pedidos_dia_semana": 7,
+    "marts.pedidos_hora": 20,
+    "marts.receita_categoria": 3,
+    "marts.vendas_loja": 32,
+    "marts.frequencia_clientes": 990
+  },
+  "dados_js_sha256": "f3b5118bafc0856f3c8e897c5069f9b4fca7516220e58d14731a238c1ebd0b05"
+}
