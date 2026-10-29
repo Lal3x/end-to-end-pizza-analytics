@@ -1,7 +1,8 @@
 # Contratos analíticos — Pizza Paradise
 
-Status: candidatos adaptados após autorização da migração. Nenhum mart
-implementado. Revisar após validar a nova refined.
+Status: revisados em 28/10/2026 após validação da refined. Os 13 contratos
+estão cobertos por specs/marts.md e implementados em sql/marts/01 a 13.
+Resultados: [execução dos marts](execucao-marts.md).
 Lista de negócio: [indicadores.md](../indicadores.md).
 
 ## População e medidas
@@ -24,14 +25,14 @@ a coincidência de totais foi demonstrada na versão, não é garantia futura.
 ## Perguntas, fontes, grãos, fórmulas e aceite
 
 Abreviações: o=orders, i=order_items, p=products, s=stores, c=customers.
-Todo nome abaixo corresponde a um futuro sql/marts/NN_nome.sql.
+Todo nome abaixo corresponde a sql/marts/NN_nome.sql e à tabela marts.nome.
 
 | Arquivo / pergunta | Tabelas e colunas | Grão | Fórmula / inclusão | Aceite |
 |---|---|---|---|---|
-| 01_vendas_mensais / Como evoluem vendas? | o.id/orderDate/total/nItems | Um mês de registro | SUM(total), COUNT(id), SUM(nItems) | Totais = KPI; cada pedido em um mês |
+| 01_vendas_mensais / Como evoluem vendas? | o.id/order_date/total/nItems | Um ano/mês de registro observado | SUM(total), COUNT(id), SUM(nItems) | Totais = KPI; cada pedido em um mês |
 | 02_ranking_pizzas / Quais variantes lideram? | i.orderID/SKU; p.SKU/Name/Size/Price; o.id/orderDate | Um SKU com venda | Receita = soma Price por ocorrência; ranking receita | PK SKU; soma receita = total de pedidos |
-| 03_pedidos_dia_semana / Quando há mais pedidos? | o.id/orderDate | Um dia ISO 1–7 observado | COUNT de pedidos por data de registro | Soma contagens = pedidos; não alegar média diária |
-| 04_pedidos_hora / Quais horas concentram pedidos? | o.id/orderDate e precisão derivada | Uma hora UTC conhecida ou grupo sem hora | COUNT de pedidos; datas sem hora em grupo próprio | Soma incluindo sem hora = pedidos; sem preencher hora ausente |
+| 03_pedidos_dia_semana / Quando há mais pedidos? | o.id/order_date | Um dia ISO 1–7 observado | COUNT de pedidos por data de registro | Soma contagens = pedidos; não alegar média diária |
+| 04_pedidos_hora / Quais horas concentram pedidos? | o.id/order_timestamp/timestamp_precision | Uma hora de São Paulo conhecida ou grupo sem hora | COUNT por hora_local, timezone America/Sao_Paulo; fuso_horario explícito | Soma incluindo sem hora = pedidos; sem preencher hora ausente |
 | 05_ticket_por_pedido / Quanto vale cada venda? | o.id/total; i.orderID/SKU; p.SKU/Price | Um pedido | Total registrado e receita conferida; ticket global no 10 | Soma receita = KPI; uma linha por pedido |
 | 06_receita_categoria / Quais categorias lideram? | i.orderID/SKU; p.SKU/Category/Price; o.id/orderDate | Uma categoria com venda | Soma Price por ocorrência | Soma receita = total de pedidos |
 | 07_vendas_tamanho / Como vendem tamanhos? | i.orderID/SKU; p.SKU/Size/Price; o.id/orderDate | Um tamanho com venda | COUNT de ocorrências, SUM(Price) | Unidades = nItems; receita = total |
@@ -50,15 +51,36 @@ Nenhum mart consulta os demais: reconciliações são verificações independent
 ## Fuso, empates e percentuais
 
 Data sem horário mantém sua data, mas não recebe meia-noite inventada.
-Horas conhecidas são UTC, não horário comercial local. Filtro de período e
+Horários originais permanecem UTC na refined; o mart horário usa
+America/Sao_Paulo por decisão de 29/10/2026. Não é o fuso comercial das lojas.
+Meses/dias continuam pela data da fonte; somente o agrupamento horário muda.
+Filtro de período e
 regras de fuso devem ser iguais em todos os indicadores comparados.
-Ranking usa mesma posição em empate; ordenação visual usa ID/Name estável.
+Ranking usa DENSE_RANK, com mesma posição em empate; ordenação visual usa
+SKU/Name estável sem alterar a posição.
 Pareto usa janela ROWS e desempate estável, comparando valores sem arredondar.
 Resumo do grupo de 80% é calculado em SQL; medidas globais repetidas em linhas
 não são aditivas. Receita zero impede o Pareto até definição explícita.
+O grupo inclui linhas cuja receita acumulada anterior × 100 é menor que
+receita total × 80. Comparar valores exatos, sem arredondar o percentual.
+Frequência entrega clientes por quantidade de pedidos, participação desses
+clientes e proporção global com mais de um pedido. A proporção global repetida
+por faixa não pode ser somada.
 
-## Pendências antes do código dos marts
+Usar order_date nas partições temporais e timezone('America/Sao_Paulo',
+order_timestamp) nas horas;
+orderDate preservada serve como rastreabilidade, não exige novo parsing.
+Todos os marts usam a janela inteira observada. Grãos globais não suportam
+filtros arbitrários de período no dashboard sem revisar esse contrato.
+Comparar somas monetárias exatamente; razões por numerador/denominador com
+tolerância absoluta de 1e-9. Não aplicar essa tolerância às receitas.
 
-Moeda declarada, regras temporais propostas, consistência de Name/Category,
-refined validada e critério de precisão monetária para DOUBLE da origem.
-Não gerar números de dashboard antes dessas validações.
+## Validações concluídas e limites
+
+Refined validada, regras monetárias e temporais aprovadas e implementadas.
+Consulta somente leitura de 28/10/2026 confirmou zero Name com categorias
+conflitantes; o executor deve verificar novamente antes de cada publicação.
+Treze marts publicados e auditados após a revisão. Moeda declarada e fuso comercial local
+não são inferidos: calcular na unidade original e exibir horas de São Paulo
+como referência escolhida, sem afirmar USD comprovado ou horário comercial.
+Não há necessidade de conversão cambial.

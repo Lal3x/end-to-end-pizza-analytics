@@ -1,9 +1,10 @@
 # Indicadores de desempenho — Pizza Paradise
 
 Fonte: dados fictícios de pedidos, itens, produtos, clientes e lojas da Observable.
-Migração autorizada; contratos abaixo são candidatos adaptados à nova fonte.
+Migração autorizada; contratos revisados após validar refined em 28/10/2026.
 Formato: indicador — tabelas (colunas) — o que mede.
-Nenhum mart novo foi calculado pelo pipeline.
+Treze marts calculados e validados pelo pipeline; resultados em
+[execução dos marts](docs/execucao-marts.md).
 
 1. **Evolução mensal das vendas** — orders (id, orderDate, total, nItems) — acompanha receita registrada, pedidos e unidades por mês, permitindo comparações entre 2020 e 2022.
 2. **Ranking de variantes por receita** — order_items (orderID, SKU) + products (SKU, Name, Size, Price) + orders (id, orderDate) — compara cada SKU separadamente, identificando produto e tamanho.
@@ -34,7 +35,9 @@ sem presumir relação 80/20.
 orderDate tem valores com Z (UTC) e valores apenas com data. O período de
 registro será definido pela representação da fonte, sem assumir fuso local
 da loja. Pedidos sem hora permanecem na contagem e são marcados como hora
-não informada no mart horário. Aprovar essa regra antes de implementar SQL.
+não informada no mart horário. Datas e instantes UTC continuam na refined.
+Revisão de 29/10/2026: o mart horário usa America/Sao_Paulo, como referência
+comum de visualização. Mês/dia da semana permanecem pela data original da fonte.
 
 A moeda USD é uma proposta de apresentação coerente com o contexto das lojas,
 mas não foi identificada declaração explícita nos anexos. Não converter moeda

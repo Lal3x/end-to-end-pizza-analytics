@@ -1,0 +1,187 @@
+{
+  "tabelas": {
+    "vendas_mensais": 36,
+    "ranking_pizzas": 36,
+    "pedidos_dia_semana": 7,
+    "pedidos_hora": 20,
+    "ticket_por_pedido": 2046713,
+    "receita_categoria": 3,
+    "vendas_tamanho": 4,
+    "concentracao_pizzas": 9,
+    "quantidade_por_pedido": 2046713,
+    "kpis": 1,
+    "ranking_tipos_pizza": 9,
+    "vendas_loja": 32,
+    "frequencia_clientes": 990
+  },
+  "segundos": 3.46,
+  "ensaio_segundos": 3.573,
+  "reexecucao_segundos": 3.487,
+  "comparacoes_except_all": {
+    "carga_principal_vs_reexecucao": {
+      "vendas_mensais": [
+        0,
+        0
+      ],
+      "ranking_pizzas": [
+        0,
+        0
+      ],
+      "pedidos_dia_semana": [
+        0,
+        0
+      ],
+      "pedidos_hora": [
+        0,
+        0
+      ],
+      "ticket_por_pedido": [
+        0,
+        0
+      ],
+      "receita_categoria": [
+        0,
+        0
+      ],
+      "vendas_tamanho": [
+        0,
+        0
+      ],
+      "concentracao_pizzas": [
+        0,
+        0
+      ],
+      "quantidade_por_pedido": [
+        0,
+        0
+      ],
+      "kpis": [
+        0,
+        0
+      ],
+      "ranking_tipos_pizza": [
+        0,
+        0
+      ],
+      "vendas_loja": [
+        0,
+        0
+      ],
+      "frequencia_clientes": [
+        0,
+        0
+      ]
+    },
+    "reexecucao_vs_primeira_carga": {
+      "vendas_mensais": [
+        0,
+        0
+      ],
+      "ranking_pizzas": [
+        0,
+        0
+      ],
+      "pedidos_dia_semana": [
+        0,
+        0
+      ],
+      "pedidos_hora": [
+        0,
+        0
+      ],
+      "ticket_por_pedido": [
+        0,
+        0
+      ],
+      "receita_categoria": [
+        0,
+        0
+      ],
+      "vendas_tamanho": [
+        0,
+        0
+      ],
+      "concentracao_pizzas": [
+        0,
+        0
+      ],
+      "quantidade_por_pedido": [
+        0,
+        0
+      ],
+      "kpis": [
+        0,
+        0
+      ],
+      "ranking_tipos_pizza": [
+        0,
+        0
+      ],
+      "vendas_loja": [
+        0,
+        0
+      ],
+      "frequencia_clientes": [
+        0,
+        0
+      ]
+    },
+    "raw_preservada": {
+      "orders": [
+        0,
+        0
+      ],
+      "order_items": [
+        0,
+        0
+      ],
+      "products": [
+        0,
+        0
+      ],
+      "stores": [
+        0,
+        0
+      ],
+      "customers": [
+        0,
+        0
+      ]
+    },
+    "refined_preservada": {
+      "orders": [
+        0,
+        0
+      ],
+      "order_items": [
+        0,
+        0
+      ],
+      "products": [
+        0,
+        0
+      ],
+      "stores": [
+        0,
+        0
+      ],
+      "customers": [
+        0,
+        0
+      ]
+    }
+  },
+  "kpis": {
+    "pedidos": 2046713,
+    "unidades": 2916015,
+    "receita": "50211527.85",
+    "ticket_medio": 24.532764412988044,
+    "unidades_por_pedido": 1.4247307756387926,
+    "data_inicial": "2020-01-01",
+    "data_final": "2022-12-31"
+  },
+  "produtos_80": 5,
+  "proporcao_produtos_80": 0.5555555555555556,
+  "testes": 86,
+  "cobertura_percentual": 92.42
+}
