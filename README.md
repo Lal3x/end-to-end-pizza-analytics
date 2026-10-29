@@ -22,6 +22,23 @@ empresa real. [Avaliação](docs/avaliacao-pizza-paradise.md) e
 
 ## Modelo e arquitetura
 
+A organização das etapas foi corrigida após revisão do usuário:
+
+```text
+pipeline/
+  ingestao.py
+  transformacao.py   transformação com pandas
+  marts.py           execução dos SQLs e auditorias
+db.py                conexão compartilhada, na raiz
+baixar_dados.py      preparação das fontes, independente
+ui.py                exploração local
+sql/marts/           13 SQLs dos indicadores
+sql/validar_*.sql    auditorias de entrada e saída dos marts
+```
+
+`pipeline/` não contém aquisição, configuração de fontes ou executor de
+transformação SQL. As três etapas e o dashboard Streamlit estão implementados.
+
 | Tabela | Grão / PK | Relacionamentos |
 |---|---|---|
 | orders | Um pedido / id | customerId → customers.id; storeId → stores.id |
@@ -36,10 +53,10 @@ Anexos oficiais CSV/Parquet → raw/pizza_paradise/
 ```
 
 RAW preserva CSV em texto e Parquet nos tipos nativos, sem deduplicação.
-Na refined, IDs serão texto e dinheiro DECIMAL. Repetições de itens representam
+Na refined, IDs são texto e dinheiro DECIMAL(18,2). Repetições de itens representam
 unidades e precisam permanecer. Há datas com/sem segundos e apenas data:
 não inventar meia-noite para os 116 registros sem hora.
-[Modelo completo](docs/modelo.md) e [transformação proposta](specs/transformacao.md).
+[Modelo completo](docs/modelo.md) e [contrato da transformação](specs/transformacao.md).
 
 ## Ambiente
 
@@ -56,7 +73,7 @@ uv run python -c "import duckdb, pandas, streamlit, plotly"
 Aquisição e ingestão implementadas. Execute na raiz do projeto:
 
 ```bash
-uv run python scripts/baixar_paradise.py
+uv run python baixar_dados.py
 uv run python -m pipeline.ingestao --banco data/pizza-paradise-validacao.duckdb
 uv run python -m pipeline.ingestao
 uv run python scripts/auditar_paradise.py
@@ -67,6 +84,9 @@ recria RAW no banco principal e o quarto compara cada valor e multiplicidade
 com a fonte, verifica tipos e FKs. Não executar com a UI aberta. A aquisição
 precisa de rede na primeira execução; se as fontes já existem, confere hashes
 sem baixá-las novamente. Conteúdo local divergente não é sobrescrito.
+Após publicar refined, a ingestão bloqueia sua recriação para evitar trocar
+RAW mantendo camadas derivadas antigas. Para uma nova carga, usar banco separado
+e revisar a atualização das camadas.
 
 Nesta migração, o banco antigo foi preservado em
 data/backups/maven-e8542a701d7a.duckdb, com SHA-256 e contagens registrados em
@@ -93,6 +113,44 @@ No ensaio medido nesta máquina: 2,59 s e pico de memória residente 588.552 KiB
 (cerca de 575 MiB), sem swap. É uma medição da ingestão, não promessa para
 outra máquina nem medição da futura transformação.
 
+## Transformação com pandas
+
+Com RAW carregada e a UI encerrada:
+
+```bash
+uv run python -m pipeline.transformacao
+```
+
+Converte uma tabela por vez, preserva RAW e publica refined em transação única.
+O JSON de saída relata nulos, tipos, contagens, duplicatas, correções de Launch,
+precisão temporal, reconciliações, tempo e pico RSS do processo. Para ensaio,
+use `--banco caminho/do/banco.duckdb` em uma cópia com RAW já carregada.
+Falhas restauram refined anterior. A reexecução substitui a camada.
+Horários com Z permanecem UTC; datas sem hora têm timestamp nulo.
+As funções principais documentam parâmetros, retorno e falhas em docstrings.
+
+## Marts dos indicadores
+
+Com refined publicada e a UI encerrada:
+
+```bash
+uv run python -m pipeline.marts
+```
+
+Executa os 13 arquivos de sql/marts em ordem e publica marts em transação única.
+Auditorias SQL conferem fontes, grãos, quantidades, receitas, rankings, Pareto
+e frequência de clientes; qualquer falha preserva a camada anterior. Reexecução
+substitui a camada e remove tabelas antigas extras. `--banco caminho.duckdb`
+permite ensaio em cópia existente com refined carregada.
+
+Os valores usam a unidade monetária da fonte; horas são exibidas em
+America/Sao_Paulo (UTC−03:00 em 2020–2022). Timestamps da refined continuam UTC;
+meses e dias mantêm a data original. São Paulo é referência de visualização,
+não o fuso comercial das lojas americanas. Os marts
+representam a janela completa: filtros arbitrários de data no dashboard exigem
+revisão dos grãos e denominadores. Resultados e limitações:
+[execução dos marts](docs/execucao-marts.md).
+
 ## Exploração e testes
 
 ```bash
@@ -110,10 +168,14 @@ SELECT * FROM raw.order_items LIMIT 10;
 ```
 
 Testes usam fontes sintéticas e DuckDB temporário real, sem rede ou banco do
-projeto. Suíte atual: 35 testes passaram, cobertura total 98,71% das 155 linhas
+projeto. Com apresentação: 112 testes passaram, cobertura total 94,05% das 521 linhas
 executáveis, acima da meta de 60%. Inclui aquisição gzip/hashes, CSV e Parquet
 reais sintéticos, repetições preservadas, mudança de esquema e rollback após
 erro real em páginas Parquet. Evidência: [registro da migração](docs/migracao-pizza-paradise.md).
+Transformação: datas inválidas, precisão temporal, centavos, domínios, conflitos,
+FKs, reconciliação, idempotência e rollback com refined anterior preservada.
+O teste de regressão monetária inclui valor maior depois da amostra inicial.
+Resultados reais: [execução da transformação](docs/execucao-transformacao.md).
 
 ## Indicadores, fórmulas e limites
 
@@ -128,17 +190,56 @@ Moeda precisa ser formalizada para esta fonte; USD ainda é proposta pelo
 contexto americano, não declaração explícita nos anexos. Sem custos, status,
 pagamentos ou eventos logísticos, não afirmar lucro, cancelamento ou atraso.
 
+## Dashboard Streamlit
+
+Com os marts publicados e a UI DuckDB encerrada:
+
+```bash
+uv run streamlit run app.py
+```
+
+Abrir http://localhost:8501. O painel tem sete gráficos Plotly, quatro KPIs
+principais e três auxiliares, com fundo ciano claro. `painel.py` lê/formata/desenha;
+`app.py` organiza a interface e o cache. Leituras somente em marts, com conexão
+read_only fechada após a consulta. **Recarregar dados** atualiza o cache depois
+de executar os marts. Seleções mensais e ranking por SKU/Name não alteram KPIs.
+
+Banco ou fonte ausente gera erro claro com orientação. Nenhum indicador é
+calculado na apresentação. [Execução e validação](docs/execucao-dashboard.md),
+[captura desktop](docs/evidencias/dashboard-desktop.png) e
+[captura móvel](docs/evidencias/dashboard-mobile.png).
+
+## Desenho do dashboard
+
+[Rascunho HTML](design/rascunho.html) com dados reais dos marts agregados,
+[PNG desktop](design/rascunho.png) e [PNG móvel](design/rascunho-mobile.png).
+Para abrir o HTML, manter design/dados.js ao lado dele. Atualizar o retrato:
+
+```bash
+uv run python scripts/preparar_rascunho.py
+```
+
+O protótipo tem fundo ciano claro, cartões com valores completos, sete gráficos
+com mart de origem e frases-resposta. O PNG é captura real do HTML renderizado.
+Validações e comandos de captura: [registro do rascunho](docs/execucao-rascunho.md).
+O HTML é o desenho preservado; a aplicação funcional está em app.py/painel.py.
+Pareto mostra nomes dos produtos no eixo X; horas usam America/Sao_Paulo.
+Revisão do formato das specs e verificações: [registro](docs/validacao-specs-e-fuso.md).
+
 ## Desenvolvimento e participação da IA
 
 Specs anteriores ao código em specs/; um SQL por indicador em sql/marts/
 quando implementados. [Metodologia](docs/metodologia.md) e histórico de commits
 mantêm a evolução real, sem reconstrução posterior.
-Os cinco SELECTs candidatos da transformação foram validados em leitura:
-43 diagnósticos sem falhas, contagens preservadas e reconciliação por pedido.
-O banco permanece somente com RAW. Revisão das decisões de datas, dinheiro e
-Launch: [validação da refined](docs/validacao-refined.md).
-Para repetir a investigação: `uv run python scripts/validar_selects_refined.py`.
-O executor de transformação, marts e dashboard ainda não foram implementados.
+A investigação SQL anterior permanece como [registro histórico](docs/validacao-refined.md),
+mas seus arquivos e testes saíram do fluxo ativo: ela não implementa a nova
+transformação com pandas. O dashboard Streamlit já está implementado.
+
+Eu ampliei a estrutura com módulos de aquisição/configuração dentro de pipeline
+e preparei transformação por SQL, contrariando a organização solicitada pelo
+usuário. A correção remove esses módulos da pasta de etapas e estabelece
+transformacao.py com pandas. As regras de qualidade dos dados permanecem;
+não foram criados arquivos vazios para aparentar etapas prontas.
 
 Codex auxiliou inspeção, specs, implementação anterior e testes. Problemas reais
 estão nos registros: acesso DNS/cache, formatação, bloqueio pela UI e correção
@@ -150,4 +251,5 @@ A hipótese de preço e as regras Maven não foram transferidas automaticamente.
 Registros históricos: [Etapa Zero](docs/execucao-etapa-zero.md),
 [conexão](docs/execucao-db.md), [ingestão Maven](docs/execucao-ingestao.md) e
 [UI](docs/execucao-ui.md). Eles descrevem suas versões, não resultados da fonte
-nova. Arquivos de dados, banco e instruções locais ficam fora do Git.
+nova. Fontes brutas, banco e instruções locais ficam fora do Git. O retrato
+agregado do desenho e suas imagens são artefatos de revisão do dashboard.

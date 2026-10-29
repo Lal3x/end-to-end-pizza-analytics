@@ -8,7 +8,7 @@ Sem reescrever histórico ou publicar fontes completas sem licença esclarecida.
 |---|---|---|
 | Migração da fundação | Modelo, fonte, indicadores e specs atualizados | Preservar histórico Maven; registrar diferenças de grão e formatos |
 | Aquisição/ingestão | Cinco fontes, CSV via pandas e Parquet via DuckDB | Hashes, tipos, contagens, valores, multiplicidades, rollback e idempotência |
-| Transformação | Investigar nova RAW e revisar SELECTs antes do código | Datas/precisão, Launch, dinheiro, quatro PKs e quatro FKs; preservar itens repetidos |
+| Transformação | Revisar contrato e implementar em pandas no módulo da etapa | Datas/precisão, Launch, dinheiro, quatro PKs e quatro FKs; preservar itens repetidos |
 | Marts | Um SQL numerado por pergunta | Sem média de médias; reconciliação entre pedido e itens; grãos declarados |
 | Dashboard | Rascunho antes do visual, painel/app separados | Somente marts, read_only e conexão fechada |
 | Entrega | README executável, testes e cobertura ≥60% | Resultados reais, licença/atribuição e histórico incremental |
@@ -20,6 +20,9 @@ Sem reescrever histórico ou publicar fontes completas sem licença esclarecida.
 - Comparar variantes separadas e produtos consolidados; Pareto e resumos.
 - Preservar a fonte anterior e registrar a migração, sem inventar histórico.
 - Manter AGENTS.md apenas local, ignorado pelo Git.
+- Transformação em pandas, em um único módulo, com docstrings nas funções.
+- Adicionar precisão temporal, manter horários Z em UTC, corrigir os dois
+  valores Launch conhecidos e aceitar apenas ruído monetário até 1e-9.
 
 ## Diferenças que exigem contrato explícito
 
@@ -36,9 +39,25 @@ Sem reescrever histórico ou publicar fontes completas sem licença esclarecida.
 
 ## Próximo passo
 
-Aquisição/ingestão validadas em banco separado, repetidas e publicadas em
-pizza.duckdb após cópia íntegra do banco Maven. Suíte atual: 35 testes, cobertura
-98,71%; pico RSS do ensaio aproximadamente 575 MiB. Registro e evidências em
-docs/migracao-pizza-paradise.md. SELECTs candidatos validados em leitura:
-43 diagnósticos sem falhas. Próximo passo: revisar as decisões propostas em
-docs/validacao-refined.md antes do executor transacional da transformação.
+Aquisição/ingestão e transformação pandas concluídas. Cinco tabelas refined
+publicadas; zero órfãos ou diferenças por pedido. Reexecução de ensaio e carga
+principal conferidas. Registro em docs/execucao-transformacao.md. Na conclusão
+da transformação eram 61 testes, cobertura 94,12%; Ruff aprovado.
+Pico RSS da transformação principal:
+1.575,04 MiB nesta máquina, diferente do consumo da ingestão.
+
+Marts implementados após revisão dos 13 contratos: arquivos numerados,
+pipeline/marts.py e duas auditorias SQL independentes. Treze tabelas publicadas;
+86 testes passaram, cobertura total 92,42%, Ruff aprovado. Registro em
+docs/execucao-marts.md.
+
+Rascunho HTML concluído em 29/10/2026 com números dos marts e capturas PNG
+desktop/móvel. Spec em specs/dashboard.md; auditoria em docs/execucao-rascunho.md.
+Período completo, sem filtro global; alternância mensal altera apenas a série.
+Desenho validado; painel.py/app.py implementados em 29/10/2026, com tema ciano,
+recarga e sete figuras Plotly. 112 testes passaram, cobertura 94,05%; navegador
+desktop/móvel verificado e marts reexecutados sem lock com Streamlit aberto.
+Registro em docs/execucao-dashboard.md. Próximo passo: revisão final da entrega,
+comandos do README e pendências de fonte/publicação; relatório HTML é opcional.
+Revisão de 29/10/2026: specs padronizadas, Pareto com nomes e mart horário em
+America/Sao_Paulo; 87 testes aprovados. Registro em docs/validacao-specs-e-fuso.md.

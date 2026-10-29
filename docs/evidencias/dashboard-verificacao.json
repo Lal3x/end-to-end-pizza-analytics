@@ -1,0 +1,58 @@
+{
+  "url_verificada": "http://127.0.0.1:8502",
+  "kpis": [
+    "50.211.527,85",
+    "2.046.713",
+    "2.916.015",
+    "24,53"
+  ],
+  "graficos": 7,
+  "pareto_nomes": [
+    "Veggie Pizza",
+    "Buffalo Chicken Pizza",
+    "BBQ Chicken Pizza",
+    "Sicilian Pizza",
+    "Margherita Pizza",
+    "Hawaiian Pizza",
+    "Pepperoni Pizza",
+    "Oxtail Pizza",
+    "Meat Lover's Pizza"
+  ],
+  "serie_mensal_e_variantes": "aprovadas",
+  "marts_com_streamlit_aberto": {
+    "tabelas": {
+      "vendas_mensais": 36,
+      "ranking_pizzas": 36,
+      "pedidos_dia_semana": 7,
+      "pedidos_hora": 20,
+      "ticket_por_pedido": 2046713,
+      "receita_categoria": 3,
+      "vendas_tamanho": 4,
+      "concentracao_pizzas": 9,
+      "quantidade_por_pedido": 2046713,
+      "kpis": 1,
+      "ranking_tipos_pizza": 9,
+      "vendas_loja": 32,
+      "frequencia_clientes": 990
+    },
+    "segundos": 4.74
+  },
+  "recarga_sem_mudanca_de_kpis": true,
+  "erros_javascript": [],
+  "viewports": [
+    [
+      1440,
+      1024
+    ],
+    [
+      390,
+      844
+    ]
+  ],
+  "capturas_sha256": {
+    "dashboard-desktop.png": "91c6f6de50b04aff084e81722fddc3d5ba5d48e27b5c192577fa86a23f7a3ce9",
+    "dashboard-mobile.png": "cf4ebe48e73a0abff803a598a0ea54017237932eaa893cd18e57c5826f20c6f2",
+    "dashboard-produtos.png": "06e15c7b3c2fb8d3016cab37bd1ba67506d11a3b2d99ba05c9620d1269b6b80b",
+    "dashboard-demanda.png": "167398ecd74554df3b1e4f7669c971ba87a647ef48023dddd793a774e3b6e1b6"
+  }
+}
