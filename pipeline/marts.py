@@ -9,6 +9,7 @@ import json
 import re
 import sys
 import time
+from contextlib import nullcontext
 from pathlib import Path
 
 import duckdb
@@ -82,12 +83,19 @@ def auditar(con: duckdb.DuckDBPyConnection, arquivo: str) -> None:
         raise ValueError(f"{arquivo}: {[linha[0] for linha in falhas]}")
 
 
-def executar(banco: Path | None = None, pasta: Path | None = None) -> dict:
+def executar(
+    banco: Path | None = None,
+    pasta: Path | None = None,
+    *,
+    con: duckdb.DuckDBPyConnection | None = None,
+) -> dict:
     """Publica marts atomicamente e retorna contagens somente após commit.
 
     Args:
         banco: Banco existente; padrão pizza.duckdb na raiz.
         pasta: Diretório dos 13 SELECTs; padrão sql/marts.
+        con: Conexão externa com transação ativa; exclusiva de banco. Conforme
+            specs/execucao-pipeline.md, o chamador confirma/reverte e fecha.
 
     Raises:
         ValueError: Se inventário, fontes, grãos ou reconciliações divergirem.
@@ -96,20 +104,25 @@ def executar(banco: Path | None = None, pasta: Path | None = None) -> dict:
     Fecha a conexão em qualquer resultado e preserva a versão anterior em erro.
     """
     caminho = Path(banco) if banco is not None else db.PASTA_RAW.parent / "pizza.duckdb"
-    if not caminho.is_file():
+    if banco is not None and con is not None:
+        raise ValueError("Use banco ou con, nunca ambos")
+    propria = con is None
+    if propria and not caminho.is_file():
         raise ValueError(f"Banco ausente: {caminho}")
     inicio = time.perf_counter()
     # Alias fixo evita ambiguidade entre catálogo e schema se o arquivo se
     # chamar marts.duckdb ou refined.duckdb. O banco em memória não recebe dados.
-    with duckdb.connect(":memory:") as con:
-        literal = str(caminho.resolve()).replace("'", "''")
-        con.execute(f"ATTACH '{literal}' AS destino")
-        con.execute("USE destino")
+    with duckdb.connect(":memory:") if propria else nullcontext(con) as con:
+        if propria:
+            literal = str(caminho.resolve()).replace("'", "''")
+            con.execute(f"ATTACH '{literal}' AS destino")
+            con.execute("USE destino")
         con.execute("SET TimeZone='UTC'")
         consultas = ler_sqls(
             Path(pasta) if pasta is not None else PASTA_SQL / "marts", con
         )
-        con.execute("BEGIN")
+        if propria:
+            con.execute("BEGIN")
         try:
             for nome in FONTES:
                 if not con.execute(f"SELECT count(*) FROM refined.{nome}").fetchone()[
@@ -140,9 +153,11 @@ def executar(banco: Path | None = None, pasta: Path | None = None) -> dict:
                 except (duckdb.Error, ValueError) as erro:
                     raise ValueError(f"marts.{nome}: {erro}") from erro
             auditar(con, "validar_marts.sql")
-            con.execute("COMMIT")
+            if propria:
+                con.execute("COMMIT")
         except Exception:
-            con.execute("ROLLBACK")
+            if propria:
+                con.execute("ROLLBACK")
             raise
     return {"tabelas": contagens, "segundos": round(time.perf_counter() - inicio, 3)}
 

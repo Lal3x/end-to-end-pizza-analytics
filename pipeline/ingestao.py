@@ -58,23 +58,11 @@ FONTES = {
 }
 
 
-def executar(banco: Path | None = None) -> dict[str, int]:
-    """Publica as cinco fontes em RAW, conforme specs/ingestao.md.
+def validar_fontes() -> dict[str, pd.DataFrame]:
+    """Pré-valida as cinco fontes sem abrir destino; retorna os três CSVs textuais.
 
-    Args:
-        banco: Caminho opcional para uma carga de ensaio. Quando omitido,
-            utiliza pizza.duckdb na raiz do projeto.
-
-    Returns:
-        Contagens por tabela, somente após o commit de toda a carga.
-
-    Raises:
-        ValueError: Se uma fonte divergir do contrato ou o destino já tiver
-            tabelas refined/marts. Falhas durante a carga provocam rollback.
-        duckdb.Error: Se a abertura ou o controle da transação falhar.
-
-    Preserva valores e multiplicidades; CSV entra como texto e Parquet mantém
-    seus tipos nativos. Fecha a conexão também em caso de erro.
+    Compartilhada com executar_pipeline.py conforme specs/execucao-pipeline.md.
+    Falhas identificam caminho e causa; não modifica nenhum arquivo de origem.
     """
     pasta = db.PASTA_RAW / "pizza_paradise"
     faltantes = [
@@ -116,12 +104,40 @@ def executar(banco: Path | None = None) -> dict[str, int]:
                     )
             except (ValueError, OSError, csv.Error, duckdb.Error) as erro:
                 raise ValueError(f"Fonte {caminho}: {erro}") from erro
+    return quadros
 
-    if banco is not None:
+
+def executar(
+    banco: Path | None = None, *, con: duckdb.DuckDBPyConnection | None = None
+) -> dict[str, int]:
+    """Publica RAW conforme specs/ingestao.md e specs/execucao-pipeline.md.
+
+    Args:
+        banco: Destino opcional, exclusivo de con; padrão pizza.duckdb na raiz.
+        con: Conexão externa com transação ativa controlada pelo chamador.
+
+    Returns:
+        Contagens do banco. Com con externo, ainda dependem do commit do chamador.
+
+    Raises:
+        ValueError: Se fontes divergirem, argumentos conflitarem ou houver
+            refined/marts existentes. A proteção da ingestão isolada permanece.
+        duckdb.Error: Se abertura/gravação/transação falhar.
+
+    Sem con, abre/fecha conexão e controla a transação; com con, apenas executa
+    as regras da etapa e propaga falhas. Não confirma nem fecha conexão externa.
+    """
+    if banco is not None and con is not None:
+        raise ValueError("Use banco ou con, nunca ambos")
+    propria = con is None
+    quadros = validar_fontes()
+    pasta = db.PASTA_RAW / "pizza_paradise"
+
+    if propria and banco is not None:
         banco = Path(banco)
         banco.parent.mkdir(parents=True, exist_ok=True)
         con = duckdb.connect(str(banco))
-    else:
+    elif propria:
         con = db.conectar()
     try:
         if con.execute(
@@ -131,7 +147,8 @@ def executar(banco: Path | None = None) -> dict[str, int]:
             raise ValueError(
                 "refined/marts existentes: revisar migração antes de trocar RAW"
             )
-        con.execute("BEGIN")
+        if propria:
+            con.execute("BEGIN")
         try:
             con.execute("DROP SCHEMA IF EXISTS raw CASCADE")
             db.criar_schema(con, "raw")
@@ -151,12 +168,15 @@ def executar(banco: Path | None = None) -> dict[str, int]:
                         contagens[nome] = db.gravar(con, quadros[nome], "raw", nome)
                 except duckdb.Error as erro:
                     raise ValueError(f"Gravação raw.{nome}: {erro}") from erro
-            con.execute("COMMIT")
+            if propria:
+                con.execute("COMMIT")
         except Exception:
-            con.execute("ROLLBACK")
+            if propria:
+                con.execute("ROLLBACK")
             raise
     finally:
-        con.close()
+        if propria:
+            con.close()
     return contagens
 
 

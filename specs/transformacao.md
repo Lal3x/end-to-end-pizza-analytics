@@ -30,6 +30,10 @@ pipeline/transformacao.py, com funções pandas explícitas e testes sintéticos
 Não criar executor de arquivos SQL de transformação ou módulos adicionais de
 regras. SQL analítico fica nos marts, executado por pipeline/marts.py.
 Comando: uv run python -m pipeline.transformacao.
+Integração: executar(banco=None, *, con=None) aceita a transação externa do
+executor completo; nessa modalidade não inicia/confirma/reverte/fecha a conexão.
+Sem con, mantém o comportamento isolado. banco/con juntos são inválidos.
+Contrato de composição: specs/execucao-pipeline.md.
 
 ## SPEC
 

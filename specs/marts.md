@@ -25,6 +25,10 @@ etapa: 13 marts publicados, 86 testes e cobertura total 92,42%.
 
 sql/marts/01 a 13 e pipeline/marts.py; comando
 uv run python -m pipeline.marts.
+Integração: executar(banco=None, pasta=None, *, con=None) aceita uma conexão
+externa com transação ativa, sem iniciar/confirmar/reverter/fechar a transação.
+Sem con, mantém a execução isolada; banco/con juntos são inválidos.
+Contrato de composição: specs/execucao-pipeline.md.
 Auditorias em sql/validar_refined.sql e sql/validar_marts.sql retornam somente
 nomes de violações. O executor interrompe se qualquer consulta retornar linhas;
 as fórmulas de negócio e de validação ficam no SQL, não em Python.

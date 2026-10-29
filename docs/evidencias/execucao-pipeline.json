@@ -1,0 +1,449 @@
+{
+  "data": "2026-10-29",
+  "execucoes": {
+    "ensaio": {
+      "estado": "publicado",
+      "segundos": 66.65,
+      "pico_rss_kib": 1901064,
+      "pico_rss_mib": 1856.51
+    },
+    "reexecucao": {
+      "estado": "publicado",
+      "segundos": 66.0,
+      "pico_rss_kib": 1863156,
+      "pico_rss_mib": 1819.49
+    },
+    "principal": {
+      "estado": "publicado",
+      "segundos": 53.848,
+      "pico_rss_kib": 1978212,
+      "pico_rss_mib": 1931.85
+    }
+  },
+  "comparacoes": {
+    "reexecucao_vs_primeira": {
+      "marts.concentracao_pizzas": [
+        0,
+        0
+      ],
+      "marts.frequencia_clientes": [
+        0,
+        0
+      ],
+      "marts.kpis": [
+        0,
+        0
+      ],
+      "marts.pedidos_dia_semana": [
+        0,
+        0
+      ],
+      "marts.pedidos_hora": [
+        0,
+        0
+      ],
+      "marts.quantidade_por_pedido": [
+        0,
+        0
+      ],
+      "marts.ranking_pizzas": [
+        0,
+        0
+      ],
+      "marts.ranking_tipos_pizza": [
+        0,
+        0
+      ],
+      "marts.receita_categoria": [
+        0,
+        0
+      ],
+      "marts.ticket_por_pedido": [
+        0,
+        0
+      ],
+      "marts.vendas_loja": [
+        0,
+        0
+      ],
+      "marts.vendas_mensais": [
+        0,
+        0
+      ],
+      "marts.vendas_tamanho": [
+        0,
+        0
+      ],
+      "raw.customers": [
+        0,
+        0
+      ],
+      "raw.order_items": [
+        0,
+        0
+      ],
+      "raw.orders": [
+        0,
+        0
+      ],
+      "raw.products": [
+        0,
+        0
+      ],
+      "raw.stores": [
+        0,
+        0
+      ],
+      "refined.customers": [
+        0,
+        0
+      ],
+      "refined.order_items": [
+        0,
+        0
+      ],
+      "refined.orders": [
+        0,
+        0
+      ],
+      "refined.products": [
+        0,
+        0
+      ],
+      "refined.stores": [
+        0,
+        0
+      ]
+    },
+    "ensaio_vs_principal_anterior": {
+      "marts.concentracao_pizzas": [
+        0,
+        0
+      ],
+      "marts.frequencia_clientes": [
+        0,
+        0
+      ],
+      "marts.kpis": [
+        0,
+        0
+      ],
+      "marts.pedidos_dia_semana": [
+        0,
+        0
+      ],
+      "marts.pedidos_hora": [
+        0,
+        0
+      ],
+      "marts.quantidade_por_pedido": [
+        0,
+        0
+      ],
+      "marts.ranking_pizzas": [
+        0,
+        0
+      ],
+      "marts.ranking_tipos_pizza": [
+        0,
+        0
+      ],
+      "marts.receita_categoria": [
+        0,
+        0
+      ],
+      "marts.ticket_por_pedido": [
+        0,
+        0
+      ],
+      "marts.vendas_loja": [
+        0,
+        0
+      ],
+      "marts.vendas_mensais": [
+        0,
+        0
+      ],
+      "marts.vendas_tamanho": [
+        0,
+        0
+      ],
+      "raw.customers": [
+        0,
+        0
+      ],
+      "raw.order_items": [
+        0,
+        0
+      ],
+      "raw.orders": [
+        0,
+        0
+      ],
+      "raw.products": [
+        0,
+        0
+      ],
+      "raw.stores": [
+        0,
+        0
+      ],
+      "refined.customers": [
+        0,
+        0
+      ],
+      "refined.order_items": [
+        0,
+        0
+      ],
+      "refined.orders": [
+        0,
+        0
+      ],
+      "refined.products": [
+        0,
+        0
+      ],
+      "refined.stores": [
+        0,
+        0
+      ]
+    },
+    "backup": {
+      "arquivo": "data/backups/pipeline-completo-20261029-b234ba99.duckdb",
+      "sha256": "1009dadd8e011b4b69e0ef64371de586fd8406175129750805fccfe1d2b1defa"
+    },
+    "principal_vs_ensaio": {
+      "marts.concentracao_pizzas": [
+        0,
+        0
+      ],
+      "marts.frequencia_clientes": [
+        0,
+        0
+      ],
+      "marts.kpis": [
+        0,
+        0
+      ],
+      "marts.pedidos_dia_semana": [
+        0,
+        0
+      ],
+      "marts.pedidos_hora": [
+        0,
+        0
+      ],
+      "marts.quantidade_por_pedido": [
+        0,
+        0
+      ],
+      "marts.ranking_pizzas": [
+        0,
+        0
+      ],
+      "marts.ranking_tipos_pizza": [
+        0,
+        0
+      ],
+      "marts.receita_categoria": [
+        0,
+        0
+      ],
+      "marts.ticket_por_pedido": [
+        0,
+        0
+      ],
+      "marts.vendas_loja": [
+        0,
+        0
+      ],
+      "marts.vendas_mensais": [
+        0,
+        0
+      ],
+      "marts.vendas_tamanho": [
+        0,
+        0
+      ],
+      "raw.customers": [
+        0,
+        0
+      ],
+      "raw.order_items": [
+        0,
+        0
+      ],
+      "raw.orders": [
+        0,
+        0
+      ],
+      "raw.products": [
+        0,
+        0
+      ],
+      "raw.stores": [
+        0,
+        0
+      ],
+      "refined.customers": [
+        0,
+        0
+      ],
+      "refined.order_items": [
+        0,
+        0
+      ],
+      "refined.orders": [
+        0,
+        0
+      ],
+      "refined.products": [
+        0,
+        0
+      ],
+      "refined.stores": [
+        0,
+        0
+      ]
+    },
+    "principal_vs_backup_anterior": {
+      "marts.concentracao_pizzas": [
+        0,
+        0
+      ],
+      "marts.frequencia_clientes": [
+        0,
+        0
+      ],
+      "marts.kpis": [
+        0,
+        0
+      ],
+      "marts.pedidos_dia_semana": [
+        0,
+        0
+      ],
+      "marts.pedidos_hora": [
+        0,
+        0
+      ],
+      "marts.quantidade_por_pedido": [
+        0,
+        0
+      ],
+      "marts.ranking_pizzas": [
+        0,
+        0
+      ],
+      "marts.ranking_tipos_pizza": [
+        0,
+        0
+      ],
+      "marts.receita_categoria": [
+        0,
+        0
+      ],
+      "marts.ticket_por_pedido": [
+        0,
+        0
+      ],
+      "marts.vendas_loja": [
+        0,
+        0
+      ],
+      "marts.vendas_mensais": [
+        0,
+        0
+      ],
+      "marts.vendas_tamanho": [
+        0,
+        0
+      ],
+      "raw.customers": [
+        0,
+        0
+      ],
+      "raw.order_items": [
+        0,
+        0
+      ],
+      "raw.orders": [
+        0,
+        0
+      ],
+      "raw.products": [
+        0,
+        0
+      ],
+      "raw.stores": [
+        0,
+        0
+      ],
+      "refined.customers": [
+        0,
+        0
+      ],
+      "refined.order_items": [
+        0,
+        0
+      ],
+      "refined.orders": [
+        0,
+        0
+      ],
+      "refined.products": [
+        0,
+        0
+      ],
+      "refined.stores": [
+        0,
+        0
+      ]
+    }
+  },
+  "testes": 127,
+  "cobertura_percentual": 94.81,
+  "contagens": {
+    "raw": {
+      "orders": 2046713,
+      "order_items": 2916015,
+      "customers": 34761,
+      "stores": 32,
+      "products": 36
+    },
+    "refined": {
+      "orders": 2046713,
+      "order_items": 2916015,
+      "customers": 34761,
+      "stores": 32,
+      "products": 36
+    },
+    "marts": {
+      "vendas_mensais": 36,
+      "ranking_pizzas": 36,
+      "pedidos_dia_semana": 7,
+      "pedidos_hora": 20,
+      "ticket_por_pedido": 2046713,
+      "receita_categoria": 3,
+      "vendas_tamanho": 4,
+      "concentracao_pizzas": 9,
+      "quantidade_por_pedido": 2046713,
+      "kpis": 1,
+      "ranking_tipos_pizza": 9,
+      "vendas_loja": 32,
+      "frequencia_clientes": 990
+    }
+  },
+  "validacoes_refined": {
+    "orders.customerId->customers.id": 0,
+    "orders.storeId->stores.id": 0,
+    "order_items.orderID->orders.id": 0,
+    "order_items.SKU->products.SKU": 0,
+    "pedidos_divergentes": 0
+  },
+  "schemas_externos": {
+    "mesmos_schemas_e_objetos": true,
+    "objetos_conferidos": 0
+  }
+}

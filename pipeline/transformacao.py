@@ -11,6 +11,7 @@ import math
 import resource
 import sys
 import time
+from contextlib import nullcontext
 from decimal import Decimal
 from pathlib import Path
 
@@ -223,11 +224,15 @@ def validar_relacoes(con: duckdb.DuckDBPyConnection) -> dict:
     return relatorio
 
 
-def executar(banco: Path | None = None) -> dict:
+def executar(
+    banco: Path | None = None, *, con: duckdb.DuckDBPyConnection | None = None
+) -> dict:
     """Recria refined atomicamente e retorna diagnósticos após o commit.
 
     Args:
         banco: Banco existente para ensaio; padrão pizza.duckdb na raiz.
+        con: Conexão externa com transação ativa; exclusiva de banco. Conforme
+            specs/execucao-pipeline.md, o chamador confirma/reverte e fecha.
 
     Raises:
         ValueError: Se conversões ou auditorias violarem o contrato.
@@ -236,13 +241,17 @@ def executar(banco: Path | None = None) -> dict:
     RAW permanece intacta; qualquer erro restaura refined anterior.
     """
     caminho = Path(banco) if banco is not None else db.PASTA_RAW.parent / "pizza.duckdb"
-    if not caminho.is_file():
+    if banco is not None and con is not None:
+        raise ValueError("Use banco ou con, nunca ambos")
+    propria = con is None
+    if propria and not caminho.is_file():
         raise ValueError(f"Banco ausente: {caminho}; execute a ingestão")
     inicio = time.perf_counter()
     relatorio = {"tabelas": {}}
-    with duckdb.connect(str(caminho)) as con:
+    with duckdb.connect(str(caminho)) if propria else nullcontext(con) as con:
         con.execute("SET TimeZone='UTC'")
-        con.execute("BEGIN")
+        if propria:
+            con.execute("BEGIN")
         try:
             con.execute("DROP SCHEMA IF EXISTS refined CASCADE")
             db.criar_schema(con, "refined")
@@ -279,9 +288,11 @@ def executar(banco: Path | None = None) -> dict:
                 relatorio["tabelas"][nome] = diagnostico
                 del df
             relatorio["validacoes"] = validar_relacoes(con)
-            con.execute("COMMIT")
+            if propria:
+                con.execute("COMMIT")
         except Exception:
-            con.execute("ROLLBACK")
+            if propria:
+                con.execute("ROLLBACK")
             raise
     relatorio["segundos"] = round(time.perf_counter() - inicio, 3)
     relatorio["pico_rss_mib"] = round(

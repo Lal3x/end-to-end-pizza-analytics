@@ -30,6 +30,11 @@ Conexão compartilhada em db.py na raiz; pipeline/ fica para as etapas.
 Comandos: uv run python baixar_dados.py;
 uv run python -m pipeline.ingestao.
 O executor aceita --banco para validar uma carga em arquivo separado.
+Na execução completa, executar(banco=None, *, con=None) recebe a conexão de
+destino com transação ativa; não confirma/reverte/fecha a conexão externa.
+Sem con, mantém sua transação e fechamento próprios. banco/con juntos falham.
+validar_fontes() pré-valida arquivos sem abrir destino e retorna os CSVs textuais,
+reutilizada pelo executor completo conforme specs/execucao-pipeline.md.
 
 ## SPEC
 
