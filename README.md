@@ -120,16 +120,25 @@ principal comparados integralmente com zero diferenças. A carga completa levou
 
 Arquivos brutos, banco, backups, credenciais, caches, site gerado e AGENTS.md
 ficam fora do Git. Evidências pequenas, agregados e imagens são artefatos de
-revisão. A fonte Maven anterior permanece apenas nos registros históricos.
+revisão.
 
-## Participação da IA
+## Decisões técnicas e participação da IA
 
-Codex auxiliou investigação, specs, implementação e testes. Desvios efetivamente
+O autor criou e validou as specs, tomou as decisões de negócio e definiu os
+indicadores. Conduziu o escopo e a escolha da fonte Pizza Paradise,
+exigiu transformação com pandas e simplificou a estrutura de pipeline/.
+Aprovou regras de conversão antes do código, solicitou Pareto e análises
+separadas por SKU e nome, escolheu o horário de São Paulo e orientou a revisão
+visual. Também solicitou o executor completo, CI, hooks e documentação.
+[Decisões e limitações](docs/decisoes.md).
+
+Codex apoiou a investigação, o detalhamento das specs, a implementação e os
+testes, sob orientação e revisão do autor. Desvios efetivamente
 encontrados: estrutura excessiva e transformação SQL contrariando a escolha por
 pandas; inferência Decimal do DuckDB insuficiente; formatos de data distintos e
 repetições de itens legítimas; layout/fuso corrigidos após revisão do usuário.
 As correções e evidências estão na [metodologia](docs/metodologia.md).
 
 Algumas mudanças ficaram acumuladas antes de serem registradas em commits;
-não foram retrodatadas. O histórico real foi preservado. Não copiar fórmulas da
-Olist nem inventar falhas/resultados para aparentar aderência ao curso.
+não foram retrodatadas. O histórico real foi preservado. As decisões e os
+resultados relatados correspondem às verificações efetivamente realizadas.

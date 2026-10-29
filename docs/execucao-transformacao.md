@@ -74,6 +74,8 @@ conexão e download também receberam documentação de parâmetros, retorno e e
 Alterações de código/documentação foram feitas por patches; Ruff format ajustou
 o layout e o JSON de evidência foi gerado a partir das execuções reais.
 
-Marts e dashboard continuam pendentes. Moeda USD ainda depende da documentação
+Na data desta execução, marts e dashboard estavam pendentes; foram concluídos
+posteriormente, conforme [marts](execucao-marts.md) e [dashboard](execucao-dashboard.md).
+Moeda USD ainda depende da documentação
 da fonte; não houve inferência de fuso comercial nem liberação de redistribuição
 dos anexos. Nenhum commit ou publicação foi realizado nesta etapa.

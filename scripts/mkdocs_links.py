@@ -26,7 +26,9 @@ def on_page_markdown(markdown, page, config, files):
         if not caminho.is_file() or not caminho.is_relative_to(RAIZ):
             return match.group(0)
         if caminho.is_relative_to(DOCS):
-            return match.group(0)
+            arquivo = files.get_file_from_path(caminho.relative_to(DOCS).as_posix())
+            if arquivo is None or not arquivo.inclusion.is_excluded():
+                return match.group(0)
         relativo = quote(caminho.relative_to(RAIZ).as_posix(), safe="/")
         if inicio.startswith("!"):
             destino = (

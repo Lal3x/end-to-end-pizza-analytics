@@ -88,4 +88,5 @@ Moeda declarada e fuso comercial local continuam sem comprovação na fonte.
 Usar valores originais e UTC; não rotular USD como fato confirmado. Os marts
 representam toda a janela observada. Filtros arbitrários de período exigem
 revisar os grãos, principalmente rankings, Pareto e frequência.
-Dashboard ainda não implementado; próximo passo é seu rascunho e contrato.
+Na data desta execução, o dashboard ainda não estava implementado. Sua conclusão
+posterior está no [registro do dashboard](execucao-dashboard.md).

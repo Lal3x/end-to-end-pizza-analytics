@@ -1,8 +1,11 @@
 # Modelo relacional — Pizza Paradise
 
 Fonte ativa: Pizza Paradise, notebook Observable versão 398, dados fictícios.
-A migração foi autorizada após a avaliação em docs/avaliacao-pizza-paradise.md.
-O modelo Maven anterior permanece nos commits e registros históricos.
+
+Grão é o significado de uma linha. PK é a chave que identifica essa linha;
+FK é a coluna que aponta para a chave de outra tabela. SKU identifica uma
+variante de produto, incluindo seu tamanho. Relação N:1 significa que várias
+linhas podem apontar para o mesmo registro da tabela relacionada.
 
 | Tabela | Colunas | Grão / chave |
 |---|---|---|
@@ -25,7 +28,7 @@ Zero nulos nas colunas inspecionadas. Evidência:
 
 54.041 repetições exatas além da primeira em order_items são ocorrências
 necessárias: COUNT por pedido = nItems, soma do catálogo em centavos = total.
-Não deduplicar esta tabela. Na refined ela não ganhará uma PK natural inventada.
+Não deduplicar esta tabela. Na refined ela não recebe uma PK natural inventada.
 Uma agregação por orderID/SKU teria outro grão e deve ser explicitamente definida.
 
 Pedidos guardam total e nItems no grão de pedido; após JOIN com itens, não somar
@@ -39,7 +42,7 @@ consolidado; não inventar pizza_type_id na origem.
 Três CSVs UTF-8 e dois Parquets. RAW mantém CSV como VARCHAR e Parquet nos
 tipos nativos: orders.id/nItems INTEGER, total DOUBLE, outros VARCHAR;
 order_items.orderID INTEGER e SKU VARCHAR. Isso preserva a representação
-tipada da fonte, ao contrário do contrato anterior de quatro CSVs.
+tipada da fonte.
 Na refined, IDs são VARCHAR e dinheiro DECIMAL(18,2).
 
 orderDate mistura segundos+Z, minutos+Z e data sem horário (116 pedidos).

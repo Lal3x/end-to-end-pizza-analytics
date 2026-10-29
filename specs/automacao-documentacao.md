@@ -53,8 +53,11 @@ Motivo: impedir divergência entre checks locais e CI.
 ### 3. MKDOCS E ORGANIZAÇÃO
 
 README curto como entrada; site com início, execução do zero, dados/modelo,
-indicadores, operação, desenvolvimento, critérios de entrega e histórico.
-Preservar relatórios antigos com data/contexto; não tratar Maven como fonte ativa.
+indicadores e decisões. Guias operacionais ficam como consulta complementar.
+Preservar registros históricos no repositório, excluindo-os do build e da busca
+por exclude_docs explícito. Links para arquivos excluídos apontam ao GitHub.
+Não publicar evidências da fonte anterior. Conferir ausência dos arquivos e
+de seus textos no HTML e no índice de busca gerados, sem apagar os originais.
 Build estrito; links de arquivos externos a docs/ apontam ao código no GitHub.
 Tema claro com identidade ciano e navegação em português; site gerado ignorado.
 Motivo: documentação navegável sem duplicar regras ou apagar evidências.

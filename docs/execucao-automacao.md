@@ -37,7 +37,8 @@ memória são medições desta máquina, sem garantia para outros ambientes.
 ## Organização e limites
 
 O site separa início, execução, dados e indicadores, operação, entrega e histórico.
-Os relatórios da fonte Maven foram preservados e identificados como históricos.
+Os relatórios históricos foram preservados no repositório. Na revisão editorial
+posterior, passaram a ser excluídos do site e do índice de busca.
 Links para código e specs apontam para o repositório; banco e anexos completos
 não entram no site. A política da fonte foi reconferida sem atribuir uma licença
 padronizada ausente nos metadados.

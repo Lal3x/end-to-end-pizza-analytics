@@ -1,5 +1,39 @@
 # Critérios de entrega
 
+## O que entregar
+
+Entregar o link do repositório público pessoal com a versão final do projeto.
+Quem clonar deve conseguir chegar aos indicadores seguindo os comandos do README.
+Não é necessário enviar banco, anexos originais ou ambiente virtual.
+
+| Requisito | Evidência neste projeto | Situação |
+| --- | --- | --- |
+| Fonte escolhida e condições de uso | [Fonte e permissão](fontes-e-licenca.md); download pela API pública do publicador | Documentado; permissão textual, sem licença padronizada |
+| Duas ou mais tabelas relacionadas | Cinco fontes; [grãos e PK/FK](modelo.md) | Atendido |
+| Três camadas, com bruto preservado | raw → refined → marts; [validação integral](execucao-pipeline.md) | Validado localmente |
+| Indicadores rastreáveis em SQL | Treze arquivos em sql/marts/; [contratos](contratos-indicadores.md) | Atendido |
+| Testes sintéticos sem banco do projeto | 127 testes; cobertura 94,81%; [evidências](execucao-automacao.md) | Validado localmente |
+| README reproduzível e registro da IA | Instalação, carga, testes, decisões e falhas observadas | Atendido |
+| Repositório público pessoal com histórico | Commits reais preservados; limitações de cronologia registradas | Envio da versão final pendente |
+| Dashboard, quando incluído | Somente leitura dos marts; [validação](execucao-dashboard.md) | Implementado e validado |
+
+O volume de linhas não é critério mínimo. Dashboard é opcional no escopo mínimo,
+mas foi incluído neste projeto. O histórico tem alterações acumuladas registradas
+posteriormente; essa limitação é declarada, sem simular commits prévios por etapa.
+
+## Essencial e complementar
+
+O núcleo para avaliação é README, indicadores.md, specs/, código das três etapas,
+conexão, SQLs, testes e arquivos de ambiente/lock. Modelo, contratos, fonte e
+metodologia sustentam as decisões. app.py, painel.py e design/ compõem a entrega
+visual escolhida.
+
+CI, pre-commit, MkDocs, Pages e executor completo são melhorias adicionais.
+Relatório HTML separado não é necessário para encerrar esta entrega.
+Os registros históricos e evidências anteriores ficam disponíveis no repositório
+para rastreabilidade, excluídos do site e da busca. Não são necessários para
+executar o projeto atual.
+
 ## Funcionalidade já validada
 
 - Fonte ativa documentada e aquisição reproduzível com hashes.

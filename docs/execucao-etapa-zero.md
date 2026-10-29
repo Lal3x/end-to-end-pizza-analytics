@@ -21,9 +21,6 @@ foram escritos por patches revisáveis.
 |---|---|
 | Leitura do anexo; `pwd`, `ls -la`, `rg --files`, `cat pyproject.toml` | Projeto só tinha pyproject.toml visível com Python >=3.14.4; pasta correta |
 | `uv --version`, `python3 --version` | uv 0.12.24; Python do sistema 3.14.4 |
-| Abertura web das quatro aulas | Erro interno; sem conteúdo útil |
-| `curl -L --fail --max-time 30` de cada aula para `/tmp/pizza-aula-N.html` | Primeiro acesso falhou por DNS; após autorização, quatro downloads bem-sucedidos |
-| Extração de texto dos HTMLs com HTMLParser | Leitura dos fundamentos, specs e desafio; síntese e hashes em metodologia.md |
 | Consulta web ao Kaggle, Maven e CC0 | Kaggle sem corpo textual; Maven com descrição/licença e metadados inconsistentes; termos CC0 acessíveis |
 | `curl -L --fail --max-time 30 'https://www.kaggle.com/api/v1/datasets/list?search=maven-pizza-challenge-dataset' -o /tmp/pizza-kaggle-meta.json` | Referência exata com CC0: Public Domain; cópia em evidencias/kaggle-list.json |
 | `curl -L --fail --max-time 60 'https://www.kaggle.com/api/v1/datasets/download/neethimohan/maven-pizza-challenge-dataset?datasetVersionNumber=1' -o /tmp/pizza-kaggle-v1.zip` | ZIP público obtido, sem login; copiado para data/pizza-kaggle-v1.zip |
@@ -94,11 +91,11 @@ Próximo passo: revisão da Etapa Zero e commit de fundação autorizado, seguid
 pela spec de conexão e pela ingestão. A exigência de revisão vem diretamente
 da seção “PRIMEIRA TAREFA — ETAPA ZERO” do pedido do usuário.
 
-## Revisão solicitada: formato das aulas
+## Revisão solicitada: formato dos contratos
 
-O usuário apontou que specs e indicadores não seguiam o padrão das aulas.
-A comparação confirmou: faltava a estrutura de contrato/prompt nas specs e a
-lista de uma linha por indicador pedida no desafio 1.
+O usuário apontou inconsistências no formato das specs e dos indicadores.
+A revisão confirmou a falta de estrutura de contrato nas specs e de uma
+lista resumida com uma linha por indicador.
 
 Arquivos alterados: indicadores.md, specs/ingestao.md, specs/transformacao.md,
 specs/marts.md, README.md, docs/metodologia.md e este registro. Criados
@@ -107,10 +104,7 @@ analítico antes concentrado em indicadores.md.
 
 Comandos realmente executados nesta revisão:
 
-- Leitura dos documentos por cat/rg e releitura dos exemplos dos HTMLs locais
-  das aulas usando HTMLParser.
-- `curl -L --fail --max-time 30 https://ckoliveiraa.github.io/pipeline-olist/indicadores.html -o /tmp/pizza-aula-indicadores.html`:
-  página vinculada pelas aulas acessada com sucesso; texto lido com HTMLParser.
+- Leitura dos documentos por cat/rg.
 - Verificação por Python de dez linhas no formato com dois separadores `—`,
   oito com múltiplas tabelas, sete seções obrigatórias nas quatro specs de
   implementação, links locais e ausência de pipeline/banco: todos os asserts passaram.

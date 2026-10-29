@@ -3,13 +3,11 @@
 Status: contrato aprovado pelo usuário em 28/10/2026 e implementado com pandas
 em um único módulo, pipeline/transformacao.py. Execução real documentada em
 docs/execucao-transformacao.md.
-Substitui a proposta da fonte Maven, preservada no histórico.
 
 ## CONTEXTO
 
 Tornar os cinco grãos confiáveis sem inventar informação temporal ou perder
 unidades repetidas. Evidência prévia: docs/avaliacao-pizza-paradise.md.
-Os SELECTs antigos da Maven não se aplicam a esta fonte.
 
 ## STACK
 
@@ -18,8 +16,8 @@ Dinheiro com decimal.Decimal no DataFrame e DECIMAL(18,2) no destino.
 
 ## O QUE JÁ EXISTE
 
-Aquisição e ingestão migradas, cinco tabelas RAW auditadas integralmente,
-26 testes aprovados e fonte anterior preservada antes desta etapa.
+Aquisição e ingestão implementadas, cinco tabelas RAW auditadas integralmente
+e 26 testes aprovados antes desta etapa.
 Na conclusão: cinco refined publicadas, 61 testes e cobertura 94,12%.
 A investigação SQL anterior está documentada como histórico. Ela não será
 o mecanismo da transformação: o usuário corrigiu o escopo para usar pandas.

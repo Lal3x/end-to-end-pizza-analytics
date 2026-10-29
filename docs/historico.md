@@ -1,8 +1,18 @@
-# Histórico e evidências
+# Arquivo técnico e evidências
 
 Os documentos desta seção registram execuções reais em momentos diferentes.
 Seus números, contagens de testes e fonte correspondem à data de cada relato.
 O roteiro atual é o [guia de execução](guia-rapido.md).
+
+Este índice fica fora da navegação principal para manter a leitura da entrega
+objetiva. Os arquivos foram preservados nos caminhos originais, evitando quebrar
+links. Documentos históricos podem registrar pendências já resolvidas depois.
+
+## Operação e revisão atual
+
+- [Automação e publicação](automacao.md) e [validação em ambiente novo](execucao-automacao.md).
+- [Checklist de entrega](entrega.md), [plano histórico](plano.md) e [método detalhado](metodologia.md).
+- [Specs versionadas](../specs/automacao-documentacao.md), com os contratos prévios de implementação.
 
 ## Fonte inicial: Maven
 

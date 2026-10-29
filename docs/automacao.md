@@ -25,6 +25,8 @@ uv run mkdocs build --strict
 O servidor informa a URL local. site/ contém a saída estática e fica ignorado.
 O MkDocs publica somente docs/; links de código/specs/design fora dessa pasta
 apontam ao GitHub, sem copiar banco, fontes ou a árvore inteira para o artefato.
+Registros históricos são excluídos pelo exclude_docs do mkdocs.yml, inclusive
+da busca. Links para esses arquivos levam à versão preservada no repositório.
 
 ## CI
 
@@ -63,8 +65,8 @@ do Pages ou execução remota do workflow nesta etapa.
 6. Conferir o job **GitHub Pages** e a URL do site. Se o ambiente pedir aprovação,
    autorizar o deployment no GitHub. Build local não substitui essa conferência.
 
-Não enviar a main local antiga diretamente nem fazer force-push. A main remota
-consultada ainda continha somente o primeiro commit; a integração é pelo PR.
+Integrar dev à main pelo PR, sem force-push. Conferir o estado das branches no
+GitHub antes da integração; os registros locais não representam seu estado atual.
 
 ## Revisão antes de enviar
 

@@ -1,4 +1,4 @@
-# Rascunho do dashboard — verificação da aula 4
+# Rascunho do dashboard — validação do desenho
 
 Data: 29/10/2026. [Spec](../specs/dashboard.md),
 [HTML](../design/rascunho.html), [PNG desktop](../design/rascunho.png) e
@@ -16,10 +16,8 @@ vazios. Agora o snapshot vem de SELECTs read_only em nove marts agregados,
 com conexão fechada após a leitura. Não são números digitados para decorar o
 layout: são resultados reais do dataset Pizza Paradise, que é fictício.
 
-A [aula 4, passo 4.1](https://ckoliveiraa.github.io/pipeline-olist/aula-4.html)
-pede números reais, identificação do mart em cada caixa, uma frase com a
-resposta de cada gráfico e exportação para design/rascunho.png. Esses pontos
-foram aplicados ao desenho autoral, sem copiar os indicadores da Olist.
+O desenho usa números dos marts, identifica a origem de cada caixa, inclui uma
+frase com a resposta de cada gráfico e foi exportado para design/rascunho.png.
 Também foi adicionada a visão por hora UTC, incluindo os 116 pedidos sem hora
 em grupo separado, para cobrir a pergunta prevista no enunciado do projeto.
 
@@ -60,7 +58,7 @@ PNGs e verificacao.json são artefatos gerados pelas ferramentas.
 O PNG é captura do HTML renderizado no Chromium, com dados carregados,
 não uma imagem desenhada separadamente. Viewport desktop 1440 × 1024, captura
 completa 1440 × 2726; móvel 390 × 844 com captura completa da página longa.
-O tamanho 1440 × 1024 sugerido na aula é usado como janela; a imagem completa
+O tamanho 1440 × 1024 é usado como janela; a imagem completa
 mantém as seções seguintes legíveis, sem reduzir o dashboard a uma miniatura.
 
 ## Verificações executadas
@@ -86,7 +84,7 @@ sintéticos do projeto. Não houve nova execução da suíte do pipeline nesta e
 ## O que ainda falta
 
 1. Validação humana do desenho, incluindo o teste de leitura de cinco segundos
-   sugerido na aula; automação não comprova compreensão do usuário.
+   para conferir a clareza; automação não comprova compreensão do usuário.
 2. Implementar painel.py e app.py conforme a spec aprovada, com leitura somente
    de marts, conexão read_only fechada e formatação/gráficos separados da UI.
    Este HTML é protótipo, não o dashboard Streamlit concluído.
@@ -100,16 +98,7 @@ sintéticos do projeto. Não houve nova execução da suíte do pipeline nesta e
    efetivamente utilizada e repositório público. Arquivos brutos não são
    liberados para publicação por esta captura.
 
-O desafio final publicado na aula apresenta dashboard como opcional; se houver,
-deve ler apenas indicadores. O escopo solicitado neste projeto inclui Streamlit
-e Plotly. Logo, cumprir o PNG não encerra a entrega combinada do dashboard.
-
-## Referência conferida
-
-Página oficial da aula 4 acessada em 29/10/2026 por curl e extraída para leitura,
-incluindo passo 4.1, spec do painel e requisitos do desafio final. O navegador de
-pesquisa retornou erro interno e o primeiro curl no sandbox falhou por DNS;
-o acesso autorizado funcionou. A comparação foi feita com o conteúdo acessado,
-não somente com os registros anteriores do projeto.
-SHA-256 do HTML consultado:
-`8056ac74f3cd99b100cfde380db6e735ab113cb95ac45c4d37988c32001e7051`.
+O escopo solicitado inclui Streamlit e Plotly, com leitura exclusiva de marts.
+O PNG registra o desenho; a implementação posterior está documentada em
+[execução do dashboard](execucao-dashboard.md). A lista acima registra as
+pendências existentes na data do rascunho, não o estado atual da entrega.

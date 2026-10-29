@@ -1,18 +1,38 @@
+# Ambientes e arquivos compilados Python
 .venv/
+.venv-*/
+venv/
 __pycache__/
+*.py[cod]
+*.egg-info/
+/build/
+/dist/
+
+# Checks e cobertura locais
 .pytest_cache/
 .ruff_cache/
 .coverage
 htmlcov/
 coverage.xml
+.coverage.*
+
+# Fontes, bancos e artefatos locais
 *.duckdb
 *.duckdb.wal
 raw/
 data/
+*.parquet
+
+# Segredos e arquivos de trabalho
 .env
 .env.*
 !.env.example
 *.log
 /AGENTS.md
+/.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Site MkDocs: gerado pelo CI, não versionado
 /site/
-/.venv-validacao/

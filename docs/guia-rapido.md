@@ -20,7 +20,7 @@ uv run python baixar_dados.py
 
 O downloader verifica os hashes e mantém arquivos em raw/pizza_paradise/.
 Fontes existentes divergentes não são sobrescritas. O pipeline não precisa de
-conta Kaggle nem token; a fonte ativa é Observable, não a Maven inicial.
+conta nem token; os anexos são obtidos pela API pública do Observable.
 
 ## 3. Publicar todas as camadas
 

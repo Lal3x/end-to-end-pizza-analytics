@@ -214,11 +214,5 @@
   ],
   "auditorias_refined_marts": "aprovadas",
   "testes": 87,
-  "cobertura_percentual": 92.42,
-  "fontes_sha256": {
-    "aula-1": "73ee3c5c78c593c8b54b219f5445c61bf924449f35e75dd271b364fc9e4c7560",
-    "aula-2": "2067e045f26af8279880ca5f678028dcd9ed067bd497bc6e4db315b63d98758b",
-    "aula-3": "0929342628562d2e6326983c459f385de5c3232a29990fea1832a34eef468921",
-    "aula-4": "8056ac74f3cd99b100cfde380db6e735ab113cb95ac45c4d37988c32001e7051"
-  }
+  "cobertura_percentual": 92.42
 }

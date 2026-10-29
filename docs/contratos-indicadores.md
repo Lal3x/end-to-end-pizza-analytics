@@ -13,7 +13,8 @@ Não eliminar repetições de itens.
 Receita por pedido usa total, reconciliado com soma Price de cada ocorrência.
 Unidades = nItems, reconciliado com COUNT de ocorrências. Ticket = SUM(total) /
 COUNT(pedidos), com uma linha por pedido. Não arredondar antes de reconciliar.
-Moeda da apresentação ainda exige definição documental específica da fonte.
+Como a fonte não declara a moeda, a apresentação usa a unidade original,
+sem símbolo ou conversão cambial.
 
 Cada mart lê apenas refined e aplica a mesma população: todos os pedidos
 válidos, sem filtro de status inexistente. Órfãos, conflitos e falhas de

@@ -1,6 +1,6 @@
 # Fonte ativa, permissão e proveniência — Pizza Paradise
 
-A migração para Pizza Paradise foi autorizada em 28/10/2026. Fonte:
+Fonte dos dados do projeto:
 [notebook oficial Observable](https://observablehq.com/@observablehq/pizza-paradise-data).
 Documento 0522fa2e9659bee6, versão 398, atualizado em 27/07/2023.
 Dados inteiramente fictícios, gerados pela equipe Observable; autoria do notebook
@@ -17,7 +17,7 @@ O repositório observablehq/sample-datasets tem licença ISC e um pizza.csv;
 essa licença não é automaticamente atribuída aos cinco anexos do notebook.
 Desenvolvimento com arquivos locais autorizado; arquivos completos permanecem
 ignorados pelo Git. Antes de redistribuir, esclarecer os termos aplicáveis.
-Nenhum envio dos arquivos à nuvem faz parte do projeto.
+Nenhum envio dos cinco anexos completos à nuvem faz parte do projeto.
 
 ## Revisão de publicação — 29/10/2026
 
@@ -51,10 +51,3 @@ A avaliação documenta as relações e os problemas encontrados:
 
 Atribuição: “Pizza Paradise, dados fictícios gerados pela equipe Observable;
 notebook de Paul Buffa, versão 398. Consulta em 28/10/2026.”
-
-## Fonte anterior
-
-A versão Maven/Kaggle permanece nos commits anteriores e nos registros
-execucao-etapa-zero.md, execucao-db.md e execucao-ingestao.md. Seus arquivos e
-banco anterior serão preservados localmente. Sua declaração CC0 não se transfere
-ao Pizza Paradise. As contagens anteriores não são resultados da nova ingestão.

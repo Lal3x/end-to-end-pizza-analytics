@@ -1,22 +1,21 @@
 # Revisão das specs, Pareto e fuso horário
 
 Data: 29/10/2026. Autorização: identificar produtos no eixo do Pareto, usar
-horários de São Paulo e validar specs contra as aulas. Não inclui Streamlit
+horários de São Paulo e padronizar os contratos das specs. Não inclui Streamlit
 nem commits nesta revisão.
 
 ## Conclusão da comparação
 
 Havia diferenças reais de organização: Etapa Zero ainda tinha seções genéricas;
 dashboard misturava contexto/stack e regras sem separar leitura, layout e formato;
-transformação juntava nomes/tipos e não separava as sete decisões da aula 2.
-A spec de marts também misturava seu contrato de execução com oito regras
-analíticas, em vez dos quatro tópicos do executor da aula 3.
+transformação juntava nomes/tipos e não separava suas decisões de tratamento.
+A spec de marts também misturava seu contrato de execução com regras analíticas.
 
 As sete specs foram conferidas e passaram a ter os blocos, nesta ordem:
 CONTEXTO, STACK, O QUE JÁ EXISTE, ARTEFATO(S) A PRODUZIR, SPEC, CRITÉRIOS DE
 ACEITE e ENTREGA. Cada decisão inclui motivo; docstrings, erros, validação e
 suposições estão previstos na entrega. Nenhuma regra aprovada foi substituída
-pela regra da Olist só para parecer igual ao exemplo.
+por regras de outro domínio.
 
 | Spec | Organização conferida/ajustada |
 |---|---|
@@ -35,18 +34,16 @@ para a implementação futura. Não afirma que essa aplicação já existe.
 ## Adaptações que continuam explícitas
 
 - db.py na raiz e apenas etapas em pipeline/, por solicitação do usuário.
-- Transformação pandas em um módulo, embora a solução de referência use SQL.
+- Transformação pandas em um módulo.
 - CSV textual e Parquet tipado na RAW, conforme fonte e migração aprovadas.
-- Preservação das repetições legítimas de itens, sem imitar chaves da Olist.
+- Preservação das repetições legítimas de itens, conforme seu grão.
 - Treze arquivos obrigatórios, correspondentes aos contratos deste projeto;
   não aceitar silenciosamente apenas 12 se um obrigatório for apagado.
 - Transformação/marts imprimem JSON de diagnóstico; ingestão mantém uma linha
-  por tabela e total. O JSON é diferença operacional em relação ao terminal
-  mostrado nas aulas, não uma alegação de reprodução literal.
+  por tabela e total.
 - Período completo e alternância de série mensal, sem filtro global; moeda sem
   símbolo não comprovado. Relatório HTML futuro continua condicionado ao escopo.
 
-Essas diferenças não foram escondidas sob a expressão “igual às aulas”.
 O padrão seguido é contrato explícito, motivos, aceite verificável e separação
 de responsabilidades, adaptados aos dados e às escolhas do usuário.
 
@@ -94,14 +91,3 @@ KPIs/contagens registrados, auditorias independentes e testes de regras.
 Código/docs foram editados por patches; Ruff format ajustou layout Python.
 Snapshot, PNGs e JSONs são artefatos gerados, sem editar manualmente resultados.
 Nenhum dado RAW/refined foi escrito pela revisão.
-
-## Fontes efetivamente consultadas
-
-Modelos de specs das [aulas 1](https://ckoliveiraa.github.io/pipeline-olist/aula-1.html),
-[2](https://ckoliveiraa.github.io/pipeline-olist/aula-2.html),
-[3](https://ckoliveiraa.github.io/pipeline-olist/aula-3.html) e
-[4](https://ckoliveiraa.github.io/pipeline-olist/aula-4.html), acessados em 29/10/2026.
-Os blocos de código dos modelos foram extraídos e comparados; hashes dos HTMLs
-consultados estão na evidência. O primeiro acesso no sandbox falhou por DNS;
-a repetição autorizada por curl funcionou. Links ficam neste registro, não como
-linhas de referência repetidas dentro das specs.

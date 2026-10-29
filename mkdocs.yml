@@ -5,6 +5,23 @@ repo_url: https://github.com/Lal3x/end-to-end-pizza-analytics
 edit_uri: edit/main/docs/
 docs_dir: docs
 site_dir: site
+exclude_docs: |
+  /historico.md
+  /plano.md
+  /metodologia.md
+  /avaliacao-pizza-paradise.md
+  /migracao-pizza-paradise.md
+  /execucao-etapa-zero.md
+  /execucao-db.md
+  /execucao-ingestao.md
+  /execucao-ui.md
+  /validacao-refined.md
+  /validacao-specs-e-fuso.md
+  /evidencias/kaggle-list.json
+  /evidencias/backup-maven.json
+  /evidencias/inspecao.json
+  /evidencias/validacao-selects-refined.json
+  /evidencias/revisao-specs-sao-paulo.json
 theme:
   name: mkdocs
   locale: pt_BR
@@ -34,26 +51,4 @@ nav:
       - Fonte e permissão: fontes-e-licenca.md
       - Modelo e granularidade: modelo.md
       - Contratos dos indicadores: contratos-indicadores.md
-  - Operação:
-      - Pipeline completo: execucao-pipeline.md
-      - Dashboard: execucao-dashboard.md
-      - CI, hooks e Pages: automacao.md
-      - Validação da automação: execucao-automacao.md
-  - Qualidade e entrega:
-      - Critérios finais: entrega.md
-      - Método e participação da IA: metodologia.md
-      - Specs no repositório: https://github.com/Lal3x/end-to-end-pizza-analytics/tree/main/specs
-  - Histórico:
-      - Sobre os registros: historico.md
-      - Plano: plano.md
-      - Etapa Zero — Maven: execucao-etapa-zero.md
-      - Conexão: execucao-db.md
-      - Ingestão — Maven: execucao-ingestao.md
-      - UI DuckDB: execucao-ui.md
-      - Avaliação Pizza Paradise: avaliacao-pizza-paradise.md
-      - Migração de fonte: migracao-pizza-paradise.md
-      - Transformação: execucao-transformacao.md
-      - Marts: execucao-marts.md
-      - Desenho: execucao-rascunho.md
-      - Investigação SQL anterior: validacao-refined.md
-      - Revisão das specs e fuso: validacao-specs-e-fuso.md
+  - Decisões e limitações: decisoes.md

@@ -1,7 +1,7 @@
 # Indicadores de desempenho — Pizza Paradise
 
 Fonte: dados fictícios de pedidos, itens, produtos, clientes e lojas da Observable.
-Migração autorizada; contratos revisados após validar refined em 28/10/2026.
+Contratos revisados após validar refined em 28/10/2026.
 Formato: indicador — tabelas (colunas) — o que mede.
 Treze marts calculados e validados pelo pipeline; resultados em
 [execução dos marts](docs/execucao-marts.md).
@@ -53,4 +53,3 @@ causal de campanhas (sem tratamento/controle). Coordenadas não são rotas.
 Não inferir demografia de clientes a partir de ID e posição.
 
 Contratos e critérios: [docs/contratos-indicadores.md](docs/contratos-indicadores.md).
-As definições anteriores da fonte Maven permanecem no histórico.

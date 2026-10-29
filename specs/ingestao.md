@@ -1,12 +1,11 @@
 # Etapa 1 — Ingestão Pizza Paradise
 
-Status: migração autorizada; este contrato substitui o da fonte Maven.
-O histórico anterior permanece nos commits e registros de execução.
+Status: contrato aprovado e implementado; resultados nos registros de execução.
 
 ## CONTEXTO
 
 Espelhar os cinco arquivos oficiais do Pizza Paradise, versão 398 do notebook,
-em raw no banco pizza.duckdb. Esta spec precede a implementação da migração.
+em raw no banco pizza.duckdb.
 Não aplicar regras de limpeza na origem.
 
 ## STACK
@@ -16,9 +15,8 @@ Sem biblioteca, banco ou orquestrador adicional.
 
 ## O QUE JÁ EXISTE (use, não reimplemente)
 
-db.py na raiz, ingestão Maven validada e evidência de inspeção do novo conjunto
-em docs/evidencias/pizza-paradise-inspecao.json. Antes de substituir a carga
-antiga, guardar cópia íntegra do banco e manter os CSVs anteriores.
+db.py na raiz e evidência de inspeção do conjunto
+em docs/evidencias/pizza-paradise-inspecao.json.
 A aquisição dos anexos deve ser reproduzível e separada da ingestão.
 
 ## ARTEFATOS A PRODUZIR
@@ -62,17 +60,15 @@ Esperados em orders: INTEGER, VARCHAR, VARCHAR, VARCHAR, INTEGER, DOUBLE;
 em order_items: VARCHAR, INTEGER, na ordem das colunas acima.
 Nunca converter datas, dinheiro ou IDs, deduplicar, normalizar ou descartar
 linhas. Motivo: Parquet já é tipado; convertê-lo para texto mudaria sua
-representação. A migração autoriza esta diferença do antigo contrato CSV.
+representação.
 
 ### 3. REEXECUÇÃO
 
 Recriar somente raw em transação única, incluindo DROP SCHEMA raw CASCADE,
-para remover tabelas da fonte anterior. Não escrever em refined/marts.
-Como os grãos da nova fonte são diferentes, recusar executar se refined ou
-marts contiverem tabelas; exigir plano explícito para não deixar camadas antigas.
-Na primeira migração real, comparar a cópia de segurança com o banco antigo
-por SHA-256. Nenhum arquivo de fonte anterior será apagado.
-Motivo: evitar mistura de fontes e preservar possibilidade de retorno.
+para manter somente as tabelas previstas. Não escrever em refined/marts.
+Recusar executar isoladamente se refined ou marts contiverem tabelas;
+para atualizar o conjunto, usar o executor completo transacional.
+Motivo: impedir camadas derivadas desatualizadas após uma nova ingestão.
 
 ### 4. LEITURA DO ARQUIVO
 
